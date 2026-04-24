@@ -112,7 +112,8 @@ function Screenshot({ project }) {
   if (project.image) {
     return (
       <img
-        src={`./images/${project.image}`}
+ //       src={`./images/${project.image}`}
+        src="./images/csd-wallboard-main.png"
         alt={project.title}
         style={{
           width: "100%",
