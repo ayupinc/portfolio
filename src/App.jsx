@@ -14,7 +14,7 @@ const projects = [
     domain: "Clinical Contact Centre",
     accent: "#007A6A",
     accentLight: "#E8F5F3",
-    image: null,
+    image: "CSD Wallboard Main.png",
     problem:
       "The Clinical Contact Centre had no live visibility of call volumes across its three clinical queues — Screening, Rapid Assessment, and Specialist Desk. Supervisors were managing up to 250 simultaneous calls without a consolidated view.",
     built:
