@@ -112,7 +112,7 @@ function Screenshot({ project }) {
   if (project.image) {
     return (
       <img
-        src={`/images/${project.image}`}
+        src={`./images/${project.image}`}
         alt={project.title}
         style={{
           width: "100%",
