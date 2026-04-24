@@ -3,8 +3,8 @@ import { useState } from "react";
 // ─────────────────────────────────────────────────────────────
 //  DASHBOARD DATA
 //  images: array of filenames in /public/images/
-//  First image in the array is shown by default.
-//  Leave as empty array [] to show the placeholder.
+//  First image is shown by default.
+//  Leave as [] to show the placeholder.
 // ─────────────────────────────────────────────────────────────
 const projects = [
   {
@@ -72,10 +72,6 @@ const projects = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────────
-//  SUB-COMPONENTS
-// ─────────────────────────────────────────────────────────────
-
 function Tag({ label, accent, accentLight, neutral }) {
   return (
     <span style={{
@@ -120,13 +116,13 @@ function Screenshots({ project }) {
       <div style={{
         background: "#F4F4F0",
         border: "1px solid #E2E4DC",
-        borderRadius: 6,
-        height: 260,
+        borderRadius: 8,
+        height: 320,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: 44,
+        marginBottom: 52,
         position: "relative",
         overflow: "hidden",
       }}>
@@ -136,11 +132,11 @@ function Screenshots({ project }) {
         }} />
         <div style={{ position: "relative", textAlign: "center" }}>
           <div style={{
-            width: 40, height: 40, borderRadius: 8,
+            width: 44, height: 44, borderRadius: 8,
             background: project.accentLight,
             border: `1px solid ${project.accent}30`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            margin: "0 auto 12px", fontSize: "1.1rem",
+            margin: "0 auto 12px", fontSize: "1.2rem",
           }}>📊</div>
           <p style={{
             fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -157,13 +153,14 @@ function Screenshots({ project }) {
   }
 
   return (
-    <div style={{ marginBottom: 44 }}>
-      {/* Main image */}
+    <div style={{ marginBottom: 52 }}>
+      {/* Main image — full width */}
       <div style={{
         border: "1px solid #E2E4DC",
-        borderRadius: 6,
+        borderRadius: 8,
         overflow: "hidden",
         marginBottom: project.images.length > 1 ? 10 : 0,
+        boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
       }}>
         <img
           src={`images/${project.images[selected]}`}
@@ -172,7 +169,7 @@ function Screenshots({ project }) {
         />
       </div>
 
-      {/* Thumbnail strip — only shown if more than one image */}
+      {/* Thumbnail strip */}
       {project.images.length > 1 && (
         <div style={{ display: "flex", gap: 8 }}>
           {project.images.map((img, i) => (
@@ -183,12 +180,12 @@ function Screenshots({ project }) {
                 padding: 0,
                 background: "none",
                 border: `2px solid ${i === selected ? project.accent : "#E2E4DC"}`,
-                borderRadius: 4,
+                borderRadius: 5,
                 cursor: "pointer",
                 overflow: "hidden",
                 flex: 1,
-                transition: "border-color 0.15s",
-                opacity: i === selected ? 1 : 0.6,
+                transition: "border-color 0.15s, opacity 0.15s",
+                opacity: i === selected ? 1 : 0.55,
               }}
             >
               <img
@@ -203,10 +200,6 @@ function Screenshots({ project }) {
     </div>
   );
 }
-
-// ─────────────────────────────────────────────────────────────
-//  MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────
 
 export default function Portfolio() {
   const [active, setActive] = useState("csd");
@@ -238,7 +231,6 @@ export default function Portfolio() {
       }}>
         <div>
           <p style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontSize: "0.62rem",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
@@ -249,7 +241,6 @@ export default function Portfolio() {
             Power BI · SQL Server · Data Engineering
           </p>
           <h1 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontSize: "clamp(1.6rem, 3.5vw, 2.4rem)",
             fontWeight: 700,
             lineHeight: 1.1,
@@ -259,7 +250,6 @@ export default function Portfolio() {
             Stephen Clinton
           </h1>
           <p style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
             fontSize: "0.9rem",
             color: "#6B7280",
             marginTop: 6,
@@ -269,12 +259,10 @@ export default function Portfolio() {
           </p>
         </div>
         <div style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
           fontSize: "0.7rem",
           color: "#C5CAD0",
           textAlign: "right",
           lineHeight: 1.9,
-          fontWeight: 400,
         }}>
           <div>NHS Ambulance Sector</div>
           <div>Selected portfolio · 2024 / 2025</div>
@@ -298,7 +286,6 @@ export default function Portfolio() {
               border: "none",
               borderBottom: active === proj.id ? `3px solid ${proj.accent}` : "3px solid transparent",
               color: active === proj.id ? "#1A2640" : "#9AA0A6",
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontSize: "0.82rem",
               fontWeight: active === proj.id ? 600 : 400,
               padding: "16px 28px",
@@ -312,56 +299,54 @@ export default function Portfolio() {
         ))}
       </nav>
 
-      {/* ── Content ── */}
-      <main style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 300px",
-        maxWidth: 1200,
-        margin: "0 auto",
-      }}>
-        {/* Left column */}
-        <div style={{ padding: "44px 52px 64px", borderRight: "1px solid #E2E4DC" }}>
+      {/* ── Content — single column, max width ── */}
+      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 56px 80px" }}>
 
-          {/* Tags */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
-            {p.tags.map((tag, i) => (
-              <Tag key={i} label={tag} accent={p.accent} accentLight={p.accentLight} />
-            ))}
-            <Tag label={p.domain} neutral />
-          </div>
+        {/* Tags */}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
+          {p.tags.map((tag, i) => (
+            <Tag key={i} label={tag} accent={p.accent} accentLight={p.accentLight} />
+          ))}
+          <Tag label={p.domain} neutral />
+        </div>
 
-          {/* Title */}
-          <h2 style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontSize: "clamp(1.5rem, 3vw, 2rem)",
-            fontWeight: 700,
-            color: "#1A2640",
-            letterSpacing: "-0.025em",
-            lineHeight: 1.2,
-            marginBottom: 10,
-          }}>
-            {p.title}
-          </h2>
+        {/* Title */}
+        <h2 style={{
+          fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
+          fontWeight: 700,
+          color: "#1A2640",
+          letterSpacing: "-0.025em",
+          lineHeight: 1.2,
+          marginBottom: 10,
+        }}>
+          {p.title}
+        </h2>
 
-          {/* Accent rule */}
-          <div style={{
-            height: 3, width: 40,
-            background: p.accent,
-            borderRadius: 2,
-            marginBottom: 32,
-          }} />
+        {/* Accent rule */}
+        <div style={{
+          height: 3, width: 40,
+          background: p.accent,
+          borderRadius: 2,
+          marginBottom: 36,
+        }} />
 
-          {/* Screenshots */}
-          <Screenshots project={p} />
+        {/* Screenshots — full width */}
+        <Screenshots project={p} />
 
+        {/* Two-column text grid below */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "48px 64px",
+          marginBottom: 48,
+        }}>
           {/* Problem */}
-          <div style={{ marginBottom: 28 }}>
+          <div>
             <SectionLabel text="The Problem" />
             <p style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 300,
-              fontSize: "0.95rem",
-              lineHeight: 1.8,
+              fontSize: "0.92rem",
+              lineHeight: 1.85,
               color: "#374151",
               fontStyle: "italic",
             }}>
@@ -373,7 +358,6 @@ export default function Portfolio() {
           <div>
             <SectionLabel text="What Was Built" />
             <p style={{
-              fontFamily: "'Plus Jakarta Sans', sans-serif",
               fontWeight: 300,
               fontSize: "0.88rem",
               lineHeight: 1.85,
@@ -384,58 +368,62 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Right sidebar */}
-        <div style={{ padding: "44px 36px 64px" }}>
+        {/* Divider */}
+        <div style={{ borderTop: "1px solid #E2E4DC", marginBottom: 40 }} />
 
-          <SectionLabel text="Audience" />
-          <p style={{
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-            fontWeight: 300,
-            fontStyle: "italic",
-            fontSize: "0.85rem",
-            lineHeight: 1.75,
-            color: "#6B7280",
-            paddingBottom: 28,
-            marginBottom: 28,
-            borderBottom: "1px solid #E2E4DC",
-          }}>
-            {p.audience}
-          </p>
-
-          <SectionLabel text="Technical Detail" />
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {p.technical.map((item, i) => (
-              <div key={i} style={{
-                display: "flex", gap: 10,
-                alignItems: "flex-start",
-                padding: "7px 6px",
-                borderRadius: 4,
-              }}>
-                <div style={{
-                  width: 5, height: 5,
-                  borderRadius: "50%",
-                  background: p.accent,
-                  marginTop: 7,
-                  flexShrink: 0,
-                }} />
-                <p style={{
-                  fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  fontWeight: 300,
-                  fontSize: "0.78rem",
-                  lineHeight: 1.65,
-                  color: "#6B7280",
-                }}>
-                  {item}
-                </p>
-              </div>
-            ))}
+        {/* Two-column: Audience + Technical */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "240px 1fr",
+          gap: "0 64px",
+        }}>
+          {/* Audience */}
+          <div>
+            <SectionLabel text="Audience" />
+            <p style={{
+              fontWeight: 300,
+              fontStyle: "italic",
+              fontSize: "0.85rem",
+              lineHeight: 1.75,
+              color: "#6B7280",
+            }}>
+              {p.audience}
+            </p>
           </div>
 
-          <div style={{
-            marginTop: 44, height: 2,
-            background: `linear-gradient(90deg, ${p.accent}40, transparent)`,
-            borderRadius: 1,
-          }} />
+          {/* Technical — two-column bullet grid */}
+          <div>
+            <SectionLabel text="Technical Detail" />
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "4px 32px",
+            }}>
+              {p.technical.map((item, i) => (
+                <div key={i} style={{
+                  display: "flex", gap: 10,
+                  alignItems: "flex-start",
+                  padding: "6px 0",
+                }}>
+                  <div style={{
+                    width: 5, height: 5,
+                    borderRadius: "50%",
+                    background: p.accent,
+                    marginTop: 7,
+                    flexShrink: 0,
+                  }} />
+                  <p style={{
+                    fontWeight: 300,
+                    fontSize: "0.78rem",
+                    lineHeight: 1.65,
+                    color: "#6B7280",
+                  }}>
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
 
@@ -450,20 +438,10 @@ export default function Portfolio() {
         gap: 12,
         background: "#fff",
       }}>
-        <p style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontSize: "0.68rem",
-          color: "#C5CAD0",
-          fontWeight: 400,
-        }}>
+        <p style={{ fontSize: "0.68rem", color: "#C5CAD0" }}>
           Stephen Clinton · Senior Power BI Developer
         </p>
-        <p style={{
-          fontFamily: "'Plus Jakarta Sans', sans-serif",
-          fontSize: "0.68rem",
-          color: "#C5CAD0",
-          fontWeight: 400,
-        }}>
+        <p style={{ fontSize: "0.68rem", color: "#C5CAD0" }}>
           NHS Ambulance Sector · 2024–2025
         </p>
       </footer>
