@@ -479,36 +479,14 @@
   <div class="nav-inner">
     <a href="index.html" class="nav-link active">Power BI Portfolio</a>
     <a href="analytics.html" class="nav-link">Analytics Engineering</a>
-    <span class="nav-sep"></span>
-        <span class="nav-label">Jump to project</span>
-    <select class="nav-select" onchange="if(this.value){location.hash=this.value;this.value=''}">
-      <option value="">— Select —</option>
-      <optgroup label="Power BI">
-        <option value="csd">Calls Waiting Wallboard</option>
-        <option value="cc">KPI – Outcomes Based</option>
-        <option value="rca">KPI – Time Based</option>
-        <option value="vr">Response and Utilisation – Staff Group</option>
-        <option value="ems">Clinical Call Flow Comparison</option>
-        <option value="cna">Patient Assessments Report</option>
-        <option value="cnt">Telephony Report</option>
-        <option value="ops111">Operations Report</option>
-        <option value="epcr">Electronic Patient Care Record Report</option>
-        <option value="dph">Hospital Handover Dashboard</option>
-        <option value="welsh">Welsh Speakers Heatmap</option>
-      </optgroup>
-      <optgroup label="Analytics Engineering">
-        <option value="ae01">EMS Clinical Flow</option>
-        <option value="ae02">Cisco Telephony Data Model</option>
-        <option value="ae03">Agent Activity Model</option>
-        <option value="ae04">AQM Questionnaire Analytics</option>
-        <option value="ae05">HI Time to Complete Encounter</option>
-      </optgroup>
-    </select>
-    <span class="nav-count">16 projects</span>
   </div>
 </nav>
 
 <main>
+
+<div class="ae-section-break" style="border-top: none; margin-top: 0;">
+  <p>The following projects cover end-to-end Power BI delivery for NHS 111 and emergency ambulance service operations — from semantic model design and DAX development through to report layout, interactivity, and production deployment for 24/7 operational teams.</p>
+</div>
 
 <article class="project" id="csd">
   <div class="project-header">
@@ -858,151 +836,6 @@
           <p class="col-label">Data Engineering</p>
           <p class="col-text">Integrated and cleaned human resource system data (national database) and merged with response data for base station locations to create a dataset specifically for geospatial visualisation. Repeatable for future years’ publications.</p>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-
-<div class="ae-section-break">
-  <h2>Analytics Engineering</h2>
-  <p>The following projects highlight the data engineering and modelling work that underpins the reporting above — SQL-based data pipeline design, event sequencing, state-transition modelling, and the construction of reusable analytical datasets from complex operational source systems.</p>
-</div>
-
-<article class="project" id="ae01">
-  <div class="project-header">
-    <div class="project-accent-bar" style="background: var(--green);"></div>
-    <div class="project-title-block">
-      <div class="project-number">AE 01</div>
-      <h2 class="project-title">EMS Clinical Flow</h2>
-    </div>
-  </div>
-  <div class="project-body">
-    <div class="top-row">
-      <div class="project-col">
-        <p class="col-label">Problem</p>
-        <p class="col-text">Clinical teams had no reliable way to understand how emergency calls progressed through the clinical system. Existing reporting relied on static extracts, could not track progression across clinical levels, and did not support identification of call pathways or bottlenecks. Audience: Clinical managers, operational leadership, 999 service directors.</p>
-      </div>
-    </div>
-    <div class="bottom-row">
-      <div class="project-col">
-        <p class="col-label">Engineering Approach</p>
-        <p class="col-text">Reconstructed clinical call flow from raw CAD audit tables using ordered event timestamps and window functions. Defined level boundaries with LEAD logic to prevent event leakage across transitions. Built persistent SQL tables materialising level start and end times, with an incremental 7-day MERGE strategy to maintain performance across high-volume datasets. Handled multiple rapid transitions within a single incident and aligned analytical logic with real-world operational behaviour.</p>
-      </div>
-      <div class="project-col">
-        <p class="col-label">Outcome &amp; Impact</p>
-        <p class="col-text">First end-to-end analytical model of clinical call flow in the organisation. Identified predictable call pathways and queue bottlenecks, directly influencing clinical routing policy for 999 call handling. Established a reusable data architecture subsequently adopted across Screening Flow, Falls Desk reporting, and Urgent Community Response.</p>
-      </div>
-    </div>
-  </div>
-</article>
-
-<article class="project" id="ae02">
-  <div class="project-header">
-    <div class="project-accent-bar" style="background: var(--ocean);"></div>
-    <div class="project-title-block">
-      <div class="project-number">AE 02</div>
-      <h2 class="project-title">Cisco Telephony Data Model</h2>
-    </div>
-  </div>
-  <div class="project-body">
-    <div class="top-row">
-      <div class="project-col">
-        <p class="col-label">Problem</p>
-        <p class="col-text">Telephony reporting across approximately 1.5–2 million annual calls suffered from fragmented source data, no reliable method to reconstruct a single call journey, and duplicate or conflicting records across transfer scenarios. KPI outputs were inconsistent across reports and trust in call volumes and durations had broken down. Audience: Operations management, contact centre performance teams, senior leadership.</p>
-      </div>
-    </div>
-    <div class="bottom-row">
-      <div class="project-col">
-        <p class="col-label">Engineering Approach</p>
-        <p class="col-text">Integrated Cisco Termination Call Detail and Route Call Detail tables, developing logic to stitch together call segments across transfers and re-queues and remove duplicate representations of the same call. Implemented deterministic rules for call start and end points, normalised inconsistent identifiers, and resolved timing conflicts across source tables. Built persistent tables to support performance and downstream reuse, replacing legacy vendor logic with transparent, auditable SQL.</p>
-      </div>
-      <div class="project-col">
-        <p class="col-label">Outcome &amp; Impact</p>
-        <p class="col-text">Became the authoritative source for all telephony reporting across the organisation. Delivered consistent KPI outputs across Power BI, SSRS, and operational reporting. Removed dependency on opaque third-party logic and gave the organisation full control over call metric definitions for the first time.</p>
-      </div>
-    </div>
-  </div>
-</article>
-
-<article class="project" id="ae03">
-  <div class="project-header">
-    <div class="project-accent-bar" style="background: var(--indigo);"></div>
-    <div class="project-title-block">
-      <div class="project-number">AE 03</div>
-      <h2 class="project-title">Agent Activity Model</h2>
-    </div>
-  </div>
-  <div class="project-body">
-    <div class="top-row">
-      <div class="project-col">
-        <p class="col-label">Problem</p>
-        <p class="col-text">Agent reporting was fragmented across separate session, activity, and call datasets with no consistent linkage. Status durations split across intervals caused duplication and inflated figures. There was no accurate way to measure productive versus non-productive time or true utilisation, and legacy reporting relied on assumptions rather than event sequencing. Audience: Operational managers across 999, 111, patient transport, and outbound clinical teams.</p>
-      </div>
-    </div>
-    <div class="bottom-row">
-      <div class="project-col">
-        <p class="col-label">Engineering Approach</p>
-        <p class="col-text">Integrated Cisco Agent Session, Agent Event Detail, and call handling datasets. Built logic to collapse interval-based activity records into continuous periods, classify activity types (available, on call, wrap, auxiliary), and link call events to agent timelines using event sequencing. Addressed collation handling across systems, standardised agent identifiers across sources, and applied strict temporal controls to prevent activity overlap or misattribution.</p>
-      </div>
-      <div class="project-col">
-        <p class="col-label">Outcome &amp; Impact</p>
-        <p class="col-text">Delivered a single, trusted view of agent activity across all operational teams for the first time. Enabled accurate utilisation reporting and supported staffing and performance decisions across multiple service areas. Replaced a costly legacy reporting solution, removing approximately £100,000 in annual licensing and maintenance expenditure.</p>
-      </div>
-    </div>
-  </div>
-</article>
-
-<article class="project" id="ae04">
-  <div class="project-header">
-    <div class="project-accent-bar" style="background: var(--rose);"></div>
-    <div class="project-title-block">
-      <div class="project-number">AE 04</div>
-      <h2 class="project-title">AQM Questionnaire Analytics</h2>
-    </div>
-  </div>
-  <div class="project-body">
-    <div class="top-row">
-      <div class="project-col">
-        <p class="col-label">Problem</p>
-        <p class="col-text">Clinical questionnaire data existed as raw question and response records with no concept of a complete assessment episode. Inconsistent text from configuration changes and user input, combined with multi-response fields not structured for analysis, made meaningful reporting effectively impossible. Audience: Clinical audit teams, individual clinicians, operational performance leads.</p>
-      </div>
-    </div>
-    <div class="bottom-row">
-      <div class="project-col">
-        <p class="col-label">Engineering Approach</p>
-        <p class="col-text">Developed episode key logic to group raw responses into discrete assessment runs, with defined start and end boundaries per questionnaire. Implemented multi-response splitting (normalised to row-level data), text standardisation using a cleaning rules engine with lookup tables for canonical question and response definitions, and branch detection logic to identify different questionnaire pathways. Applied an incremental load strategy to handle large data volumes efficiently.</p>
-      </div>
-      <div class="project-col">
-        <p class="col-label">Outcome &amp; Impact</p>
-        <p class="col-text">First structured AQM reporting capability in the organisation. Enabled performance reporting, clinical audit, and individual clinician feedback from a dataset that had previously been analytically unusable. The cleaned, episode-structured dataset became the foundation for all subsequent AQM-related dashboards and analytics.</p>
-      </div>
-    </div>
-  </div>
-</article>
-
-<article class="project" id="ae05">
-  <div class="project-header">
-    <div class="project-accent-bar" style="background: var(--copper);"></div>
-    <div class="project-title-block">
-      <div class="project-number">AE 05</div>
-      <h2 class="project-title">HI Time to Complete Encounter</h2>
-    </div>
-  </div>
-  <div class="project-body">
-    <div class="top-row">
-      <div class="project-col">
-        <p class="col-label">Problem</p>
-        <p class="col-text">The organisation required a reliable measure of how long it takes to complete a Health Information encounter within the 111 service, but no agreed definition existed for when an interaction starts or ends. Inconsistent logic across reports produced conflicting KPI outputs and the metric could not be used for operational monitoring or stakeholder reporting. Audience: 111 service managers, clinical leads, senior leadership and external stakeholders.</p>
-      </div>
-    </div>
-    <div class="bottom-row">
-      <div class="project-col">
-        <p class="col-label">Engineering Approach</p>
-        <p class="col-text">Analysed call handling, CAD event, and outcome data to define KPI boundaries based on operational reality rather than system convenience. Built SQL logic to identify relevant events per incident, sequence them using timestamps, and select the correct start and end markers per encounter. Addressed multiple start-point candidates, delayed outcome recording, and missing event data. Implemented validation checks against known scenarios and aggregation logic for averages, percentiles, and distributions.</p>
-      </div>
-      <div class="project-col">
-        <p class="col-label">Outcome &amp; Impact</p>
-        <p class="col-text">Delivered a trusted, standardised KPI for HI performance that replaced conflicting outputs across teams. Enabled accurate operational monitoring and meaningful trend analysis for the first time, supporting performance reporting to leadership and external stakeholders and providing a foundation for identifying delays and inefficiencies in the encounter workflow.</p>
       </div>
     </div>
   </div>
