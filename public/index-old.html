@@ -470,7 +470,7 @@
 <header>
   <div class="header-inner">
     <h1>Stephen Clinton</h1>
-    <p class="header-subtitle">Senior Power BI Developer</p>
+    <p class="header-subtitle">Senior Power BI Developer &amp; Analytics Engineer</p>
     <!--p class="header-desc">End-to-end reporting delivery across clinical contact centre operations, ambulance dispatch, and patient management systems — from data engineering and semantic modelling through to production dashboards serving 24/7 operational teams.</p-->
   </div>
 </header>
@@ -485,7 +485,7 @@
 <main>
 
 <div class="ae-section-break" style="border-top: none; margin-top: 0;">
-  <p>Power BI report examples demonstrating reporting delivery.</p>
+  <p>The following projects cover end-to-end Power BI delivery for clinical contact centre and emergency ambulance service operations, from semantic model design and DAX development through to report layout, interactivity, and production deployment for 24/7 operational teams.</p>
 </div>
 
 <article class="project" id="csd">
@@ -497,24 +497,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/wall-anon.png" alt="Calls Waiting Wallboard">
+    <img src="images/csd-dashboard.png" alt="Call Waiting Wallboard">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.</p>
+                <p class="col-text">For cases received on 999 requiring clinical call back, provide a live view of call volumes and wait times split across clinician groups. Audience: Clinical contact centre staff and team leaders, senior operational command staff.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Direct Query Power BI dashboard polling every 60 seconds, displaying counts of cases by response priority, using both numerical and coloured bar visualisations for the dashboard to be viewed across the room as well as on a desktop. Measures include CALCULATE with COUNT, SUM and FILTER for metrics and MAX / MAXX for durations.</p>
+        <p class="col-text">Power BI dashboard polling the CAD every 60 seconds to display case counts by response priority in both a numerical and coloured bar visualisation along with bar visualisation of cases being assessed by each group of clinicians. Delivered a near real-time operational view of clinical queue pressure, enabling supervisors to intervene dynamically in queue management and prioritisation.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Initiation of an unused CAD indicator, with support from the vendor and adjustment to parameterised setting in operations, new multi-condition CASE logic across separate CAD event tables and the optimisation of a query against the live CAD tables (sub 1 second refresh) to prevent interference with CAD operations.</p>
       </div>
     </div>
   </div>
@@ -529,24 +529,23 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/perf-metric-anon.png" alt="KPI Outcomes Based">
-  </div>
+    <img src="images/consult-close.png" alt="KPI Outcomes Based">  </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.</p>
+                <p class="col-text">Report a significant internal and external KPI with high accuracy showing case outcomes and the nature of the group resolving, across volumes and percentage of all cases. Audience: Clinical contact staff, leadership and senior leadership teams, board and external stakeholders.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">New Power BI Report showing the percentage and volume over time with headline metrics and group / outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window. DAX measures include extensive CALCULATE, SUM and DIVIDE for calculating the metrics.</p>
+        <p class="col-text">New Power BI Report showing the percentage and volume over time against headline figures and group level outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology. Provided socialisation for stakeholders and database view of all cases and outcomes for reference.</p>
       </div>
     </div>
   </div>
@@ -561,24 +560,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/queue-action-anon.png" alt="KPI Time Based">
+    <img src="images/remote-clinical-assessment.png" alt="KPI Time Based">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Provide a reliable methodology to measure duration from the case being created to a specific action taking place and a Power BI Report to display the metrics over time, by clinician group assessing and with high level call details. Audience: Clinical leadership, senior operations team, performance stakeholders, with summaries to executive team and board.</p>
+                <p class="col-text">Provide a reliable methodology to measure time from case confirmed to clinical assessment, accounting for complex clinical event sequencing in the patient management system. Audience: Clinical leadership, senior operations team, performance stakeholders with summaries to executive team and board.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Power BI report built used the newly modelled dataset with visuals for key metrics and over-time with multiple axis options. Filtering by case priorities and clinical level. Included a responsive drill-through page for incident detail and a separate help / information / version page. DAX measures include PERCENTILEX, MEDIANX and AVERAGEX with FILTERs, CALCULATE and COUNTROWS. Created documentation for stakeholders and data team to understand calculation steps and the meaning of the new metric.</p>
+        <p class="col-text">Power BI report built over the resulting dataset showing metrics over time and with filtering by case priorities and the group assessing the case. Drill through for incident detail and a separate help / information / version page.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Defined accurate start and end timestamps for the metric, supported by complex SQL to correctly attribute the times between different queue tables. Query contained multiple CTEs to gather data, ranked window functions to capture specific case events where multiple events existed, and STRING_AGG to show queue levels on the case journey. Created a view for further downstream reporting. All processes documented with code for future reference.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Defined a robust start and end indicator for the metric, based on available system timestamps. Complex SQL to correctly attribute the assessment start time to the right set of clinicians from the clinical queue event table. New SQL procedures and table creation to process clinical queue data for accuracy.</p>
       </div>
     </div>
   </div>
@@ -593,24 +592,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/util-anon.png" alt="Response and Utilisation Report">
+    <img src="images/responder-utilisation.png" alt="Response and Utilisation Report">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.</p>
+                <p class="col-text">Report on Volunteer Responder activity including times available, utilisation while available and 999 calls responded to. Audience: Responder management team, operations leadership and performance management groups.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Power BI report to present headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. DAX measures include CALCULATE, COUNTROWS and FILTERs, CONCATENATE/X for active filters, refresh times and version display, COUNT, SUM, DIVIDE and AVERAGE for metrics and ALLEXCEPT for broader measures. Report also contains detail pages for review of individual responses and a separate help, information and version page. Socialised the methodologies to stakeholders and included in help file.</p>
+        <p class="col-text">Power BI report to present visually in a format that suited the responder team including time and event-based views, metrics and field parameter filters.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing to ensure accuracy. Captured event times and calculated availability durations, using temporal modelling to link responses to availability to determine utilisation. Provided thorough documentation of data capture methodology for data teams and to stakeholders for information.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Volunteer Responders book available on the response management system in a different way to regular crews making standard reports inaccurate. Clarified undocumented areas of the response management system from the vendor and built new raw data capture processes to reporting servers. Captured event times and calculated availability durations, temporal modelling used to join response tables and capture utilisation activity.</p>
       </div>
     </div>
   </div>
@@ -625,24 +624,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/flow-anon.png" alt="Clinical Call Flow">
+    <img src="images/ems-clinical-flow.png" alt="Clinical Call Flow">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making. Report would replace intensive sessions using extracted patient management system data in spreadsheets.</p>
+                <p class="col-text">Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Also includes pages for different perspectives (outcome, category and priority) and drill through detail pages with a separate page for help, information and version updates. DAX measures include CALCULATE, with REMOVEFILTERS for overall totals, SWITCH and SELECTEDVALUE for parameterised charts. Created documentation and shared with stakeholders to break down the complexity of the call queuing process and allow understanding of the measures being shown in the report.</p>
+        <p class="col-text">New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Drill through detail pages and a separate page for help, information and version updates.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy preventing overlaps between levels to ensure the strictest accuracy. Using CTEs for data capture and structure, ranked window functions and LEAD/LAG for event timings and complex CASE statements to identify the correct events, created persistent tables to materialise the data for downstream reporting, simplifying performance reporting across all clinical queues and avoiding re-processing large datasets in the future. Prepared extensive technical documentation to share with the data teams to clarify the logic and process.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Designed a new state-transition model from CAD event data using level-change data and ordered event streams with LEAD/LAG logic to capture time a case spends with each clinician group. Enforced temporal accuracy with no overlaps and no leakage between levels. Created persistent tables to materialise true state changes to avoid later re-processing large datasets.</p>
       </div>
     </div>
   </div>
@@ -657,24 +656,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/aqm-anon.png" alt="Patient Assessments Report">
+    <img src="images/aqm.png" alt="Patient Assessments Report">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.</p>
+                <p class="col-text">Provide visibility of clinician decision-making in remote patient assessments, supporting volume, duration and time-based analysis, patient response associations, outcomes and individual clinician performance. Data based on questionnaire style patient assessments designed to guide the clinician and carried out over the telephone. Audience: Clinicians, team leaders, operational leadership.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Multi-page Power BI report showing assessment volumes, assessment durations and outcomes with correlations between responses for all activity. Additional pages for each assessment type (7), incident level detail and help, information and version detail. Created Power Query transitions to pivot the data into episode level responses, allowing the comparisons of per-episode responses. Created documentation on the methodology and shared with stakeholders to facilitate understanding especially around the individual clinician feedback.</p>
+        <p class="col-text">Multi-page Power BI report showing volume analysis, assessment durations and outcomes with correlations between responses for all activity and by individual clinician. Additional pages show anonymous incident level detail and version and report detail information for the user.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric analysis and sequencing. Data required significant cleaning including multiple response handling, question and response text cleaning to standardise entries and branch logic to show separate pathways within the same questionnaire. Resulting clean data tables provided a reusable dataset for all downstream questionnaire reporting across all clinician streams. Provided extensive technical documentation to share with the data teams to clarify the logic and process.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric counting and sequencing of assessments. Implemented multiple response handling, text cleaning to standardise entries, branch logic for separate pathways in the same questionnaire and a reusable cleaned data set for all questionnaire reporting across multiple clinician streams.</p>
       </div>
     </div>
   </div>
@@ -689,24 +688,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/telephony-anon.png" alt="Telephony Report">
+    <img src="images/clinical-navigator-telephony.png" alt="Telephony Report">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Provide information on telephone activity; call distribution, volume, handling and wait times including detail to identify specific calls for review. Audience: Clinical contact centre leadership, clinical group supervisors, operations and performance groups.</p>
+                <p class="col-text">Provide information on telephone activity to and from the 999 clinicians; call distribution, volume, handling and wait times including detail to identify specific calls for review. Audience: Clinical contact centre leadership, clinical group supervisors, operations and performance groups.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Multi-page report for volumes, with pages for detail on call durations, handling time analysis, wait time analysis and inbound and outbound calls including call level drill through and a data glossary page. Filters for call types and groups handling as well as answer status and date. DAX measures include CALCULATE with COUNT, SUM and AVERAGE with REMOVEFILTERS and KEEPFILTERS for some broader metrics. Power Query table creation for call handling and wait time intervals. Additional calculated columns referencing call fields, provide context for calls in the report and classification into groups.</p>
+        <p class="col-text">Multi-page report for volumes, call durations, handling time analysis, wait time analysis and call details for inbound and outbound calls with anonymous call level drill through and a data glossary page.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Created new data warehouse procedures and data tables to report telephone activity following changes to switchboard which rendered earlier third party tables redundant. Extensive mapping and joining of CISCO native call tables was required to provide accurate reliable call tables covering all call, transfer, dial and hold activity on the switchboard. Wrote additional procedures to create tables for agent activity, logged in sessions and calls which combine to create reports used for individual agents. Each form the backbone of all telephony reporting in the organisation replacing all others previously used.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Joined previously created call and agent event detail records to capture activity for this group of clinicians.</p>
       </div>
     </div>
   </div>
@@ -721,24 +720,24 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/operations-anon.png" alt="Operations Report">
+    <img src="images/111-operations.png" alt="Operations Report">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information. Replace multiple fragmented reports from other reporting systems. Audience: KPI pages for assessment times used in all external performance reports to stakeholders and all pages used daily by operations teams as the main source of operational information.</p>
+                <p class="col-text">Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information. Replace multiple fragmented reports from multiple reporting systems. Audience: KPI pages for assessment times used in all external performance reports to stakeholders and all pages used daily by operations teams as the main source of operational information.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact. DAX measures include active filters using table creation with ISFILTERED, as part of 40+ measures covering various calculated metrics. 168 hour weekly matrix is used for demand analysis and staffing predictions.</p>
+        <p class="col-text">Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from other native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Data from the Patient Management System minimum data set provided by Data Engineering with additional metrics derived where not natively available.</p>
       </div>
     </div>
   </div>
@@ -753,35 +752,99 @@
   </div>
 
   <div class="screenshot-area">
-    <img src="images-anon/epcr-anon.png" alt="Electronic Patient Care Record Report">
+    <img src="images/epcr.png" alt="Electronic Patient Care Record Report">
   </div>
 
   <div class="project-body">
     <div class="top-row">
       <div class="project-col">
         <p class="col-label">Requirement</p>
-        <p class="col-text">Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.</p>
+                <p class="col-text">Summarise patient care records captured by the front-line clinical responders, volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.</p>
       </div>
     </div>
     <div class="bottom-row">
       <div class="project-col">
         <p class="col-label">Power BI Solution</p>
-        <p class="col-text">Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering to see impact and relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management. DAX measures include CALCULATE counts throughout, REMOVE/KEEPFILTERS/ALL for broader metrics, ISFILTERED for active filters, USERELATIONSHIP for drug associations.</p>
+        <p class="col-text">Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering to see impact and relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management.</p>
       </div>
       <div class="project-col">
-        <p class="col-label">Data Modelling / Engineering</p>
-        <p class="col-text">Vendor servers synchronised multiple times daily to organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records.</p>
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Vendor servers synchronised multiple times daily to organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Logic built to capture ePCR records with no link to response records.</p>
       </div>
     </div>
   </div>
 </article>
 
+<article class="project" id="dph">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--copper);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Hospital Handover Dashboard</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images/dual-pin.png" alt="Hospital Handover Dashboard">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+                <p class="col-text">Capture and report handover details in major receiving hospitals with breakdown by hospital and region. Required for external KPI reporting to stakeholders and liaison with hospitals to improve process. Audience: Response team leadership, hospital liaison team, operational and performance groups.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Single page Power BI summary report with drill through information for specific calls, floating window information, help and version page.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Engineering</p>
+        <p class="col-text">Data extracted from previously unused response management system tables. Required vendor support plus complex transformation logic to construct usable tables from raw unstructured data and align with incident response times. Documented full data process for future maintainability.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="welsh">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--stone);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Welsh Speakers Heatmap</h2>
+    </div>
+  </div>
+
+  <div class="welsh-layout">
+    <div class="welsh-img-col">
+      <img class="welsh-screenshot" src="images/welsh-speakers.png" alt="Welsh Speakers Heatmap">
+    </div>
+    <div class="welsh-content-col">
+      <div class="top-row">
+        <div class="project-col">
+          <p class="col-label">Requirement</p>
+                  <p class="col-text">A heatmap visual of the base locations of Welsh speaking staff, for publication in printed and online media. Audience: Internal report readers, Board, Welsh Language Commissioner and other external stakeholders.</p>
+        </div>
+      </div>
+      <div class="bottom-row">
+        <div class="project-col">
+          <p class="col-label">Power BI Solution</p>
+          <p class="col-text">Significant styling in a single page Power BI report to enable the map to be used in a presentation and printed document.</p>
+        </div>
+        <div class="project-col">
+          <p class="col-label">Data Engineering</p>
+          <p class="col-text">Integrated and cleaned human resource system data (national database) and merged with response data for base station locations to create a dataset specifically for geospatial visualisation. Repeatable for future years’ publications.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
 
 </main>
 
 <footer>
-  <p>Stephen Clinton &nbsp;·&nbsp; Senior Power BI Developer</p>
-  <p class="footer-note">Organisational names and labels have been changed for presentation in this portfolio. Figures shown are placeholders and do not represent actual values. Categories and types have been anonymised. Productions reports used the full names and values.</p>
+  <p>Stephen Clinton &nbsp;·&nbsp; Senior Power BI Developer &amp; Analytics Engineer</p>
+  <p class="footer-note">Organisational names have been blurred from all images. Figures shown do not necessarily represent true performance, activity or operational data.</p>
 </footer>
 
 </body>
