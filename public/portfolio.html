@@ -6,8 +6,8 @@
 <title>Stephen Clinton | Maple Leaf Intelligence</title>
 <style>
   :root {
-    --accent: #E8732A;
     --navy: #0F1F3D;
+    --accent: var(--navy);
     --navy-mid: #1E3A5F;
     --ink: #1A1A2E;
     --body: #3D4A5C;
@@ -130,12 +130,13 @@
   .hero {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 72px 32px 60px;
+    padding: 54px 32px 46px;
+    text-align: center;
   }
 
   h1 {
     margin: 0 0 12px;
-    font-size: clamp(40px, 6vw, 76px);
+    font-size: clamp(30px, 4vw, 50px);
     line-height: 0.98;
     font-weight: 400;
     color: var(--navy);
