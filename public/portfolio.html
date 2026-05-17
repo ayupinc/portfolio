@@ -186,10 +186,11 @@
   .project-card:focus-within {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(15,31,61,0.11);
-    border-color: rgba(232,115,42,0.45);
+    border-color: rgba(15,31,61,0.35);
   }
 
-  .thumb-button {
+  .thumb-button,
+  .thumb-link {
     padding: 0;
     border: 0;
     border-bottom: 1px solid var(--rule);
@@ -198,9 +199,11 @@
     display: block;
     width: 100%;
     text-align: inherit;
+    text-decoration: none;
   }
 
-  .thumb-button img {
+  .thumb-button img,
+  .thumb-link img {
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
@@ -230,7 +233,8 @@
     line-height: 1.58;
   }
 
-  .details-button {
+  .details-button,
+  .details-link {
     align-self: flex-start;
     margin-top: auto;
     border: 1px solid var(--accent);
@@ -244,9 +248,11 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
+    text-decoration: none;
   }
 
-  .details-button:hover { background: rgba(232,115,42,0.08); }
+  .details-button:hover,
+  .details-link:hover { background: rgba(15,31,61,0.06); }
 
   .modal {
     position: fixed;
@@ -461,6 +467,7 @@ const projects = [
   {
     title: "Telephony Demand & Agent Activity",
     image: "images-anon/telephony-anon.png",
+    url: "telephony-demand-agent-activity.html",
     summary: "SQL Server transformation pipelines and Power BI reporting structures for operational telephony, queue demand and workforce activity reporting.",
     sections: [
       {
@@ -552,18 +559,26 @@ projects.forEach((project, index) => {
   const article = document.createElement("article");
   article.className = "project-card";
   article.innerHTML = `
+    ${project.url ? `
+    <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
+      <img src="${project.image}" alt="${project.title}">
+    </a>` : `
     <button class="thumb-button" type="button" aria-label="Open details for ${project.title}">
       <img src="${project.image}" alt="${project.title}">
-    </button>
+    </button>`}
     <div class="card-body">
       <h2 class="project-title">${project.title}</h2>
       <p class="summary">${project.summary}</p>
-      <button class="details-button" type="button">View detail</button>
+      ${project.url
+        ? `<a class="details-link" href="${project.url}">Read case study</a>`
+        : `<button class="details-button" type="button">View detail</button>`}
     </div>
   `;
-  article.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => openProject(project, button));
-  });
+  if (!project.url) {
+    article.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => openProject(project, button));
+    });
+  }
   grid.appendChild(article);
 });
 

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telephony Demand & Agent Activity | Maple Leaf Intelligence</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #3D4A5C;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    min-width: 210px;
+    color: var(--accent);
+  }
+
+  .nav-link,
+  .reserved-link {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .reserved-link {
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  .social-link {
+    width: 32px;
+    height: 32px;
+    border: 1px solid currentColor;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 44px 32px 86px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 34px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .case-header {
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .lede {
+    margin: 0 auto;
+    max-width: 780px;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .hero-image {
+    margin: 34px 0 38px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F0F2F5;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .case-study {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 8px 36px 34px;
+  }
+
+  .case-section {
+    padding-top: 28px;
+    margin-top: 28px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .case-section:first-child {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+  }
+
+  p + p { margin-top: 14px; }
+
+  .output-list {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 7px 0 7px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .output-list li:last-child { border-bottom: 0; }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .footer-nav {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .reserved-link { display: none; }
+    .top-actions { min-width: 40px; }
+    main { padding: 32px 20px 64px; }
+    .case-study { padding: 4px 22px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="portfolio.html" aria-label="Maple Leaf Intelligence home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Maple Leaf Intelligence</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="portfolio.html">Portfolio</a>
+      <a class="reserved-link" href="#" aria-disabled="true">CV</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">in</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <a class="back-link" href="portfolio.html">Back to portfolio</a>
+
+  <header class="case-header">
+    <h1>Telephony Demand & Agent Activity</h1>
+    <p class="lede">SQL Server transformation pipelines and Power BI reporting structures for operational telephony, queue demand and workforce activity reporting.</p>
+  </header>
+
+  <figure class="hero-image">
+    <img src="images-anon/telephony-anon.png" alt="Telephony reporting screenshot">
+  </figure>
+
+  <article class="case-study">
+    <section class="case-section">
+      <h2>Overview</h2>
+      <p>Developed SQL Server transformation pipelines and Power BI reporting structures supporting operational telephony and workforce reporting across a high-volume emergency clinical contact centre handling 999 and 111 activity.</p>
+      <p>The reporting environment reconstructed operational sessions, agent activity, call handling behaviour, queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD).</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Operational Requirement</h2>
+      <p>Operational reporting requirements included queue demand analysis, answering performance, handling times, abandonment analysis, workforce utilisation, operational KPI reporting, and detailed session-level operational investigation.</p>
+      <p>The reporting structures supported operational management, workforce planning, performance reporting, and operational review across clinical contact centre services.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Data Transformation (T-SQL)</h2>
+      <p>Cisco source tables recorded low-level operational events and call segments rather than complete operational workflows. SQL Server transformation procedures were therefore developed to reconstruct operational reporting structures from multiple related event streams.</p>
+      <p>Transformation outputs included:</p>
+      <ul class="output-list">
+        <li><strong>Call Data</strong> - operational call reconstruction including routing behaviour</li>
+        <li><strong>Agent Calls</strong> - operational call attribution from the agent perspective</li>
+        <li><strong>Agent Sessions</strong> - reconstructed login sessions and session durations</li>
+        <li><strong>Agent Activity</strong> - operational activity classification and utilisation reporting</li>
+        <li><strong>Session Journal</strong> - minute-by-minute operational timeline reporting</li>
+      </ul>
+      <p>Transformation logic included session reconstruction, event sequencing, temporal modelling, operational call attribution, overlapping call handling, activity classification, duration derivation, and operational timeline reconstruction.</p>
+      <p>SQL techniques included staged processing, temporary tables, conditional aggregation, CASE logic, lookup enrichment, UNION-based schema normalisation, and MERGE update processing across datasets approaching two million records.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Data Modelling & Power BI</h2>
+      <p>Transformed reporting tables were modelled in Power BI to support operational dashboards, workforce reporting, queue analysis, operational drillthrough reporting, and detailed session-level investigation.</p>
+      <p>DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, percentages, averages, and percentile reporting. Additional DAX logic supported operational time formatting, filter-context management, and operational summary reporting.</p>
+      <p>Power BI models were designed for operational usability and responsive filtering across high-volume reporting datasets.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Validation & Governance</h2>
+      <p>Reporting outputs were validated against source system behaviour, operational workflows, existing reporting outputs, and operational examples to ensure operational interpretability and reporting accuracy.</p>
+      <p>Validation included investigation of reporting discrepancies, edge-case analysis, activity-duration validation, and operational lifecycle attribution testing.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Performance & Scalability</h2>
+      <p>Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies.</p>
+      <p>Transformation procedures and reporting models were designed to remain responsive under operational reporting workloads.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Operational Outcome</h2>
+      <p>The reporting environment provided operational visibility across telephony activity, workforce utilisation, queue behaviour, operational performance, and session-level activity analysis.</p>
+      <p>The reporting structures improved confidence in operational KPI reporting and reduced reliance on externally interpreted telephony reporting outputs.</p>
+    </section>
+  </article>
+
+  <div class="footer-nav">
+    <a class="back-link" href="portfolio.html">Back to portfolio</a>
+  </div>
+</main>
+
+<footer>
+  Organisational names and labels have been changed for presentation in this portfolio. Figures shown are placeholders and do not represent actual values.
+</footer>
+</body>
+</html>
