@@ -127,13 +127,17 @@
 
   .back-link {
     display: inline-block;
-    margin-bottom: 34px;
     color: var(--navy);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     text-decoration: none;
+  }
+
+  .back-nav {
+    max-width: 900px;
+    margin: 0 auto 34px;
   }
 
   .case-header {
@@ -149,14 +153,6 @@
     line-height: 1.06;
     font-weight: 600;
     letter-spacing: 0;
-  }
-
-  .lede {
-    margin: 0 auto;
-    max-width: 780px;
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.65;
   }
 
   .media-carousel {
@@ -377,11 +373,12 @@
 </div>
 
 <main>
-  <a class="back-link" href="portfolio.html">Back to portfolio</a>
+  <div class="back-nav">
+    <a class="back-link" href="portfolio.html">Back to portfolio</a>
+  </div>
 
   <header class="case-header">
     <h1>Telephony Demand & Agent Activity</h1>
-    <p class="lede">SQL Server transformations and Power BI reports for operational telephony and agent activity reporting in a high-volume emergency services clinical contact centre.</p>
   </header>
 
   <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
