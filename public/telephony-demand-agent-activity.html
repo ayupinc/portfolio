@@ -206,11 +206,11 @@
   .carousel-button.next { right: 10px; }
 
   .case-layout {
-    max-width: 980px;
+    max-width: 900px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 290px minmax(0, 1fr);
-    gap: 58px;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 50px;
     align-items: start;
   }
 
@@ -284,32 +284,19 @@
   }
 
   .technical-detail summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--navy);
+    display: inline;
+    color: var(--body);
     cursor: pointer;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 0;
     text-transform: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
     list-style: none;
   }
 
   .technical-detail summary::-webkit-details-marker { display: none; }
-
-  .technical-detail summary::after {
-    content: "+";
-    width: 16px;
-    height: 16px;
-    border: 1px solid currentColor;
-    display: grid;
-    place-items: center;
-    font-size: 12px;
-    line-height: 1;
-  }
-
-  .technical-detail[open] summary::after { content: "-"; }
 
   .technical-body {
     margin-top: 14px;
@@ -475,23 +462,12 @@
         <h2>Operational Engagement & Validation</h2>
         <p>Reporting requirements were developed through direct engagement with operational managers, workforce teams, and operational users responsible for day-to-day service management.</p>
         <p>This included clarification of operational workflows, validation of KPI interpretation, investigation of reporting discrepancies, and alignment of reporting outputs with operational expectations.</p>
-        <details class="technical-detail">
-          <summary>Technical Detail</summary>
-          <div class="technical-body">
-            <p>Operational examples and real-world workflow scenarios were used during validation to ensure reporting outputs reflected operational behaviour rather than simple reproduction of raw telephony events.</p>
-          </div>
-        </details>
+        <p>Operational examples and real-world workflow scenarios were used during validation to ensure reporting outputs reflected operational behaviour rather than simple reproduction of raw telephony events.</p>
       </section>
 
       <section class="case-section">
         <h2>Performance & Scalability</h2>
-        <p>Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies.</p>
-        <details class="technical-detail">
-          <summary>Technical Detail</summary>
-          <div class="technical-body">
-            <p>Stored procedures were used in preference to views for the more calculation-heavy operational timelines, supporting temporary table processing and improving execution performance.</p>
-          </div>
-        </details>
+        <p>Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies. Stored procedures were used in preference to views for the more calculation-heavy operational timelines, supporting temporary table processing and improving execution performance.</p>
       </section>
     </div>
   </article>
