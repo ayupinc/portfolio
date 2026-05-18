@@ -440,7 +440,7 @@
 <script>
 const projects = [
   {
-    title: "Calls Waiting Wallboard",
+    title: "Real Time Demand",
     image: "images-anon/wall-anon.png",
     summary: "Near-real-time queue visibility for call-back workload, wait times and operational prioritisation.",
     requirement: "For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.",
@@ -448,7 +448,7 @@ const projects = [
     engineering: "Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values."
   },
   {
-    title: "Key Performance Indicator - Outcomes Based",
+    title: "Key Performance Indicator",
     image: "images-anon/perf-metric-anon.png",
     summary: "Outcome-based KPI reporting across volumes, percentages, outcome categories and resolving teams.",
     requirement: "Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.",
@@ -456,15 +456,7 @@ const projects = [
     engineering: "Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting."
   },
   {
-    title: "Key Performance Indicator - Time Based",
-    image: "images-anon/queue-action-anon.png",
-    summary: "Duration measurement from case creation to a defined action, with trend and detail analysis.",
-    requirement: "Provide a reliable methodology to measure duration from the case being created to a specific action taking place and a Power BI Report to display the metrics over time, by clinician group assessing and with high level call details. Audience: Clinical leadership, senior operations team, performance stakeholders, with summaries to executive team and board.",
-    solution: "Power BI report built using the newly modelled dataset with visuals for key metrics and over-time views with multiple axis options. Filtering by case priorities and clinical level. Included a responsive drill-through page for incident detail and a separate help / information / version page. DAX measures include PERCENTILEX, MEDIANX and AVERAGEX with FILTERs, CALCULATE and COUNTROWS.",
-    engineering: "Defined accurate start and end timestamps for the metric, supported by complex SQL to correctly attribute the times between different queue tables. Query contained multiple CTEs to gather data, ranked window functions to capture specific case events where multiple events existed, and STRING_AGG to show queue levels on the case journey."
-  },
-  {
-    title: "Response and Utilisation Information - Staff Group",
+    title: "Resource Utilisation",
     image: "images-anon/util-anon.png",
     summary: "Availability, activity and utilisation reporting for a specialist operational staff group.",
     requirement: "A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.",
@@ -472,7 +464,7 @@ const projects = [
     engineering: "Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing. Captured event times and calculated availability durations using temporal modelling."
   },
   {
-    title: "Clinical Call Flow Comparison",
+    title: "Call Flow Analysis",
     image: "images-anon/flow-anon.png",
     summary: "Flow analysis showing how calls move through clinical teams, statuses and outcomes.",
     requirement: "Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making.",
@@ -480,7 +472,7 @@ const projects = [
     engineering: "Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy to prevent overlaps between levels, used CTEs, ranked window functions and complex CASE statements, and created persistent tables for downstream reporting."
   },
   {
-    title: "Patient Assessments Report",
+    title: "Remote Assessments Summary",
     image: "images-anon/aqm-anon.png",
     summary: "Questionnaire response reporting for remote patient assessments and clinician feedback.",
     requirement: "Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.",
@@ -531,7 +523,7 @@ const projects = [
     ]
   },
   {
-    title: "Operations Report",
+    title: "Operations Summary",
     image: "images-anon/operations-anon.png",
     summary: "Consolidated operational reporting across call handling, assessment activity and headline KPIs.",
     requirement: "Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information.",
@@ -539,7 +531,7 @@ const projects = [
     engineering: "Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data."
   },
   {
-    title: "Electronic Patient Care Record Report",
+    title: "Electronic Patient Care Record",
     image: "images-anon/epcr-anon.png",
     summary: "Clinical observation, intervention, questionnaire and outcome reporting from patient care records.",
     requirement: "Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.",
