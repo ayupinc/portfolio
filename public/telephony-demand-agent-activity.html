@@ -186,18 +186,6 @@
     height: auto;
   }
 
-  .carousel-caption {
-    margin: 0;
-    padding: 11px 16px;
-    border-top: 1px solid var(--rule);
-    background: var(--white);
-    color: var(--navy);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
   .carousel-button {
     position: absolute;
     top: 50%;
@@ -220,24 +208,25 @@
     background: var(--white);
     border: 1px solid var(--rule);
     border-radius: 8px;
-    padding: 34px 36px 38px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 30px 36px;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 42px 48px 48px;
   }
 
   .case-section {
-    min-width: 0;
+    padding-top: 34px;
+    margin-top: 34px;
+    border-top: 1px solid var(--rule);
   }
 
-  .case-section.overview {
-    grid-column: 1 / -1;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--rule);
+  .case-section:first-child {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: 0;
   }
 
   h2 {
-    margin: 0 0 10px;
+    margin: 0 0 14px;
     color: var(--navy);
     font-size: 13px;
     font-weight: 800;
@@ -248,14 +237,14 @@
   p {
     margin: 0;
     color: var(--body);
+    font-size: 17px;
+    line-height: 1.75;
   }
 
-  p + p { margin-top: 14px; }
+  p + p { margin-top: 18px; }
 
   .technical-detail {
-    margin-top: 16px;
-    border-top: 1px solid var(--rule);
-    padding-top: 12px;
+    margin-top: 20px;
   }
 
   .technical-detail summary {
@@ -337,10 +326,9 @@
     .top-actions { min-width: 40px; }
     main { padding: 32px 20px 64px; }
     .case-study {
-      grid-template-columns: 1fr;
-      padding: 28px 22px;
+      padding: 32px 24px 36px;
     }
-    .case-section.overview { grid-column: auto; }
+    p { font-size: 16px; }
   }
 </style>
 </head>
@@ -372,23 +360,18 @@
     <div class="carousel-frame">
       <figure class="carousel-slide is-active">
         <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
-        <figcaption class="carousel-caption">Calls to Service</figcaption>
       </figure>
       <figure class="carousel-slide">
         <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
-        <figcaption class="carousel-caption">Agent Activity Overview</figcaption>
       </figure>
       <figure class="carousel-slide">
         <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot">
-        <figcaption class="carousel-caption">Agent Activity Session Summary</figcaption>
       </figure>
       <figure class="carousel-slide">
         <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
-        <figcaption class="carousel-caption">Agent Activity Calls</figcaption>
       </figure>
       <figure class="carousel-slide">
         <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
-        <figcaption class="carousel-caption">Agent Session Journal</figcaption>
       </figure>
       <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
       <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
@@ -396,7 +379,7 @@
   </section>
 
   <article class="case-study">
-    <section class="case-section overview">
+    <section class="case-section">
       <h2>Overview</h2>
       <p>Reconstructed agent activity, call and queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD).</p>
       <p>Presented call demand analysis, answer, abandonment and handling performance, workforce utilisation and detailed operational level reports for operational management, workforce planning, performance reporting and operational review.</p>
@@ -422,12 +405,7 @@
       <h2>Data Modelling & Power BI</h2>
       <p>Transformed reporting tables were modelled directly in Power BI.</p>
       <p>A single further view combined call and activity events into a unified operational agent session journal, giving a minute-by-minute timeline of activity.</p>
-      <details class="technical-detail">
-        <summary>Technical Detail</summary>
-        <div class="technical-body">
-          <p>DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, averages, percentages, and percentile reporting. Operational time formatting was used alongside measures for filter-context management and broader summary reporting.</p>
-        </div>
-      </details>
+      <p>DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, averages, percentages, and percentile reporting. Operational time formatting was used alongside measures for filter-context management and broader summary reporting.</p>
     </section>
 
     <section class="case-section">
