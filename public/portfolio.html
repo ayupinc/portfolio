@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operational Reporting Solutions | Maple Leaf Intelligence</title>
+<title>Power BI Portfolio</title>
+<!-- Using system fonts with Aptos preference -->
 <style>
   :root {
     --navy: #0F1F3D;
-    --accent: var(--navy);
     --navy-mid: #1E3A5F;
+    --slate: #2D4A6B;
     --ink: #1A1A2E;
     --body: #3D4A5C;
     --muted: #6B7A8F;
@@ -16,640 +17,768 @@
     --bg: #F7F8FA;
     --white: #FFFFFF;
     --paper: #FAFBFC;
-    --shadow: 0 18px 55px rgba(15,31,61,0.16);
+
+    /* Project accents */
+    --teal:   #006B5E;
+    --teal-l: #E6F4F1;
+    --blue:   #1B4D8E;
+    --blue-l: #EAF0F9;
+    --amber:  #8B5E00;
+    --amber-l:#FFF4E0;
+    --plum:   #5E2B7E;
+    --plum-l: #F4EDF9;
+    --red:    #8B1A1A;
+    --red-l:  #FDF0F0;
+    --green:  #1A5C35;
+    --green-l:#EBF6F0;
+    --indigo: #2B3A8B;
+    --indigo-l:#EEF0FC;
+    --rose:   #8B2252;
+    --rose-l: #FCF0F5;
+    --copper: #7A3D1A;
+    --copper-l:#FDF1EA;
+    --stone:  #4A4A4A;
+    --stone-l:#F2F2F2;
+    --ocean:  #1A5F7A;
+    --ocean-l:#EAF5F9;
   }
 
-  *, *::before, *::after { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
 
   body {
-    margin: 0;
-    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
     background: var(--bg);
     color: var(--body);
     font-size: 15px;
-    line-height: 1.65;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
 
-  body.modal-open { overflow: hidden; }
-
-  a { color: inherit; }
-
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(255,255,255,0.94);
-    border-bottom: 1px solid var(--rule);
-    backdrop-filter: blur(14px);
-  }
-
-  .topbar-inner {
-    max-width: 1180px;
-    margin: 0 auto;
-    min-height: 66px;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 11px;
-    min-width: 0;
-    color: var(--accent);
-    text-decoration: none;
-  }
-
-  .brand-mark {
-    width: 31px;
-    height: 31px;
-    object-fit: contain;
-    display: block;
-  }
-
-  .brand-fallback {
-    width: 31px;
-    height: 31px;
-    border: 2px solid var(--accent);
-    display: none;
-    place-items: center;
-    color: var(--accent);
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  .brand-name {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-
-  .top-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 18px;
-    color: var(--accent);
-  }
-
-  .social-link {
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--accent);
-  }
-
+  /* ---- HEADER ---- */
   header {
-    background: var(--bg);
-    color: var(--navy);
+    background: var(--navy);
+    color: white;
+    padding: 44px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+    pointer-events: none;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.02);
+    pointer-events: none;
   }
 
-  .hero {
-    max-width: 1180px;
+  .header-inner {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 54px 32px 24px;
-    text-align: center;
+    padding: 0 48px;
+    position: relative;
+    z-index: 1;
   }
 
   h1 {
-    margin: 0 0 10px;
-    font-size: clamp(30px, 4vw, 50px);
-    line-height: 1.06;
-    font-weight: 600;
-    color: var(--navy);
-    letter-spacing: 0;
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    font-size: clamp(36px, 4.5vw, 54px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 10px;
   }
 
-  .subtitle {
-    margin: 0;
-    color: var(--navy);
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0;
+  .header-subtitle {
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    /* width roughly matches name — set via max-width */
+    max-width: 420px;
   }
 
-  main {
-    max-width: 1180px;
+  .header-desc {
+    font-size: 15.5px;
+    color: rgba(255,255,255,0.6);
+    max-width: 100%;
+    line-height: 1.65;
+    margin-bottom: 0;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 20px 32px 92px;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 52px;
   }
 
-  .intro {
-    margin: 0 0 24px;
+  .nav-link {
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
     color: var(--muted);
-    max-width: none;
+    text-decoration: none;
+    padding: 14px 14px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
   }
 
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
-    align-items: start;
+  .nav-link:hover { color: var(--navy); border-bottom-color: var(--navy); }
+
+  /* ---- MAIN LAYOUT ---- */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px 100px;
   }
 
-  .project-card {
+  /* ---- PROJECT CARD ---- */
+  .project {
+    background: var(--white);
     border: 1px solid var(--rule);
-    background: var(--white);
     border-radius: 8px;
+    margin-bottom: 28px;
     overflow: hidden;
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: box-shadow 0.25s;
   }
 
-  .project-card:hover,
-  .project-card:focus-within {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(15,31,61,0.11);
-    border-color: rgba(15,31,61,0.35);
-  }
+  .project:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
 
-  .thumb-button,
-  .thumb-link {
-    padding: 0;
-    border: 0;
+  .project-header {
+    padding: 20px 32px 16px;
     border-bottom: 1px solid var(--rule);
-    background: #F0F2F5;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-    text-align: inherit;
-    text-decoration: none;
-  }
-
-  .thumb-button img,
-  .thumb-link img {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-  }
-
-  .thumb-carousel {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    background: #F0F2F5;
-  }
-
-  .project-card > .thumb-carousel {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .thumb-image-link {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
-  }
-
-  .thumb-carousel img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    opacity: 0;
-    transition: opacity 0.18s ease;
-  }
-
-  .thumb-carousel img.is-active {
-    opacity: 1;
-  }
-
-  .thumb-carousel-button {
-    position: absolute;
-    top: 50%;
-    z-index: 2;
-    transform: translateY(-50%);
-    width: 32px;
-    height: 40px;
-    border: 1px solid rgba(15,31,61,0.24);
-    background: rgba(255,255,255,0.88);
-    color: var(--navy);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .thumb-carousel-button:hover {
-    background: var(--white);
-  }
-
-  .thumb-carousel-button.prev { left: 8px; }
-  .thumb-carousel-button.next { right: 8px; }
-
-  .card-body {
-    padding: 20px 22px 22px;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .project-accent-bar {
+    width: 4px;
+    border-radius: 2px;
+    min-height: 28px;
+    flex-shrink: 0;
+  }
+
+  .project-title-block { flex: 1; }
+
+  .project-number {
+    font-family: 'Aptos Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 6px;
   }
 
   .project-title {
-    margin: 0;
-    color: var(--navy);
-    font-size: 21px;
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    font-size: 20px;
     font-weight: 500;
+    color: var(--navy);
     line-height: 1.2;
+    margin-bottom: 0;
   }
 
-  .summary {
-    margin: 0;
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'Aptos Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 10.5px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---- SCREENSHOT PLACEHOLDER ---- */
+  .screenshot-area {
+    background: #F0F2F5;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .screenshot-area img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ---- PROJECT BODY ---- */
+  .project-body {
+    padding: 24px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Top row: Requirement full width */
+  .top-row {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Bottom row: Power BI Solution (1/2) + Data Engineering (1/2) */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  @media (max-width: 860px) {
+    .bottom-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .project-header { flex-direction: column; gap: 12px; }
+    .project-accent-bar { width: 40px; height: 4px; min-height: unset; }
+    main { padding: 0 24px 60px; }
+    .nav-inner { padding: 0 24px; }
+    .header-inner { padding: 0 24px; }
+  }
+
+  /* Section label — bold navy uppercase with full-width rule below */
+  .col-label {
+    font-family: 'Aptos', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    display: block;
+  }
+
+  /* All section blocks are plain — no backgrounds or borders */
+
+  /* Outcome / callout: left border accent, italic */
+  .outcome-callout {
+    border-left: 3px solid var(--rule);
+    padding-left: 16px;
+    font-style: italic;
     color: var(--body);
     font-size: 13.5px;
-    line-height: 1.58;
+    line-height: 1.65;
   }
 
-  .details-button,
-  .details-link {
-    align-self: flex-start;
-    margin-top: auto;
-    border: 1px solid var(--accent);
-    background: transparent;
-    color: var(--accent);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    text-decoration: none;
+  .col-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--body);
   }
 
-  .details-button:hover,
-  .details-link:hover { background: rgba(15,31,61,0.06); }
+  .col-text p + p { margin-top: 10px; }
 
-  .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
+  /* Technical points list */
+  .tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
-  .modal[aria-hidden="false"] { display: flex; }
-
-  .modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(10,18,33,0.72);
-  }
-
-  .modal-panel {
+  .tech-list li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--body);
+    padding: 5px 0 5px 16px;
     position: relative;
-    z-index: 1;
-    width: min(1040px, 100%);
-    max-height: min(88vh, 920px);
-    overflow: auto;
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-  }
-
-  .modal-close {
-    position: sticky;
-    top: 0;
-    float: right;
-    z-index: 2;
-    width: 42px;
-    height: 42px;
-    border: 0;
-    border-left: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    background: white;
-    color: var(--navy);
-    font-size: 28px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .modal-image {
-    width: 100%;
-    display: block;
-    background: #F0F2F5;
     border-bottom: 1px solid var(--rule);
   }
 
-  .modal-content {
-    padding: 28px 34px 34px;
+  .tech-list li:last-child { border-bottom: none; }
+
+  .tech-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-size: 12px;
   }
 
-  .modal-title {
-    margin: 0 48px 22px 0;
-    color: var(--navy);
-    font-size: 30px;
-    line-height: 1.18;
-    font-weight: 500;
+  /* Audience pill */
+  .audience-pill {
+    display: inline-block;
+    font-size: 12.5px;
+    color: var(--body);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 8px 14px;
+    line-height: 1.5;
   }
 
-  .detail-block {
-    padding-top: 18px;
-    margin-top: 18px;
+  /* Outcome box — left border accent, italic, no background */
+  .outcome-box {
+    border-left: 3px solid;
+    padding-left: 16px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--body);
+    font-style: italic;
+  }
+
+  /* Full-width sections */
+  .project-full {
+    padding: 0 32px 28px;
     border-top: 1px solid var(--rule);
   }
 
-  .detail-block:first-of-type {
-    padding-top: 0;
-    margin-top: 0;
-    border-top: 0;
+  .project-full-inner {
+    padding-top: 24px;
   }
 
-  .detail-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--navy);
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .detail-text {
-    margin: 0;
-    color: var(--body);
-    font-size: 14px;
-    line-height: 1.7;
-  }
-
+  /* ---- FOOTER ---- */
   footer {
     background: var(--navy);
-    color: rgba(255,255,255,0.72);
-    padding: 34px 32px;
+    color: rgba(255,255,255,0.4);
     text-align: center;
-    font-size: 11px;
-    letter-spacing: 0.03em;
+    padding: 40px;
+    font-size: 13px;
+    font-family: 'Aptos Mono', 'Consolas', 'Courier New', monospace;
+    letter-spacing: 0.05em;
   }
 
-  @media (max-width: 780px) {
-    .topbar-inner { padding: 0 20px; }
-    .brand-name { font-size: 13px; }
-    .top-actions { min-width: 40px; }
-    .hero { padding: 54px 24px 46px; }
-    main { padding: 28px 20px 64px; }
-    .portfolio-grid { grid-template-columns: 1fr; }
-    .modal { padding: 14px; }
-    .modal-content { padding: 22px; }
-    .modal-title { font-size: 24px; }
+  footer a { color: rgba(255,255,255,0.55); }
+  /* Audience inline at end of requirement */
+  .aud-inline {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
   }
+
+  .aud-label {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-right: 4px;
+  }
+
+  .footer-note {
+    margin-top: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,255);
+    letter-spacing: 0.02em;
+  }
+
+  /* Analytics Engineering section break */
+  .ae-section-break {
+    margin: 56px 0 0;
+    padding: 32px 32px 28px;
+    border-top: 2px solid var(--navy);
+  }
+  .ae-section-break h2 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .ae-section-break p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 720px;
+    line-height: 1.65;
+  }
+
+  /* Welsh heatmap: 2-col layout */
+  .welsh-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+  }
+
+  .welsh-img-col {
+    border-right: 1px solid var(--rule);
+    background: #F0F2F5;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .welsh-screenshot {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .welsh-content-col {
+    padding: 24px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  @media (max-width: 860px) {
+    .welsh-layout { grid-template-columns: 1fr; }
+    .welsh-img-col { border-right: none; border-bottom: 1px solid var(--rule); }
+    .welsh-cols { grid-template-columns: 1fr; }
+  }
+
+  /* ---- PAGE NAV ---- */
+  .nav-link.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
+  .nav-sep { width: 1px; height: 20px; background: var(--rule); margin: 0 8px; flex-shrink: 0; }
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="portfolio.html" aria-label="Maple Leaf Intelligence home">
-      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
-      <span class="brand-fallback" aria-hidden="true">M</span>
-      <span class="brand-name">Maple Leaf Intelligence</span>
-    </a>
-    <div class="top-actions" aria-label="Portfolio links">
-      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
-    </div>
-  </div>
-</div>
 
 <header>
-  <section class="hero">
-    <h1>Operational Reporting Solutions</h1>
-    <p class="subtitle">Stephen Clinton, Senior Power BI Developer / Analytics Engineer</p>
-  </section>
+  <div class="header-inner">
+    <h1>Stephen Clinton</h1>
+    <p class="header-subtitle">SENIOR POWER BI DEVELOPER / ANALYTICS ENGINEER</p>
+    <!--p class="header-desc">End-to-end reporting delivery across clinical contact centre operations, ambulance dispatch, and patient management systems — from data engineering and semantic modelling through to production dashboards serving 24/7 operational teams.</p-->
+  </div>
 </header>
 
-<main>
-  <p class="intro">Power BI and analytics engineering examples spanning operational reporting, clinical contact centre intelligence, telephony modelling and patient pathway analysis.</p>
-  <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
-</main>
-
-<div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-panel" role="document">
-    <button class="modal-close" type="button" data-close aria-label="Close details">&times;</button>
-    <img class="modal-image" id="modalImage" src="" alt="">
-    <div class="modal-content">
-      <h2 class="modal-title" id="modalTitle"></h2>
-      <div id="modalDetails"></div>
-    </div>
+<nav>
+  <div class="nav-inner">
+    <a href="portfolio.html" class="nav-link active">Power BI Portfolio</a>
+    <a href="analytics.html" class="nav-link">Analytics Engineering</a>
   </div>
+</nav>
+
+<main>
+
+<div class="ae-section-break" style="border-top: none; margin-top: 0;">
+  <p>Power BI report examples demonstrating reporting delivery.</p>
 </div>
 
+<article class="project" id="csd">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--teal);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Calls Waiting Wallboard</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/wall-anon.png" alt="Calls Waiting Wallboard">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Direct Query Power BI dashboard polling every 60 seconds, displaying counts of cases by response priority, using both numerical and coloured bar visualisations for the dashboard to be viewed across the room as well as on a desktop. Measures include CALCULATE with COUNT, SUM and FILTER for metrics and MAX / MAXX for durations.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="cc">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--blue);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Key Performance Indicator – Outcomes Based</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/perf-metric-anon.png" alt="KPI Outcomes Based">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">New Power BI Report showing the percentage and volume over time with headline metrics and group / outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window. DAX measures include extensive CALCULATE, SUM and DIVIDE for calculating the metrics.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="rca">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--amber);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Key Performance Indicator – Time Based</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/queue-action-anon.png" alt="KPI Time Based">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Provide a reliable methodology to measure duration from the case being created to a specific action taking place and a Power BI Report to display the metrics over time, by clinician group assessing and with high level call details. Audience: Clinical leadership, senior operations team, performance stakeholders, with summaries to executive team and board.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Power BI report built used the newly modelled dataset with visuals for key metrics and over-time with multiple axis options. Filtering by case priorities and clinical level. Included a responsive drill-through page for incident detail and a separate help / information / version page. DAX measures include PERCENTILEX, MEDIANX and AVERAGEX with FILTERs, CALCULATE and COUNTROWS. Created documentation for stakeholders and data team to understand calculation steps and the meaning of the new metric.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Defined accurate start and end timestamps for the metric, supported by complex SQL to correctly attribute the times between different queue tables. Query contained multiple CTEs to gather data, ranked window functions to capture specific case events where multiple events existed, and STRING_AGG to show queue levels on the case journey. Created a view for further downstream reporting. All processes documented with code for future reference.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="vr">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--plum);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Response and Utilisation Information – Staff Group</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/util-anon.png" alt="Response and Utilisation Report">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Power BI report to present headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. DAX measures include CALCULATE, COUNTROWS and FILTERs, CONCATENATE/X for active filters, refresh times and version display, COUNT, SUM, DIVIDE and AVERAGE for metrics and ALLEXCEPT for broader measures. Report also contains detail pages for review of individual responses and a separate help, information and version page. Socialised the methodologies to stakeholders and included in help file.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing to ensure accuracy. Captured event times and calculated availability durations, using temporal modelling to link responses to availability to determine utilisation. Provided thorough documentation of data capture methodology for data teams and to stakeholders for information.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="ems">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--red);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Clinical Call Flow Comparison</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/flow-anon.png" alt="Clinical Call Flow">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making. Report would replace intensive sessions using extracted patient management system data in spreadsheets.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Also includes pages for different perspectives (outcome, category and priority) and drill through detail pages with a separate page for help, information and version updates. DAX measures include CALCULATE, with REMOVEFILTERS for overall totals, SWITCH and SELECTEDVALUE for parameterised charts. Created documentation and shared with stakeholders to break down the complexity of the call queuing process and allow understanding of the measures being shown in the report.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy preventing overlaps between levels to ensure the strictest accuracy. Using CTEs for data capture and structure, ranked window functions and LEAD/LAG for event timings and complex CASE statements to identify the correct events, created persistent tables to materialise the data for downstream reporting, simplifying performance reporting across all clinical queues and avoiding re-processing large datasets in the future. Prepared extensive technical documentation to share with the data teams to clarify the logic and process.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="cna">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--green);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Patient Assessments Report (Questionnaire Data)</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/aqm-anon.png" alt="Patient Assessments Report">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Multi-page Power BI report showing assessment volumes, assessment durations and outcomes with correlations between responses for all activity. Additional pages for each assessment type (7), incident level detail and help, information and version detail. Created Power Query transitions to pivot the data into episode level responses, allowing the comparisons of per-episode responses. Created documentation on the methodology and shared with stakeholders to facilitate understanding especially around the individual clinician feedback.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric analysis and sequencing. Data required significant cleaning including multiple response handling, question and response text cleaning to standardise entries and branch logic to show separate pathways within the same questionnaire. Resulting clean data tables provided a reusable dataset for all downstream questionnaire reporting across all clinician streams. Provided extensive technical documentation to share with the data teams to clarify the logic and process.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="cnt">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--indigo);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Telephony Report</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/telephony-anon.png" alt="Telephony Report">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Provide information on telephone activity; call distribution, volume, handling and wait times including detail to identify specific calls for review. Audience: Clinical contact centre leadership, clinical group supervisors, operations and performance groups.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Multi-page report for volumes, with pages for detail on call durations, handling time analysis, wait time analysis and inbound and outbound calls including call level drill through and a data glossary page. Filters for call types and groups handling as well as answer status and date. DAX measures include CALCULATE with COUNT, SUM and AVERAGE with REMOVEFILTERS and KEEPFILTERS for some broader metrics. Power Query table creation for call handling and wait time intervals. Additional calculated columns referencing call fields, provide context for calls in the report and classification into groups.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Created new data warehouse procedures and data tables to report telephone activity following changes to switchboard which rendered earlier third party tables redundant. Extensive mapping and joining of CISCO native call tables was required to provide accurate reliable call tables covering all call, transfer, dial and hold activity on the switchboard. Wrote additional procedures to create tables for agent activity, logged in sessions and calls which combine to create reports used for individual agents. Each form the backbone of all telephony reporting in the organisation replacing all others previously used.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="ops111">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--ocean);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Operations Report</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/operations-anon.png" alt="Operations Report">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information. Replace multiple fragmented reports from other reporting systems. Audience: KPI pages for assessment times used in all external performance reports to stakeholders and all pages used daily by operations teams as the main source of operational information.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact. DAX measures include active filters using table creation with ISFILTERED, as part of 40+ measures covering various calculated metrics. 168 hour weekly matrix is used for demand analysis and staffing predictions.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from other native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="epcr">
+  <div class="project-header">
+    <div class="project-accent-bar" style="background: var(--rose);"></div>
+    <div class="project-title-block">
+      <h2 class="project-title">Electronic Patient Care Record Report</h2>
+    </div>
+  </div>
+
+  <div class="screenshot-area">
+    <img src="images-anon/epcr-anon.png" alt="Electronic Patient Care Record Report">
+  </div>
+
+  <div class="project-body">
+    <div class="top-row">
+      <div class="project-col">
+        <p class="col-label">Requirement</p>
+        <p class="col-text">Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.</p>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="project-col">
+        <p class="col-label">Power BI Solution</p>
+        <p class="col-text">Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering to see impact and relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management. DAX measures include CALCULATE counts throughout, REMOVE/KEEPFILTERS/ALL for broader metrics, ISFILTERED for active filters, USERELATIONSHIP for drug associations.</p>
+      </div>
+      <div class="project-col">
+        <p class="col-label">Data Modelling / Engineering</p>
+        <p class="col-text">Vendor servers synchronised multiple times daily to organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+</main>
+
 <footer>
-  Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
+  <!-- <p>Stephen Clinton &nbsp;·&nbsp; Senior Power BI Developer</p> -->
+  <p class="footer-note">Organisational names and labels have been changed for presentation in this portfolio. Figures shown are placeholders and do not represent actual values. Categories and types have been anonymised.</p>
 </footer>
 
-<script>
-const projects = [
-  {
-    title: "Real Time Demand",
-    image: "images-anon/wall-anon.png",
-    summary: "Near-real-time queue visibility for call-back workload, wait times and operational prioritisation.",
-    requirement: "For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.",
-    solution: "Direct Query Power BI dashboard polling every 60 seconds, displaying counts of cases by response priority, using both numerical and coloured bar visualisations for the dashboard to be viewed across the room as well as on a desktop. Measures include CALCULATE with COUNT, SUM and FILTER for metrics and MAX / MAXX for durations.",
-    engineering: "Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values."
-  },
-  {
-    title: "Key Performance Indicator",
-    image: "images-anon/perf-metric-anon.png",
-    summary: "Outcome-based KPI reporting across volumes, percentages, outcome categories and resolving teams.",
-    requirement: "Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.",
-    solution: "New Power BI Report showing the percentage and volume over time with headline metrics and group / outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window. DAX measures include extensive CALCULATE, SUM and DIVIDE for calculating the metrics.",
-    engineering: "Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting."
-  },
-  {
-    title: "Resource Utilisation",
-    image: "images-anon/util-anon.png",
-    summary: "Availability, activity and utilisation reporting for a specialist operational staff group.",
-    requirement: "A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.",
-    solution: "Power BI report presenting headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. Report also contains detail pages for review of individual responses and a separate help, information and version page.",
-    engineering: "Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing. Captured event times and calculated availability durations using temporal modelling."
-  },
-  {
-    title: "Call Flow Analysis",
-    image: "images-anon/flow-anon.png",
-    summary: "Flow analysis showing how calls move through clinical teams, statuses and outcomes.",
-    requirement: "Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making.",
-    solution: "New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Also includes pages for different perspectives and drill through detail pages with a separate page for help, information and version updates. DAX measures include CALCULATE with REMOVEFILTERS, SWITCH and SELECTEDVALUE.",
-    engineering: "Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy to prevent overlaps between levels, used CTEs, ranked window functions and complex CASE statements, and created persistent tables for downstream reporting."
-  },
-  {
-    title: "Remote Assessments Summary",
-    image: "images-anon/aqm-anon.png",
-    summary: "Questionnaire response reporting for remote patient assessments and clinician feedback.",
-    requirement: "Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.",
-    solution: "Multi-page Power BI report showing assessment volumes, assessment durations and outcomes with correlations between responses for all activity. Additional pages for each assessment type, incident level detail and help, information and version detail. Created Power Query transitions to pivot the data into episode level responses.",
-    engineering: "Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric analysis and sequencing. Data required significant cleaning including multiple response handling, question and response text cleaning and branch logic to show separate pathways within the same questionnaire."
-  },
-  {
-    title: "Telephony Demand & Agent Activity",
-    image: "screenshots/calls-to-service.png",
-    images: [
-      "screenshots/calls-to-service.png",
-      "screenshots/agent-summary.png",
-      "screenshots/agent-session-summary.png",
-      "screenshots/agent-calls.png",
-      "screenshots/agent-session-journal.png"
-    ],
-    url: "telephony-demand-agent-activity.html",
-    summary: "Reconstructed agent activity, call and queue activity, and operational timelines from Cisco telephony event streams for demand, performance and workforce reporting.",
-    sections: [
-      {
-        label: "Overview",
-        text: "Developed SQL Server transformation pipelines and Power BI reporting structures supporting operational telephony and workforce reporting across a high-volume emergency clinical contact centre handling 999 and 111 activity. The reporting environment reconstructed operational sessions, agent activity, call handling behaviour, queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD)."
-      },
-      {
-        label: "Operational Requirement",
-        text: "Operational reporting requirements included queue demand analysis, answering performance, handling times, abandonment analysis, workforce utilisation, operational KPI reporting, and detailed session-level operational investigation. The reporting structures supported operational management, workforce planning, performance reporting, and operational review across clinical contact centre services."
-      },
-      {
-        label: "Data Transformation (T-SQL)",
-        text: "Cisco source tables recorded low-level operational events and call segments rather than complete operational workflows. SQL Server transformation procedures were therefore developed to reconstruct operational reporting structures from multiple related event streams. Transformation outputs included Call Data for operational call reconstruction including routing behaviour; Agent Calls for operational call attribution from the agent perspective; Agent Sessions for reconstructed login sessions and session durations; Agent Activity for operational activity classification and utilisation reporting; and Session Journal for minute-by-minute operational timeline reporting. Transformation logic included session reconstruction, event sequencing, temporal modelling, operational call attribution, overlapping call handling, activity classification, duration derivation, and operational timeline reconstruction. SQL techniques included staged processing, temporary tables, conditional aggregation, CASE logic, lookup enrichment, UNION-based schema normalisation, and MERGE update processing across datasets approaching two million records."
-      },
-      {
-        label: "Data Modelling & Power BI",
-        text: "Transformed reporting tables were modelled in Power BI to support operational dashboards, workforce reporting, queue analysis, operational drillthrough reporting, and detailed session-level investigation. DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, percentages, averages, and percentile reporting. Additional DAX logic supported operational time formatting, filter-context management, and operational summary reporting. Power BI models were designed for operational usability and responsive filtering across high-volume reporting datasets."
-      },
-      {
-        label: "Validation & Governance",
-        text: "Reporting outputs were validated against source system behaviour, operational workflows, existing reporting outputs, and operational examples to ensure operational interpretability and reporting accuracy. Validation included investigation of reporting discrepancies, edge-case analysis, activity-duration validation, and operational lifecycle attribution testing."
-      },
-      {
-        label: "Performance & Scalability",
-        text: "Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies. Transformation procedures and reporting models were designed to remain responsive under operational reporting workloads."
-      },
-      {
-        label: "Operational Outcome",
-        text: "The reporting environment provided operational visibility across telephony activity, workforce utilisation, queue behaviour, operational performance, and session-level activity analysis. The reporting structures improved confidence in operational KPI reporting and reduced reliance on externally interpreted telephony reporting outputs."
-      }
-    ]
-  },
-  {
-    title: "Operations Summary",
-    image: "images-anon/operations-anon.png",
-    summary: "Consolidated operational reporting across call handling, assessment activity and headline KPIs.",
-    requirement: "Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information.",
-    solution: "Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact. A 168 hour weekly matrix is used for demand analysis and staffing predictions.",
-    engineering: "Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data."
-  },
-  {
-    title: "Electronic Patient Care Record",
-    image: "images-anon/epcr-anon.png",
-    summary: "Clinical observation, intervention, questionnaire and outcome reporting from patient care records.",
-    requirement: "Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.",
-    solution: "Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering and show relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management.",
-    engineering: "Vendor servers synchronised multiple times daily to the organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records."
-  }
-];
-
-const grid = document.querySelector("#portfolioGrid");
-const modal = document.querySelector("#projectModal");
-const modalTitle = document.querySelector("#modalTitle");
-const modalImage = document.querySelector("#modalImage");
-const modalDetails = document.querySelector("#modalDetails");
-let lastTrigger = null;
-
-const featuredProjectIndex = projects.findIndex((project) => project.url === "telephony-demand-agent-activity.html");
-if (featuredProjectIndex > 0) {
-  projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
-}
-
-function detailBlock(label, text) {
-  return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;
-}
-
-function openProject(project, trigger) {
-  lastTrigger = trigger;
-  modalTitle.textContent = project.title;
-  modalImage.src = project.image;
-  modalImage.alt = project.title;
-  modalDetails.innerHTML = [
-    ...(project.sections
-      ? project.sections.map((section) => detailBlock(section.label, section.text))
-      : [
-        detailBlock("Requirement", project.requirement),
-        detailBlock("Power BI Solution", project.solution),
-        detailBlock("Data Modelling / Engineering", project.engineering),
-        project.extra ? detailBlock(project.extraLabel || "More Detail", project.extra) : ""
-      ])
-  ].join("");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
-  modal.querySelector(".modal-close").focus();
-}
-
-function closeProject() {
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-  if (lastTrigger) lastTrigger.focus();
-}
-
-projects.forEach((project, index) => {
-  const article = document.createElement("article");
-  article.className = "project-card";
-  const thumbMedia = project.images
-    ? `<div class="thumb-carousel" data-thumb-carousel>
-        <a class="thumb-image-link" href="${project.url}" aria-label="Open case study for ${project.title}">
-          ${project.images.map((image, imageIndex) => `<img class="${imageIndex === 0 ? "is-active" : ""}" src="${image}" alt="">`).join("")}
-        </a>
-        <button class="thumb-carousel-button prev" type="button" aria-label="Previous screenshot" data-thumb-prev>&lsaquo;</button>
-        <button class="thumb-carousel-button next" type="button" aria-label="Next screenshot" data-thumb-next>&rsaquo;</button>
-      </div>`
-    : `<img src="${project.image}" alt="${project.title}">`;
-  article.innerHTML = `
-    ${project.url && project.images ? thumbMedia : project.url ? `
-    <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
-      ${thumbMedia}
-    </a>` : `
-    <button class="thumb-button" type="button" aria-label="Open details for ${project.title}">
-      ${thumbMedia}
-    </button>`}
-    <div class="card-body">
-      <h2 class="project-title">${project.title}</h2>
-      <p class="summary">${project.summary}</p>
-      ${project.url
-        ? `<a class="details-link" href="${project.url}">Read case study</a>`
-        : `<button class="details-button" type="button">View detail</button>`}
-    </div>
-  `;
-  if (!project.url) {
-    article.querySelectorAll("button").forEach((button) => {
-      button.addEventListener("click", () => openProject(project, button));
-    });
-  }
-  article.querySelectorAll("[data-thumb-carousel]").forEach((carousel) => {
-    const images = [...carousel.querySelectorAll("img")];
-    let activeImage = 0;
-    const showImage = (nextIndex) => {
-      activeImage = (nextIndex + images.length) % images.length;
-      images.forEach((image, imageIndex) => {
-        image.classList.toggle("is-active", imageIndex === activeImage);
-      });
-    };
-
-    carousel.querySelector("[data-thumb-prev]").addEventListener("click", () => showImage(activeImage - 1));
-    carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
-  });
-  grid.appendChild(article);
-});
-
-modal.addEventListener("click", (event) => {
-  if (event.target.hasAttribute("data-close")) closeProject();
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") closeProject();
-});
-</script>
 </body>
 </html>
