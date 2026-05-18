@@ -158,19 +158,85 @@
     line-height: 1.65;
   }
 
-  .hero-image {
-    margin: 34px 0 38px;
+  .media-carousel {
+    margin: 34px auto 38px;
+    max-width: 690px;
     border: 1px solid var(--rule);
     border-radius: 8px;
     overflow: hidden;
     background: #F0F2F5;
   }
 
-  .hero-image img {
+  .carousel-frame {
+    position: relative;
+    background: #E8EBF0;
+  }
+
+  .carousel-slide {
+    display: none;
+    margin: 0;
+  }
+
+  .carousel-slide.is-active {
+    display: block;
+  }
+
+  .carousel-slide img {
     display: block;
     width: 100%;
     height: auto;
   }
+
+  .carousel-caption {
+    margin: 0;
+    padding: 11px 16px;
+    border-top: 1px solid var(--rule);
+    background: var(--white);
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 42px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .carousel-button:hover { background: var(--white); }
+  .carousel-button.prev { left: 10px; }
+  .carousel-button.next { right: 10px; }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px 14px;
+    background: var(--white);
+    border-top: 1px solid var(--rule);
+  }
+
+  .carousel-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    border: 1px solid var(--navy);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .carousel-dot.is-active { background: var(--navy); }
 
   .case-study {
     background: var(--white);
@@ -272,64 +338,69 @@
 
   <header class="case-header">
     <h1>Telephony Demand & Agent Activity</h1>
-    <p class="lede">SQL Server transformation pipelines and Power BI reporting structures for operational telephony, queue demand and workforce activity reporting.</p>
+    <p class="lede">SQL Server transformations and Power BI reports for operational telephony and agent activity reporting in a high-volume emergency services clinical contact centre.</p>
   </header>
 
-  <figure class="hero-image">
-    <img src="images-anon/telephony-anon.png" alt="Telephony reporting screenshot">
-  </figure>
+  <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
+    <div class="carousel-frame">
+      <figure class="carousel-slide is-active">
+        <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
+        <figcaption class="carousel-caption">Calls to Service</figcaption>
+      </figure>
+      <figure class="carousel-slide">
+        <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
+        <figcaption class="carousel-caption">Agent Activity Overview</figcaption>
+      </figure>
+      <figure class="carousel-slide">
+        <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot">
+        <figcaption class="carousel-caption">Agent Activity Session Summary</figcaption>
+      </figure>
+      <figure class="carousel-slide">
+        <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
+        <figcaption class="carousel-caption">Agent Activity Calls</figcaption>
+      </figure>
+      <figure class="carousel-slide">
+        <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
+        <figcaption class="carousel-caption">Agent Session Journal</figcaption>
+      </figure>
+      <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
+      <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
+    </div>
+    <div class="carousel-dots" aria-label="Choose screenshot">
+      <button class="carousel-dot is-active" type="button" aria-label="Show Calls to Service" data-carousel-dot="0"></button>
+      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Overview" data-carousel-dot="1"></button>
+      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Session Summary" data-carousel-dot="2"></button>
+      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Calls" data-carousel-dot="3"></button>
+      <button class="carousel-dot" type="button" aria-label="Show Agent Session Journal" data-carousel-dot="4"></button>
+    </div>
+  </section>
 
   <article class="case-study">
     <section class="case-section">
       <h2>Overview</h2>
-      <p>Developed SQL Server transformation pipelines and Power BI reporting structures supporting operational telephony and workforce reporting across a high-volume emergency clinical contact centre handling 999 and 111 activity.</p>
-      <p>The reporting environment reconstructed operational sessions, agent activity, call handling behaviour, queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD).</p>
+      <p>Reconstructed agent activity, call and queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD).</p>
+      <p>Presented call demand analysis, answer, abandonment and handling performance, workforce utilisation and detailed operational level reports for operational management, workforce planning, performance reporting and operational review.</p>
     </section>
 
     <section class="case-section">
-      <h2>Operational Requirement</h2>
-      <p>Operational reporting requirements included queue demand analysis, answering performance, handling times, abandonment analysis, workforce utilisation, operational KPI reporting, and detailed session-level operational investigation.</p>
-      <p>The reporting structures supported operational management, workforce planning, performance reporting, and operational review across clinical contact centre services.</p>
+      <h2>Report Design & Operational Usability</h2>
+      <p>Multiple Power BI reports were created to support the various areas and requirements of the organisation.</p>
+      <p>An operational overview showed temporal demand, weekly heatmap analysis and charts indicating call types, durations, abandonment rates and handling times, with drill-throughs to call details available by date or category.</p>
+      <p>An agent dashboard showed relevant activity and call data in a standard format for feedback and performance monitoring, along with industry standard call centre metrics for busy, idle and away times. Drill-throughs were available to focus on particular calls, categories or time periods.</p>
+      <p>Report layouts prioritised clarity and visibility of key metrics, rates over time, category quantity and relativity while maintaining access to detail, filters, definitions and usage guidance on demand.</p>
     </section>
 
     <section class="case-section">
-      <h2>Data Transformation (T-SQL)</h2>
-      <p>Cisco source tables recorded low-level operational events and call segments rather than complete operational workflows. SQL Server transformation procedures were therefore developed to reconstruct operational reporting structures from multiple related event streams.</p>
-      <p>Transformation outputs included:</p>
-      <ul class="output-list">
-        <li><strong>Call Data</strong> - operational call reconstruction including routing behaviour</li>
-        <li><strong>Agent Calls</strong> - operational call attribution from the agent perspective</li>
-        <li><strong>Agent Sessions</strong> - reconstructed login sessions and session durations</li>
-        <li><strong>Agent Activity</strong> - operational activity classification and utilisation reporting</li>
-        <li><strong>Session Journal</strong> - minute-by-minute operational timeline reporting</li>
-      </ul>
-      <p>Transformation logic included session reconstruction, event sequencing, temporal modelling, operational call attribution, overlapping call handling, activity classification, duration derivation, and operational timeline reconstruction.</p>
-      <p>SQL techniques included staged processing, temporary tables, conditional aggregation, CASE logic, lookup enrichment, UNION-based schema normalisation, and MERGE update processing across datasets approaching two million records.</p>
+      <h2>Operational Engagement & Validation</h2>
+      <p>Reporting requirements were developed through direct engagement with operational managers, workforce teams, and operational users responsible for day-to-day service management.</p>
+      <p>This included clarification of operational workflows, validation of KPI interpretation, investigation of reporting discrepancies, and alignment of reporting outputs with operational expectations.</p>
     </section>
 
     <section class="case-section">
-      <h2>Data Modelling & Power BI</h2>
-      <p>Transformed reporting tables were modelled in Power BI to support operational dashboards, workforce reporting, queue analysis, operational drillthrough reporting, and detailed session-level investigation.</p>
-      <p>DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, percentages, averages, and percentile reporting. Additional DAX logic supported operational time formatting, filter-context management, and operational summary reporting.</p>
-      <p>Power BI models were designed for operational usability and responsive filtering across high-volume reporting datasets.</p>
-    </section>
-
-    <section class="case-section">
-      <h2>Validation & Governance</h2>
-      <p>Reporting outputs were validated against source system behaviour, operational workflows, existing reporting outputs, and operational examples to ensure operational interpretability and reporting accuracy.</p>
-      <p>Validation included investigation of reporting discrepancies, edge-case analysis, activity-duration validation, and operational lifecycle attribution testing.</p>
-    </section>
-
-    <section class="case-section">
-      <h2>Performance & Scalability</h2>
-      <p>Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies.</p>
-      <p>Transformation procedures and reporting models were designed to remain responsive under operational reporting workloads.</p>
-    </section>
-
-    <section class="case-section">
-      <h2>Operational Outcome</h2>
+      <h2>Outcome</h2>
       <p>The reporting environment provided operational visibility across telephony activity, workforce utilisation, queue behaviour, operational performance, and session-level activity analysis.</p>
       <p>The reporting structures improved confidence in operational KPI reporting and reduced reliance on externally interpreted telephony reporting outputs.</p>
+      <p>Individual agent activity reports replaced third-party generated reports, saving the organisation around £60k in expansion costs.</p>
     </section>
   </article>
 
@@ -341,5 +412,26 @@
 <footer>
   Organisational names and labels have been changed for presentation in this portfolio. Figures shown are placeholders and do not represent actual values.
 </footer>
+<script>
+const slides = [...document.querySelectorAll(".carousel-slide")];
+const dots = [...document.querySelectorAll(".carousel-dot")];
+let activeSlide = 0;
+
+function showSlide(index) {
+  activeSlide = (index + slides.length) % slides.length;
+  slides.forEach((slide, slideIndex) => {
+    slide.classList.toggle("is-active", slideIndex === activeSlide);
+  });
+  dots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === activeSlide);
+  });
+}
+
+document.querySelector("[data-carousel-prev]").addEventListener("click", () => showSlide(activeSlide - 1));
+document.querySelector("[data-carousel-next]").addEventListener("click", () => showSlide(activeSlide + 1));
+dots.forEach((dot) => {
+  dot.addEventListener("click", () => showSlide(Number(dot.dataset.carouselDot)));
+});
+</script>
 </body>
 </html>
