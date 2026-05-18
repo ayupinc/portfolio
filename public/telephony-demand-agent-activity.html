@@ -159,8 +159,7 @@
   }
 
   .media-carousel {
-    margin: 34px auto 38px;
-    max-width: 690px;
+    margin: 34px 0 38px;
     border: 1px solid var(--rule);
     border-radius: 8px;
     overflow: hidden;
@@ -217,43 +216,24 @@
   .carousel-button.prev { left: 10px; }
   .carousel-button.next { right: 10px; }
 
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 16px 14px;
-    background: var(--white);
-    border-top: 1px solid var(--rule);
-  }
-
-  .carousel-dot {
-    width: 9px;
-    height: 9px;
-    padding: 0;
-    border: 1px solid var(--navy);
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .carousel-dot.is-active { background: var(--navy); }
-
   .case-study {
     background: var(--white);
     border: 1px solid var(--rule);
     border-radius: 8px;
-    padding: 8px 36px 34px;
+    padding: 34px 36px 38px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 36px;
   }
 
   .case-section {
-    padding-top: 28px;
-    margin-top: 28px;
-    border-top: 1px solid var(--rule);
+    min-width: 0;
   }
 
-  .case-section:first-child {
-    margin-top: 0;
-    border-top: 0;
+  .case-section.overview {
+    grid-column: 1 / -1;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
   }
 
   h2 {
@@ -271,6 +251,49 @@
   }
 
   p + p { margin-top: 14px; }
+
+  .technical-detail {
+    margin-top: 16px;
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+
+  .technical-detail summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--navy);
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    list-style: none;
+  }
+
+  .technical-detail summary::-webkit-details-marker { display: none; }
+
+  .technical-detail summary::after {
+    content: "+";
+    width: 16px;
+    height: 16px;
+    border: 1px solid currentColor;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .technical-detail[open] summary::after { content: "-"; }
+
+  .technical-body {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .technical-body p { color: var(--muted); }
 
   .output-list {
     margin: 14px 0 0;
@@ -313,7 +336,11 @@
     .reserved-link { display: none; }
     .top-actions { min-width: 40px; }
     main { padding: 32px 20px 64px; }
-    .case-study { padding: 4px 22px 28px; }
+    .case-study {
+      grid-template-columns: 1fr;
+      padding: 28px 22px;
+    }
+    .case-section.overview { grid-column: auto; }
   }
 </style>
 </head>
@@ -366,20 +393,41 @@
       <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
       <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
     </div>
-    <div class="carousel-dots" aria-label="Choose screenshot">
-      <button class="carousel-dot is-active" type="button" aria-label="Show Calls to Service" data-carousel-dot="0"></button>
-      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Overview" data-carousel-dot="1"></button>
-      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Session Summary" data-carousel-dot="2"></button>
-      <button class="carousel-dot" type="button" aria-label="Show Agent Activity Calls" data-carousel-dot="3"></button>
-      <button class="carousel-dot" type="button" aria-label="Show Agent Session Journal" data-carousel-dot="4"></button>
-    </div>
   </section>
 
   <article class="case-study">
-    <section class="case-section">
+    <section class="case-section overview">
       <h2>Overview</h2>
       <p>Reconstructed agent activity, call and queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD).</p>
       <p>Presented call demand analysis, answer, abandonment and handling performance, workforce utilisation and detailed operational level reports for operational management, workforce planning, performance reporting and operational review.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Data Transformation (T-SQL)</h2>
+      <p>SQL Server procedures transformed landed Cisco event tables into silver-level operational reporting tables.</p>
+      <p>Transformation outputs included operational call reconstruction, agent session reporting, agent activity classification, operational timeline reporting, and workforce utilisation structures supporting Power BI operational reporting.</p>
+      <details class="technical-detail">
+        <summary>Technical Detail</summary>
+        <div class="technical-body">
+          <p>Cisco datasets recorded low-level events and call segments rather than complete operational workflows. Reporting structures required reconstruction of operational sessions, activity timelines, queue behaviour, and call attribution from multiple related event streams. Interval tables existed, but were not sufficient for call-level or agent-level reporting.</p>
+          <p>A detailed understanding of the Cisco data was built through technical table guides, online forums, comparison against interval tables, and testing against real-world activity. Peripheral Call Type and Call Disposition Flag fields in Termination Call Detail were especially valuable for identifying the meaning and value of call records.</p>
+          <p>Transformation logic included session reconstruction, event sequencing across multiple tables, temporal modelling, call attribution where more than one agent was involved, overlapping call handling for conference and on-hold activity, activity classification via lookup tables, and duration derivation from timestamps.</p>
+          <p>Validation compared transformed tables against interval data, Cisco reporting outputs, custom comparison scripts, and real-world testing. Existing commercial reports replaced by the new reporting were found to contain inaccuracies not present in the new tables or reports.</p>
+          <p>SQL techniques included staged processing in temporary tables, conditional aggregation with CASE logic, lookup enrichment, UNION-based schema normalisation, and MERGE update processing. Datasets were approaching two million records, while the reporting environment remained retrospective, refreshed through daily ETL and available the following morning.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="case-section">
+      <h2>Data Modelling & Power BI</h2>
+      <p>Transformed reporting tables were modelled directly in Power BI.</p>
+      <p>A single further view combined call and activity events into a unified operational agent session journal, giving a minute-by-minute timeline of activity.</p>
+      <details class="technical-detail">
+        <summary>Technical Detail</summary>
+        <div class="technical-body">
+          <p>DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, averages, percentages, and percentile reporting. Operational time formatting was used alongside measures for filter-context management and broader summary reporting.</p>
+        </div>
+      </details>
     </section>
 
     <section class="case-section">
@@ -394,6 +442,23 @@
       <h2>Operational Engagement & Validation</h2>
       <p>Reporting requirements were developed through direct engagement with operational managers, workforce teams, and operational users responsible for day-to-day service management.</p>
       <p>This included clarification of operational workflows, validation of KPI interpretation, investigation of reporting discrepancies, and alignment of reporting outputs with operational expectations.</p>
+      <details class="technical-detail">
+        <summary>Technical Detail</summary>
+        <div class="technical-body">
+          <p>Operational examples and real-world workflow scenarios were used during validation to ensure reporting outputs reflected operational behaviour rather than simple reproduction of raw telephony events.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="case-section">
+      <h2>Performance & Scalability</h2>
+      <p>Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies.</p>
+      <details class="technical-detail">
+        <summary>Technical Detail</summary>
+        <div class="technical-body">
+          <p>Stored procedures were used in preference to views for the more calculation-heavy operational timelines, supporting temporary table processing and improving execution performance.</p>
+        </div>
+      </details>
     </section>
 
     <section class="case-section">
@@ -414,7 +479,6 @@
 </footer>
 <script>
 const slides = [...document.querySelectorAll(".carousel-slide")];
-const dots = [...document.querySelectorAll(".carousel-dot")];
 let activeSlide = 0;
 
 function showSlide(index) {
@@ -422,16 +486,10 @@ function showSlide(index) {
   slides.forEach((slide, slideIndex) => {
     slide.classList.toggle("is-active", slideIndex === activeSlide);
   });
-  dots.forEach((dot, dotIndex) => {
-    dot.classList.toggle("is-active", dotIndex === activeSlide);
-  });
 }
 
 document.querySelector("[data-carousel-prev]").addEventListener("click", () => showSlide(activeSlide - 1));
 document.querySelector("[data-carousel-next]").addEventListener("click", () => showSlide(activeSlide + 1));
-dots.forEach((dot) => {
-  dot.addEventListener("click", () => showSlide(Number(dot.dataset.carouselDot)));
-});
 </script>
 </body>
 </html>

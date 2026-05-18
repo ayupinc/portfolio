@@ -217,21 +217,53 @@
     background: #F0F2F5;
   }
 
+  .project-card > .thumb-carousel {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thumb-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+
   .thumb-carousel img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
     opacity: 0;
-    animation: thumbFade 20s infinite;
-    animation-delay: calc(var(--slide-index) * 4s);
+    transition: opacity 0.18s ease;
   }
 
-  @keyframes thumbFade {
-    0%, 18% { opacity: 1; }
-    22%, 100% { opacity: 0; }
+  .thumb-carousel img.is-active {
+    opacity: 1;
   }
+
+  .thumb-carousel-button {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 40px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .thumb-carousel-button:hover {
+    background: var(--white);
+  }
+
+  .thumb-carousel-button.prev { left: 8px; }
+  .thumb-carousel-button.next { right: 8px; }
 
   .card-body {
     padding: 20px 22px 22px;
@@ -581,10 +613,16 @@ projects.forEach((project, index) => {
   const article = document.createElement("article");
   article.className = "project-card";
   const thumbMedia = project.images
-    ? `<div class="thumb-carousel" aria-hidden="true">${project.images.map((image, imageIndex) => `<img src="${image}" alt="" style="--slide-index: ${imageIndex};">`).join("")}</div>`
+    ? `<div class="thumb-carousel" data-thumb-carousel>
+        <a class="thumb-image-link" href="${project.url}" aria-label="Open case study for ${project.title}">
+          ${project.images.map((image, imageIndex) => `<img class="${imageIndex === 0 ? "is-active" : ""}" src="${image}" alt="">`).join("")}
+        </a>
+        <button class="thumb-carousel-button prev" type="button" aria-label="Previous screenshot" data-thumb-prev>&lsaquo;</button>
+        <button class="thumb-carousel-button next" type="button" aria-label="Next screenshot" data-thumb-next>&rsaquo;</button>
+      </div>`
     : `<img src="${project.image}" alt="${project.title}">`;
   article.innerHTML = `
-    ${project.url ? `
+    ${project.url && project.images ? thumbMedia : project.url ? `
     <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
       ${thumbMedia}
     </a>` : `
@@ -604,6 +642,19 @@ projects.forEach((project, index) => {
       button.addEventListener("click", () => openProject(project, button));
     });
   }
+  article.querySelectorAll("[data-thumb-carousel]").forEach((carousel) => {
+    const images = [...carousel.querySelectorAll("img")];
+    let activeImage = 0;
+    const showImage = (nextIndex) => {
+      activeImage = (nextIndex + images.length) % images.length;
+      images.forEach((image, imageIndex) => {
+        image.classList.toggle("is-active", imageIndex === activeImage);
+      });
+    };
+
+    carousel.querySelector("[data-thumb-prev]").addEventListener("click", () => showImage(activeImage - 1));
+    carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
+  });
   grid.appendChild(article);
 });
 
