@@ -88,16 +88,15 @@
     align-items: center;
     justify-content: flex-end;
     gap: 18px;
-    min-width: 210px;
     color: var(--accent);
   }
 
   .nav-link,
   .reserved-link {
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
     text-decoration: none;
     color: var(--accent);
   }
@@ -108,14 +107,9 @@
   }
 
   .social-link {
-    width: 32px;
-    height: 32px;
-    border: 1px solid currentColor;
-    display: grid;
-    place-items: center;
     text-decoration: none;
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent);
   }
 
@@ -129,9 +123,9 @@
     display: inline-block;
     color: var(--navy);
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
     text-decoration: none;
   }
 
@@ -344,7 +338,6 @@
   @media (max-width: 780px) {
     .topbar-inner { padding: 0 20px; }
     .brand-name { font-size: 13px; }
-    .reserved-link { display: none; }
     .top-actions { min-width: 40px; }
     main { padding: 32px 20px 64px; }
     .media-carousel { margin-bottom: 42px; }
@@ -366,16 +359,15 @@
       <span class="brand-name">Maple Leaf Intelligence</span>
     </a>
     <div class="top-actions" aria-label="Portfolio links">
-      <a class="nav-link" href="portfolio.html">Portfolio</a>
-      <a class="reserved-link" href="#" aria-disabled="true">CV</a>
-      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">in</a>
+      <a class="nav-link" href="portfolio.html">Solutions page</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
     </div>
   </div>
 </div>
 
 <main>
   <div class="back-nav">
-    <a class="back-link" href="portfolio.html">&larr; Back to portfolio</a>
+    <a class="back-link" href="portfolio.html">&larr; Back to solutions page</a>
   </div>
 
   <header class="case-header">
@@ -473,7 +465,7 @@
   </article>
 
   <div class="footer-nav">
-    <a class="back-link" href="portfolio.html">Back to portfolio</a>
+    <a class="back-link" href="portfolio.html">Back to solutions page</a>
   </div>
 </main>
 
