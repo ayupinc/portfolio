@@ -113,7 +113,7 @@
   .hero {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 54px 32px 46px;
+    padding: 54px 32px 24px;
     text-align: center;
   }
 
@@ -137,7 +137,7 @@
   main {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 36px 32px 92px;
+    padding: 20px 32px 92px;
   }
 
   .intro {
@@ -558,6 +558,11 @@ const modalTitle = document.querySelector("#modalTitle");
 const modalImage = document.querySelector("#modalImage");
 const modalDetails = document.querySelector("#modalDetails");
 let lastTrigger = null;
+
+const featuredProjectIndex = projects.findIndex((project) => project.url === "telephony-demand-agent-activity.html");
+if (featuredProjectIndex > 0) {
+  projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
+}
 
 function detailBlock(label, text) {
   return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;
