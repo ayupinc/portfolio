@@ -215,13 +215,13 @@
   }
 
   .case-section + .case-section {
-    margin-top: 54px;
+    margin-top: 42px;
   }
 
   h2 {
-    margin: 0 0 16px;
+    margin: 0 0 14px;
     color: var(--navy);
-    font-size: clamp(24px, 2.6vw, 31px);
+    font-size: clamp(22px, 2.2vw, 28px);
     line-height: 1.14;
     font-weight: 650;
     letter-spacing: 0;
@@ -266,18 +266,18 @@
   .technical-body p { color: var(--muted); }
 
   .output-list {
-    margin: 14px 0 0;
+    margin: 10px 0 18px;
     padding: 0;
     list-style: none;
   }
 
   .output-list li {
     position: relative;
-    padding: 7px 0 7px 18px;
-    border-bottom: 1px solid var(--rule);
+    padding: 3px 0 3px 18px;
+    color: var(--body);
+    font-size: 16px;
+    line-height: 1.62;
   }
-
-  .output-list li:last-child { border-bottom: 0; }
 
   .output-list li::before {
     content: "-";
@@ -285,6 +285,8 @@
     left: 0;
     color: var(--muted);
   }
+
+  p + .output-list { margin-top: 12px; }
 
   .footer-nav {
     margin-top: 30px;
