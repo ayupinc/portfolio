@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time Clinical Queue Monitoring and Operational Wallboard | Maple Leaf Intelligence</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #3D4A5C;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .nav-link,
+  .reserved-link {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .reserved-link {
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 44px 32px 86px;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+  }
+
+  .back-nav {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  .case-header {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: clamp(34px, 4.2vw, 50px);
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .case-subtitle {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .media-carousel {
+    max-width: 900px;
+    margin: 34px auto 52px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F0F2F5;
+  }
+
+  .carousel-frame {
+    position: relative;
+    background: #E8EBF0;
+  }
+
+  .carousel-slide {
+    display: none;
+    margin: 0;
+  }
+
+  .carousel-slide.is-active {
+    display: block;
+  }
+
+  .carousel-slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 42px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .carousel-button:hover { background: var(--white); }
+  .carousel-button.prev { left: 10px; }
+  .carousel-button.next { right: 10px; }
+
+  .case-layout {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 50px;
+    align-items: start;
+  }
+
+  .case-sidebar {
+    position: sticky;
+    top: 94px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 24px 24px 26px;
+  }
+
+  .sidebar-block + .sidebar-block {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .sidebar-label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  .sidebar-value {
+    margin: 0;
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  .sidebar-text {
+    margin: 0;
+    color: var(--body);
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
+
+  .case-content {
+    min-width: 0;
+  }
+
+  .case-section + .case-section {
+    margin-top: 54px;
+  }
+
+  h2 {
+    margin: 0 0 16px;
+    color: var(--navy);
+    font-size: clamp(24px, 2.6vw, 31px);
+    line-height: 1.14;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  p + p { margin-top: 20px; }
+
+  .technical-detail {
+    margin-top: 20px;
+  }
+
+  .technical-detail summary {
+    display: inline;
+    color: var(--body);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    list-style: none;
+  }
+
+  .technical-detail summary::-webkit-details-marker { display: none; }
+
+  .technical-body {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .technical-body p { color: var(--muted); }
+
+  .output-list {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 7px 0 7px 18px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .output-list li:last-child { border-bottom: 0; }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .footer-nav {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    main { padding: 32px 20px 64px; }
+    .case-subtitle { font-size: 16px; }
+    .media-carousel { margin-bottom: 42px; }
+    .case-layout {
+      grid-template-columns: 1fr;
+      gap: 34px;
+    }
+    .case-sidebar { position: static; }
+    p { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Maple Leaf Intelligence home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Maple Leaf Intelligence</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="index.html">Solutions page</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="back-nav">
+    <a class="back-link" href="index.html">&larr; Back to solutions page</a>
+  </div>
+
+  <header class="case-header">
+    <h1>Real-Time Clinical Queue Monitoring and Operational Wallboard</h1>
+    <p class="case-subtitle">The requirement was for a near-live wallboard capable of supporting clinical team leaders across multiple queues continuously throughout the day.</p>
+  </header>
+
+  <section class="media-carousel" aria-label="Real-time clinical queue monitoring wallboard screenshot">
+    <div class="carousel-frame">
+      <figure class="carousel-slide is-active">
+        <img src="screenshots/queue-wallboard.png" alt="Real-time clinical queue monitoring wallboard screenshot">
+      </figure>
+    </div>
+  </section>
+
+  <article class="case-layout">
+    <aside class="case-sidebar" aria-label="Case study summary">
+      <section class="sidebar-block">
+        <span class="sidebar-label">Client</span>
+        <p class="sidebar-value">Emergency Service Clinical Contact Centre</p>
+      </section>
+      <section class="sidebar-block">
+        <span class="sidebar-label">Data Size</span>
+        <p class="sidebar-value">Near-live operational queue records</p>
+      </section>
+      <section class="sidebar-block">
+        <span class="sidebar-label">Technology</span>
+        <p class="sidebar-value">SQL Server, Power BI Direct Query, 60-second refresh</p>
+      </section>
+      <section class="sidebar-block">
+        <span class="sidebar-label">Overview</span>
+        <p class="sidebar-text">Reconstructed live clinical queue state from CAD event and queue action data rather than explicit status fields.</p>
+        <p class="sidebar-text">Supported operational leaders with visibility of waiting workload, active clinician assessment and queue priority.</p>
+      </section>
+      <section class="sidebar-block">
+        <span class="sidebar-label">Outcome</span>
+        <p class="sidebar-text">Became the primary operational view of live clinical queue demand.</p>
+        <p class="sidebar-text">Established reusable queue interpretation logic for wider clinical performance reporting.</p>
+      </section>
+    </aside>
+
+    <div class="case-content">
+      <section class="case-section">
+        <h2>Operational Context</h2>
+        <p>Around one third of incoming emergency cases were managed by remote clinicians calling patients to attempt to resolve their issue over the telephone. Operational managers relied on the CAD Patient Management System to understand queue demand and clinician workload, which provided limited visibility of cases waiting and longest waits, and almost no visibility of clinician utilisation.</p>
+        <p>The requirement was for a near-live wallboard capable of supporting clinical team leaders across multiple queues continuously throughout the day.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Business Problem</h2>
+        <p>The challenge was not simply visualising queue counts but reconstructing the operational state of cases from CAD data which was represented indirectly through audit actions. Cases could move repeatedly between queues, generate conflicting or duplicate audit markers, enter an active state without expected markers and leave a queue without a trace. Queue status was inferred from a combination of events rather than explicit status fields.</p>
+        <p>This created ambiguity when calculating waiting cases, active clinician workload and time within a queue. Without resolving these behaviours, operational metrics would routinely overstate or understate true workload.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Technical Environment</h2>
+        <p>The source systems were the CAD operational tables, case event tables, queue action tables and case type lookup tables. The technologies used were SQL Server, Power BI Direct Query and a near-live refresh model. To supplement the technology perspective a CAD vendor collaboration was undertaken for an undocumented parameter review.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Investigation and Workflow Interpretation</h2>
+        <p>A significant proportion of the work involved interpreting undocumented behaviour within the CAD case event and queue action tables. This required tracing complete case event histories, validating event sequencing against operational workflow, identifying which events genuinely represented queue placement, distinguishing waiting from active cases, identifying false queue entries and duplicated events and validating against clinical actions. Some workflow edge cases required specific handling where cases moved between queues and states, entered an assessment or completed with outcomes without any visible markers in the CAD data.</p>
+        <p>Operational queue status could not be derived from a single field or timestamp, instead queue state was reconstructed dynamically using latest valid queue change, latest clinician activity, state markers, queue entry events and timing relationships between audit actions.</p>
+        <p>The logic was validated through a direct review of individual case audit histories, comparison against live CAD behaviour, operational walk-throughs with clinical teams, vendor discussions, and testing against known edge-case incidents.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>SQL Transformation and Queue Logic</h2>
+        <p>A lightweight SQL extraction process was developed to support near-live operational reporting without introducing significant load onto the CAD environment. The extraction process:</p>
+        <ul class="output-list">
+          <li>identified the latest valid queue start for each case,</li>
+          <li>reconstructed active versus waiting status,</li>
+          <li>derived elapsed waiting and assessment durations,</li>
+          <li>classified cases by operational queue and priority, and</li>
+          <li>filtered invalid or obsolete queue states.</li>
+        </ul>
+        <p>The query refreshed every 60 seconds and populated a compact reporting table optimised for Direct Query consumption. Despite the complexity of the operational logic, the extraction query consistently executed in under one second.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Power BI Design</h2>
+        <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The dashboard provided live waiting volumes, active clinician workload, longest waiting case by priority, longest active assessment duration and active clinician counts by role.</p>
+        <p>The model intentionally remained lightweight, with a single operational fact table, small lookup dimensions for priorities and queue labels, Direct Query architecture and minimal transformation within Power BI.</p>
+        <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types, and metric definitions and support/version information for governance.</p>
+        <p>The wallboard was deployed for continuous 24/7 operational use across clinicians and supervisory teams.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Outcome</h2>
+        <p>The solution became the primary operational view of live clinical queue demand. It provided operational teams with immediate visibility of true queue backlog, separation of waiting versus active clinical workload, identification of prolonged waits by priority and live monitoring of clinician utilisation.</p>
+        <p>The underlying queue interpretation logic subsequently informed wider clinical performance metric development.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Personal Contribution</h2>
+        <p>Responsible for the end-to-end investigation, SQL development, operational logic design, validation and Power BI implementation including:</p>
+        <ul class="output-list">
+          <li>Reverse engineered undocumented CAD queue behaviour</li>
+          <li>Designed operational queue-state reconstruction logic</li>
+          <li>Developed near-live SQL extraction and transformation process</li>
+          <li>Implemented Direct Query Power BI wallboard</li>
+          <li>Validated KPI logic against operational workflow and audit histories</li>
+          <li>Worked directly with operational managers and CAD vendor</li>
+          <li>Investigated and resolved workflow edge cases affecting queue reporting</li>
+          <li>Established reusable logic later used in wider clinical queue reporting</li>
+        </ul>
+      </section>
+    </div>
+  </article>
+
+  <div class="footer-nav">
+    <a class="back-link" href="index.html">Back to solutions page</a>
+  </div>
+</main>
+
+<footer>
+  Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
+</footer>
+</body>
+</html>

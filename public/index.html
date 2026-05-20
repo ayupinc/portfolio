@@ -452,9 +452,10 @@
 <script>
 const projects = [
   {
-    title: "Real Time Demand",
-    image: "images-anon/wall-anon.png",
-    summary: "Near-real-time queue visibility for call-back workload, wait times and operational prioritisation.",
+    title: "Real-Time Clinical Queue Monitoring and Operational Wallboard",
+    image: "screenshots/queue-wallboard.png",
+    url: "real-time-clinical-queue-monitoring-operational-wallboard.html",
+    summary: "Near-live wallboard supporting clinical team leaders across multiple queues continuously throughout the day.",
     requirement: "For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.",
     solution: "Direct Query Power BI dashboard polling every 60 seconds, displaying counts of cases by response priority, using both numerical and coloured bar visualisations for the dashboard to be viewed across the room as well as on a desktop. Measures include CALCULATE with COUNT, SUM and FILTER for metrics and MAX / MAXX for durations.",
     engineering: "Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values."
