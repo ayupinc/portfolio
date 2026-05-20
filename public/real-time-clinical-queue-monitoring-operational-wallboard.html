@@ -167,6 +167,20 @@
     background: #F0F2F5;
   }
 
+  .data-flow-figure {
+    margin: 18px 0 0;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  .data-flow-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .carousel-frame {
     position: relative;
     background: #E8EBF0;
@@ -350,7 +364,7 @@
     <div class="case-content">
       <section class="case-section">
         <h2>Operational Context</h2>
-        <p>Around one third of incoming emergency cases were managed by remote clinicians calling patients to attempt to resolve their issue over the telephone. Operational managers relied on the CAD Patient Management System to understand queue demand and clinician workload, which provided limited visibility of cases waiting and longest waits, and almost no visibility of clinician utilisation.</p>
+        <p>Around one third of incoming emergency cases were managed by remote clinicians calling patients back to attempt to resolve their issue over the telephone. Operational managers relied on the CAD Patient Management System to understand queue demand and clinician workload, which provided limited visibility of cases waiting or longest waits, and almost no visibility of clinician utilisation.</p>
         <p>The requirement was for a near-live wallboard capable of supporting clinical team leaders across multiple queues continuously throughout the day.</p>
       </section>
 
@@ -361,14 +375,44 @@
       </section>
 
       <section class="case-section">
+        <h2>Technical Challenges</h2>
+        <p>Several operational and technical challenges required specific handling within the reporting logic including:</p>
+        <ul class="output-list">
+          <li>queue state was represented indirectly through audit events rather than explicit status fields,</li>
+          <li>cases could move repeatedly between queues creating duplicate or conflicting markers,</li>
+          <li>some active assessments occurred without expected workflow events,</li>
+          <li>queue timestamps could be overwritten during reassignment or re-entry,</li>
+          <li>operational state required reconstruction across multiple related event tables, and</li>
+          <li>near-live reporting needed to minimise load on the production CAD environment.</li>
+        </ul>
+      </section>
+
+      <section class="case-section">
         <h2>Technical Environment</h2>
-        <p>The source systems were the CAD operational tables, case event tables, queue action tables and case type lookup tables. The technologies used were SQL Server, Power BI Direct Query and a near-live refresh model. To supplement the technology perspective a CAD vendor collaboration was undertaken for an undocumented parameter review.</p>
+        <p>The source systems were the CAD operational tables, case event tables, queue action tables and case type lookup tables. The technologies used were SQL Server, Power BI Direct Query and a near-live refresh model. Vendor discussion took place to investigate undocumented CAD parameters and queue behaviour.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Data Flow</h2>
+        <figure class="data-flow-figure">
+          <img src="screenshots/telephony-data-visual.png" alt="Data flow from CAD operational data through SQL transformation and Power BI Direct Query reporting">
+        </figure>
       </section>
 
       <section class="case-section">
         <h2>Investigation and Workflow Interpretation</h2>
-        <p>A significant proportion of the work involved interpreting undocumented behaviour within the CAD case event and queue action tables. This required tracing complete case event histories, validating event sequencing against operational workflow, identifying which events genuinely represented queue placement, distinguishing waiting from active cases, identifying false queue entries and duplicated events and validating against clinical actions. Some workflow edge cases required specific handling where cases moved between queues and states, entered an assessment or completed with outcomes without any visible markers in the CAD data.</p>
-        <p>Operational queue status could not be derived from a single field or timestamp, instead queue state was reconstructed dynamically using latest valid queue change, latest clinician activity, state markers, queue entry events and timing relationships between audit actions.</p>
+        <p>A significant proportion of the work involved interpreting undocumented behaviour within the CAD case event and queue action tables. This required tracing complete case histories, validating event sequencing against operational workflow and identifying which actions genuinely represented queue placement and active assessment activity.</p>
+        <p>Some workflow edge cases required specific handling where cases moved into, out of or between queues, generated duplicate or conflicting audit markers and entered or completed an assessment, without any event markers.</p>
+        <p>Operational queue status could not be derived from a single field or timestamp.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Queue Reconstruction Logic</h2>
+        <p>Queue state was reconstructed dynamically using latest valid queue change, latest clinician activity, queue entry events, state markers and timing relationships between audit actions. This allowed the reporting model to distinguish waiting cases, active clinician assessments, obsolete queue entries and reopened or reassigned cases.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Operational Validation</h2>
         <p>The logic was validated through a direct review of individual case audit histories, comparison against live CAD behaviour, operational walk-throughs with clinical teams, vendor discussions, and testing against known edge-case incidents.</p>
       </section>
 
@@ -388,7 +432,13 @@
       <section class="case-section">
         <h2>Power BI Design</h2>
         <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The dashboard provided live waiting volumes, active clinician workload, longest waiting case by priority, longest active assessment duration and active clinician counts by role.</p>
-        <p>The model intentionally remained lightweight, with a single operational fact table, small lookup dimensions for priorities and queue labels, Direct Query architecture and minimal transformation within Power BI.</p>
+        <p>The model intentionally remained lightweight using:</p>
+        <ul class="output-list">
+          <li>a single operational fact table,</li>
+          <li>small lookup dimensions for priorities and queue labels,</li>
+          <li>Direct Query architecture, and</li>
+          <li>minimal transformation within Power BI.</li>
+        </ul>
         <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types, and metric definitions and support/version information for governance.</p>
         <p>The wallboard was deployed for continuous 24/7 operational use across clinicians and supervisory teams.</p>
       </section>
@@ -396,7 +446,7 @@
       <section class="case-section">
         <h2>Outcome</h2>
         <p>The solution became the primary operational view of live clinical queue demand. It provided operational teams with immediate visibility of true queue backlog, separation of waiting versus active clinical workload, identification of prolonged waits by priority and live monitoring of clinician utilisation.</p>
-        <p>The underlying queue interpretation logic subsequently informed wider clinical performance metric development.</p>
+        <p>The reporting logic and queue interpretation model were later reused within wider clinical performance reporting development.</p>
       </section>
 
       <section class="case-section">
