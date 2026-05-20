@@ -208,49 +208,6 @@
   .case-layout {
     max-width: 900px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 270px minmax(0, 1fr);
-    gap: 50px;
-    align-items: start;
-  }
-
-  .case-sidebar {
-    position: sticky;
-    top: 94px;
-    background: var(--white);
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: 24px 24px 26px;
-  }
-
-  .sidebar-block + .sidebar-block {
-    margin-top: 24px;
-    padding-top: 22px;
-    border-top: 1px solid var(--rule);
-  }
-
-  .sidebar-label {
-    display: block;
-    margin-bottom: 6px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.35;
-    font-weight: 600;
-  }
-
-  .sidebar-value {
-    margin: 0;
-    color: var(--body);
-    font-size: 14px;
-    line-height: 1.45;
-    font-weight: 400;
-  }
-
-  .sidebar-text {
-    margin: 0;
-    color: var(--body);
-    font-size: 15.5px;
-    line-height: 1.65;
   }
 
   .case-content {
@@ -350,11 +307,6 @@
     main { padding: 32px 20px 64px; }
     .case-subtitle { font-size: 16px; }
     .media-carousel { margin-bottom: 42px; }
-    .case-layout {
-      grid-template-columns: 1fr;
-      gap: 34px;
-    }
-    .case-sidebar { position: static; }
     p { font-size: 16px; }
   }
 </style>
@@ -393,31 +345,6 @@
   </section>
 
   <article class="case-layout">
-    <aside class="case-sidebar" aria-label="Case study summary">
-      <section class="sidebar-block">
-        <span class="sidebar-label">Client</span>
-        <p class="sidebar-value">Emergency Service Clinical Contact Centre</p>
-      </section>
-      <section class="sidebar-block">
-        <span class="sidebar-label">Data Size</span>
-        <p class="sidebar-value">Near-live operational queue records</p>
-      </section>
-      <section class="sidebar-block">
-        <span class="sidebar-label">Technology</span>
-        <p class="sidebar-value">SQL Server, Power BI Direct Query, 60-second refresh</p>
-      </section>
-      <section class="sidebar-block">
-        <span class="sidebar-label">Overview</span>
-        <p class="sidebar-text">Reconstructed live clinical queue state from CAD event and queue action data rather than explicit status fields.</p>
-        <p class="sidebar-text">Supported operational leaders with visibility of waiting workload, active clinician assessment and queue priority.</p>
-      </section>
-      <section class="sidebar-block">
-        <span class="sidebar-label">Outcome</span>
-        <p class="sidebar-text">Became the primary operational view of live clinical queue demand.</p>
-        <p class="sidebar-text">Established reusable queue interpretation logic for wider clinical performance reporting.</p>
-      </section>
-    </aside>
-
     <div class="case-content">
       <section class="case-section">
         <h2>Operational Context</h2>
