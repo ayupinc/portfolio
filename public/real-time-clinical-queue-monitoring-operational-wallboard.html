@@ -8,18 +8,20 @@
   :root {
     --navy: #0F1F3D;
     --accent: var(--navy);
-    --body: #3D4A5C;
+    --body: #2F3A4A;
     --muted: #6B7A8F;
     --rule: #D1D8E3;
     --bg: #F7F8FA;
     --white: #FFFFFF;
+    --sans: Aptos, "Segoe UI", system-ui, sans-serif;
+    --serif: Georgia, "Times New Roman", serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
 
   body {
     margin: 0;
-    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    font-family: var(--sans);
     background: var(--bg);
     color: var(--body);
     font-size: 15px;
@@ -154,8 +156,9 @@
     max-width: 720px;
     margin: 0 auto;
     color: var(--muted);
-    font-size: 17px;
-    line-height: 1.55;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.62;
   }
 
   .media-carousel {
@@ -220,7 +223,7 @@
   .carousel-button.next { right: 10px; }
 
   .case-layout {
-    max-width: 900px;
+    max-width: 720px;
     margin: 0 auto;
   }
 
@@ -233,11 +236,11 @@
   }
 
   h2 {
-    margin: 0 0 14px;
+    margin: 0 0 12px;
     color: var(--navy);
-    font-size: clamp(22px, 2.2vw, 28px);
-    line-height: 1.14;
-    font-weight: 650;
+    font-size: clamp(21px, 2vw, 26px);
+    line-height: 1.18;
+    font-weight: 600;
     letter-spacing: 0;
     text-transform: none;
   }
@@ -245,11 +248,12 @@
   p {
     margin: 0;
     color: var(--body);
-    font-size: 16px;
-    line-height: 1.7;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.72;
   }
 
-  p + p { margin-top: 20px; }
+  p + p { margin-top: 22px; }
 
   .technical-detail {
     margin-top: 20px;
@@ -289,8 +293,9 @@
     position: relative;
     padding: 3px 0 3px 18px;
     color: var(--body);
-    font-size: 16px;
-    line-height: 1.62;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.68;
   }
 
   .output-list li::before {
@@ -323,7 +328,8 @@
     main { padding: 32px 20px 64px; }
     .case-subtitle { font-size: 16px; }
     .media-carousel { margin-bottom: 42px; }
-    p { font-size: 16px; }
+    p,
+    .output-list li { font-size: 17px; }
   }
 </style>
 </head>
