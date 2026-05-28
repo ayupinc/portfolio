@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Power BI Portfolio | Maple Leaf Intelligence</title>
+<title>Analytics Engineering Portfolio | Maple Leaf Intelligence</title>
 <style>
   :root {
     --navy: #0F1F3D;
@@ -461,8 +461,8 @@
       <span class="brand-name">Maple Leaf Intelligence</span>
     </a>
     <nav class="portfolio-nav" aria-label="Portfolio sections">
-      <a href="index.html" aria-current="page">Power BI Portfolio</a>
-      <a href="analytics-engineering.html">Analytics Engineering Portfolio</a>
+      <a href="index.html">Power BI Portfolio</a>
+      <a href="analytics-engineering.html" aria-current="page">Analytics Engineering Portfolio</a>
     </nav>
     <div class="top-actions" aria-label="Portfolio links">
       <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
@@ -478,7 +478,7 @@
 </header>
 
 <main>
-  <p class="intro">Power BI portfolio examples spanning operational reporting, clinical contact centre intelligence, telephony demand, patient pathway analysis and clinical quality reporting. Selected case studies link through to the analytics engineering work that sits underneath the report layer.</p>
+  <p class="intro">Analytics engineering examples showing the SQL transformation, event sequencing, data modelling and reusable analytical datasets behind selected Power BI reporting projects.</p>
   <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
 </main>
 
@@ -501,104 +501,22 @@
 <script>
 const projects = [
   {
-    title: "Real-Time Clinical Queue Monitoring and Operational Wallboard",
-    image: "screenshots/queue-wallboard.png",
-    url: "real-time-clinical-queue-monitoring-operational-wallboard.html",
-    summary: "Near-live wallboard supporting clinical team leaders across multiple queues continuously throughout the day.",
-    requirement: "For cases requiring a call back, provide a near-real-time view of call volumes and wait times split across groups to enable teams to see waiting workload, and supervisors to dynamically intervene in queue management and prioritisation. Audience: Clinical contact centre staff and team leaders, senior operational command staff.",
-    solution: "Direct Query Power BI dashboard polling every 60 seconds, displaying counts of cases by response priority, using both numerical and coloured bar visualisations for the dashboard to be viewed across the room as well as on a desktop. Measures include CALCULATE with COUNT, SUM and FILTER for metrics and MAX / MAXX for durations.",
-    engineering: "Initiated use of a known flag in the patient management system to show queue status, with support from the vendor, used multi-condition CASE logic across separate event tables within an optimised query against the live tables to prevent interference with critical response operations and ranking window functions to prevent duplicate values."
+    title: "Cisco Telephony",
+    image: "screenshots/telephony-data-flow.png",
+    url: "cisco-telephony-analytics-engineering.html",
+    summary: "Reconstructed calls, agent calls, sessions and activities from native Cisco event data so Power BI and SSRS could report from a trusted operational layer."
   },
   {
-    title: "Key Performance Indicator",
-    image: "images-anon/perf-metric-anon.png",
-    summary: "Outcome-based KPI reporting across volumes, percentages, outcome categories and resolving teams.",
-    requirement: "Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.",
-    solution: "New Power BI Report showing the percentage and volume over time with headline metrics and group / outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window. DAX measures include extensive CALCULATE, SUM and DIVIDE for calculating the metrics.",
-    engineering: "Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting."
-  },
-  {
-    title: "Resource Utilisation",
-    image: "images-anon/util-anon.png",
-    summary: "Availability, activity and utilisation reporting for a specialist operational staff group.",
-    requirement: "A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.",
-    solution: "Power BI report presenting headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. Report also contains detail pages for review of individual responses and a separate help, information and version page.",
-    engineering: "Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing. Captured event times and calculated availability durations using temporal modelling."
-  },
-  {
-    title: "Call Flow Analysis",
-    image: "images-anon/flow-anon.png",
-    summary: "Flow analysis showing how calls move through clinical teams, statuses and outcomes.",
-    requirement: "Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making.",
-    solution: "New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Also includes pages for different perspectives and drill through detail pages with a separate page for help, information and version updates. DAX measures include CALCULATE with REMOVEFILTERS, SWITCH and SELECTEDVALUE.",
-    engineering: "Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy to prevent overlaps between levels, used CTEs, ranked window functions and complex CASE statements, and created persistent tables for downstream reporting."
-  },
-  {
-    title: "Remote Assessments Summary",
+    title: "Questionnaire Responses",
     image: "images-anon/aqm-anon.png",
-    summary: "Questionnaire response reporting for remote patient assessments and clinician feedback.",
-    requirement: "Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.",
-    solution: "Multi-page Power BI report showing assessment volumes, assessment durations and outcomes with correlations between responses for all activity. Additional pages for each assessment type, incident level detail and help, information and version detail. Created Power Query transitions to pivot the data into episode level responses.",
-    engineering: "Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric analysis and sequencing. Data required significant cleaning including multiple response handling, question and response text cleaning and branch logic to show separate pathways within the same questionnaire."
+    url: "questionnaire-analytics-engineering.html",
+    summary: "Structured raw CAD questionnaire responses into episode and response tables for clinical quality, outcome and pathway reporting."
   },
   {
-    title: "Telephony Demand & Agent Activity",
-    image: "screenshots/calls-to-service.png",
-    images: [
-      "screenshots/calls-to-service.png",
-      "screenshots/agent-summary.png",
-      "screenshots/agent-session-summary.png",
-      "screenshots/agent-calls.png",
-      "screenshots/agent-session-journal.png"
-    ],
-    url: "telephony-demand-agent-activity.html",
-    summary: "Power BI reporting for telephony demand, answer and abandonment performance, handling time, workforce utilisation and agent session activity.",
-    sections: [
-      {
-        label: "Overview",
-        text: "Developed SQL Server transformation pipelines and Power BI reporting structures supporting operational telephony and workforce reporting across a high-volume emergency clinical contact centre handling 999 and 111 activity. The reporting environment reconstructed operational sessions, agent activity, call handling behaviour, queue activity, and operational timelines from Cisco telephony event streams including Agent Event Detail (AED), Route Call Detail (RCD), and Termination Call Detail (TCD)."
-      },
-      {
-        label: "Operational Requirement",
-        text: "Operational reporting requirements included queue demand analysis, answering performance, handling times, abandonment analysis, workforce utilisation, operational KPI reporting, and detailed session-level operational investigation. The reporting structures supported operational management, workforce planning, performance reporting, and operational review across clinical contact centre services."
-      },
-      {
-        label: "Data Transformation (T-SQL)",
-        text: "Cisco source tables recorded low-level operational events and call segments rather than complete operational workflows. SQL Server transformation procedures were therefore developed to reconstruct operational reporting structures from multiple related event streams. Transformation outputs included Call Data for operational call reconstruction including routing behaviour; Agent Calls for operational call attribution from the agent perspective; Agent Sessions for reconstructed login sessions and session durations; Agent Activity for operational activity classification and utilisation reporting; and Session Journal for minute-by-minute operational timeline reporting. Transformation logic included session reconstruction, event sequencing, temporal modelling, operational call attribution, overlapping call handling, activity classification, duration derivation, and operational timeline reconstruction. SQL techniques included staged processing, temporary tables, conditional aggregation, CASE logic, lookup enrichment, UNION-based schema normalisation, and MERGE update processing across datasets approaching two million records."
-      },
-      {
-        label: "Data Modelling & Power BI",
-        text: "Transformed reporting tables were modelled in Power BI to support operational dashboards, workforce reporting, queue analysis, operational drillthrough reporting, and detailed session-level investigation. DAX measures supported operational KPI calculations including call volumes, answering times, handling durations, percentages, averages, and percentile reporting. Additional DAX logic supported operational time formatting, filter-context management, and operational summary reporting. Power BI models were designed for operational usability and responsive filtering across high-volume reporting datasets."
-      },
-      {
-        label: "Validation & Governance",
-        text: "Reporting outputs were validated against source system behaviour, operational workflows, existing reporting outputs, and operational examples to ensure operational interpretability and reporting accuracy. Validation included investigation of reporting discrepancies, edge-case analysis, activity-duration validation, and operational lifecycle attribution testing."
-      },
-      {
-        label: "Performance & Scalability",
-        text: "Performance optimisation included SQL query optimisation, staged transformation processing, temporary table usage, model simplification, DAX optimisation, cardinality reduction, and incremental refresh strategies. Transformation procedures and reporting models were designed to remain responsive under operational reporting workloads."
-      },
-      {
-        label: "Operational Outcome",
-        text: "The reporting environment provided operational visibility across telephony activity, workforce utilisation, queue behaviour, operational performance, and session-level activity analysis. The reporting structures improved confidence in operational KPI reporting and reduced reliance on externally interpreted telephony reporting outputs."
-      }
-    ]
-  },
-  {
-    title: "Operations Summary",
-    image: "images-anon/operations-anon.png",
-    summary: "Consolidated operational reporting across call handling, assessment activity and headline KPIs.",
-    requirement: "Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information.",
-    solution: "Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact. A 168 hour weekly matrix is used for demand analysis and staffing predictions.",
-    engineering: "Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data."
-  },
-  {
-    title: "Electronic Patient Care Record",
-    image: "images-anon/epcr-anon.png",
-    summary: "Clinical observation, intervention, questionnaire and outcome reporting from patient care records.",
-    requirement: "Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.",
-    solution: "Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering and show relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management.",
-    engineering: "Vendor servers synchronised multiple times daily to the organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records."
+    title: "Clinical Queue Activity",
+    image: "screenshots/queue-data-flow.png",
+    url: "clinical-queue-activity-monitoring-engineering.html",
+    summary: "Built a validated clinical queue episode model from CAD audit tables, including queue placements, waiting times and actions taken while cases were waiting."
   }
 ];
 
@@ -609,10 +527,6 @@ const modalImage = document.querySelector("#modalImage");
 const modalDetails = document.querySelector("#modalDetails");
 let lastTrigger = null;
 
-const featuredProjectIndex = projects.findIndex((project) => project.url === "telephony-demand-agent-activity.html");
-if (featuredProjectIndex > 0) {
-  projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
-}
 
 function detailBlock(label, text) {
   return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;

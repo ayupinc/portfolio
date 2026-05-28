@@ -121,7 +121,7 @@ main {
   color: var(--navy);
   font-size: 15px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.45; text-decoration: none; display: block;
 }
 
 .side-nav-group { margin: 0 0 28px; }
