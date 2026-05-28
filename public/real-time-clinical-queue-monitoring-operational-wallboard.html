@@ -331,6 +331,39 @@
     p,
     .output-list li { font-size: 18px; }
   }
+  /* Shared case-study layout */
+  :root { --sans: Arial, "Helvetica Neue", Helvetica, sans-serif; }
+  main { max-width: 1125px; margin: 0 auto; padding: 34px 32px 86px; }
+  .page-grid { display: grid; grid-template-columns: 250px minmax(0, 800px); gap: 75px; align-items: start; }
+  .side-nav { position: sticky; top: 92px; color: var(--navy); font-size: 15px; line-height: 1.45; }
+  .side-nav-title { margin: 0 0 10px; color: var(--navy); font-size: 15px; font-weight: 700; line-height: 1.45; }
+  .side-nav-group { margin: 0 0 28px; }
+  .side-nav-list,
+  .side-nav-sublist { margin: 0; padding: 0; list-style: none; }
+  .side-nav-list { border-left: 4px solid var(--navy); }
+  .side-nav-list a,
+  .side-nav-current { display: block; padding: 9px 0 9px 14px; color: var(--navy); text-decoration: none; }
+  .side-nav-current { font-weight: 700; }
+  .side-nav-sublist { margin: 0 0 6px 14px; border-left: 2px solid var(--rule); }
+  .side-nav-sublist a { padding: 6px 0 6px 14px; color: var(--body); font-size: 14px; }
+  .side-nav-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .content-column { max-width: 800px; min-width: 0; }
+  .back-nav,
+  .case-header,
+  .case-layout,
+  .media-carousel { max-width: 800px; margin-left: 0; margin-right: 0; text-align: left; }
+  h1 { font-size: 36pt; }
+  .case-subtitle,
+  p,
+  .output-list li { font-family: var(--sans); font-size: 19px; line-height: 25px; }
+  p + p { margin-block-start: 20pt; margin-top: 0; }
+  @media (max-width: 780px) {
+    .page-grid { display: block; }
+    .side-nav { display: none; }
+    .case-subtitle,
+    p,
+    .output-list li { font-size: 19px; line-height: 25px; }
+  }
 </style>
 </head>
 <body>
@@ -342,15 +375,57 @@
       <span class="brand-name">Maple Leaf Intelligence</span>
     </a>
     <div class="top-actions" aria-label="Portfolio links">
-      <a class="nav-link" href="index.html">Solutions page</a>
+      <a class="nav-link" href="index.html">Power BI portfolio</a>
       <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
     </div>
   </div>
 </div>
 
 <main>
+  <div class="page-grid">
+    <aside class="side-nav" aria-label="Portfolio structure">
+      <nav class="side-nav-group" aria-label="Power BI reports">
+        <p class="side-nav-title">Power BI Reports</p>
+        <ul class="side-nav-list">
+          <li>
+            <span class="side-nav-current">Real-Time Clinical Queue Monitoring and Operational Wallboard</span>
+            <ul class="side-nav-sublist" aria-label="Wallboard page contents">
+              <li><a href="#operational-context">Operational context</a></li>
+              <li><a href="#business-problem">Business problem</a></li>
+              <li><a href="#technical-environment">Technical environment</a></li>
+              <li><a href="#data-flow">Data flow</a></li>
+              <li><a href="#investigation">Investigation</a></li>
+              <li><a href="#queue-reconstruction-logic">Queue reconstruction logic</a></li>
+              <li><a href="#validation">Validation</a></li>
+              <li><a href="#sql-transformation">SQL transformation</a></li>
+              <li><a href="#power-bi-design">Power BI design</a></li>
+              <li><a href="#outcome">Outcome</a></li>
+              <li><a href="#personal-contribution">Personal contribution</a></li>
+            </ul>
+          </li>
+          <li><a href="index.html">Key Performance Indicator</a></li>
+          <li><a href="index.html">Resource Utilisation</a></li>
+          <li><a href="index.html">Call Flow Analysis</a></li>
+          <li><a href="index.html">Remote Assessments Summary</a></li>
+          <li><a href="telephony-demand-agent-activity.html">Telephony Demand &amp; Agent Activity</a></li>
+          <li><a href="index.html">Operations Summary</a></li>
+          <li><a href="index.html">Electronic Patient Care Record</a></li>
+        </ul>
+      </nav>
+
+      <nav class="side-nav-group" aria-label="Analytics engineering studies">
+        <p class="side-nav-title">Analytics Engineering</p>
+        <ul class="side-nav-list">
+          <li><a href="cisco-telephony-analytics-engineering.html">Cisco Telephony Analytics Engineering</a></li>
+          <li><a href="questionnaire-analytics-engineering.html">Questionnaire Analytics Engineering</a></li>
+          <li><a href="clinical-queue-activity-monitoring-engineering.html">Clinical Queue Activity Monitoring</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="content-column">
   <div class="back-nav">
-    <a class="back-link" href="index.html">&larr; Back to solutions page</a>
+    <a class="back-link" href="index.html">&larr; Back to Power BI portfolio</a>
   </div>
 
   <header class="case-header">
@@ -368,47 +443,47 @@
 
   <article class="case-layout">
     <div class="case-content">
-      <section class="case-section">
+      <section class="case-section" id="operational-context">
         <h2>Operational Context</h2>
         <p>Ambulance Service Clinical Contact Centre handling incoming 999 and 111 calls, dispatching ambulance responses and providing remote telephone triage and assessment service.</p>
         <p>Around one third of incoming emergency cases were remotely assessed by clinicians to potentially resolve issues over the telephone. Operational team leaders relied on the CAD (Patient Management System) to understand queue demand and clinician workload, which provided limited visibility of waiting cases and almost no visibility of clinician utilisation.</p>
         <p>The requirement was for a near-live wallboard capable of supporting clinical team leaders across multiple queues continuously throughout the day.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="business-problem">
         <h2>Business Problem</h2>
         <p>The challenge was not simply visualising queue counts but reconstructing the operational state of cases from CAD data. Case states were represented indirectly through audited events, cases could move repeatedly between queues, generate conflicting or duplicate event markers, enter an active state without expected markers or leave a queue without any event recorded. Queue status was ultimately inferred from a combination of events rather than explicit status fields. This created ambiguity when calculating waiting cases, active clinician workload and time within a queue. Without resolving these behaviours, operational metrics would routinely overstate or understate true workload.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="technical-environment">
         <h2>Technical Environment</h2>
         <p>The source systems were the CAD operational tables; case details and event tables, queue event audit tables and case type lookup tables. The technologies used were SQL Server, Power BI Direct Query and a near-live refresh model. Vendor discussion took place to investigate undocumented CAD parameters and queue behaviour.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="data-flow">
         <h2>Data Flow</h2>
         <figure class="data-flow-figure">
           <img src="screenshots/queue-data-flow.png" alt="Data flow from CAD operational data through SQL transformation and Power BI Direct Query reporting">
         </figure>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="investigation">
         <h2>Investigation and Workflow Interpretation</h2>
         <p>A significant proportion of the work involved interpreting undocumented behaviour within the CAD case event and queue action tables. This required tracing complete case histories, validating event sequencing against operational workflow and identifying which actions genuinely represented queue placement and active assessment activity.</p>
         <p>Some workflow edge cases required specific handling where cases moved into, out of or between queues, generated duplicate or conflicting audit markers and entered or completed an assessment, without any event markers.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="queue-reconstruction-logic">
         <h2>Queue Reconstruction Logic</h2>
         <p>Operational queue status could not be derived from a single field or timestamp. Queue state was reconstructed dynamically using latest valid queue change, latest clinician activity, queue entry events, state markers and timing relationships between audit actions. This allowed the reporting model to distinguish waiting cases, active clinician assessments, obsolete queue entries and reopened or reassigned cases.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="validation">
         <h2>Validation</h2>
         <p>The logic was validated through a direct review of individual case audit histories, comparison against live CAD behaviour, operational walk-throughs with clinical teams, vendor discussions, and testing against known edge-case incidents.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="sql-transformation">
         <h2>SQL Transformation</h2>
         <p>A lightweight SQL extraction process was developed to support near-live operational reporting without introducing significant load onto the CAD environment. The extraction process:</p>
         <ul class="output-list">
@@ -421,7 +496,7 @@
         <p>The query refreshed every 60 seconds and populated a compact reporting table optimised for Direct Query consumption. Despite the complexity of the operational logic, the extraction query consistently executed in under one second.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="power-bi-design">
         <h2>Power BI Design</h2>
         <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The dashboard provided live waiting volumes, active clinician workload, longest waiting case by priority, longest active assessment duration and active clinician counts by role. The model intentionally remained lightweight using:</p>
         <ul class="output-list">
@@ -433,13 +508,13 @@
         <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types, and metric definitions and support/version information for governance. The wallboard was deployed for continuous 24/7 operational use across clinicians and supervisory teams.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="outcome">
         <h2>Outcome</h2>
         <p>The solution became the primary operational view of live clinical queue demand. It provided operational teams with immediate visibility of true queue backlog, separation of waiting versus active clinical workload, identification of prolonged waits by priority and live monitoring of clinician utilisation.</p>
         <p>The reporting logic and queue interpretation model were later reused within wider clinical performance reporting development.</p>
       </section>
 
-      <section class="case-section">
+      <section class="case-section" id="personal-contribution">
         <h2>Personal Contribution</h2>
         <p>Responsible for the end-to-end investigation, SQL development, operational logic design, validation and Power BI implementation including:</p>
         <ul class="output-list">
@@ -457,7 +532,9 @@
   </article>
 
   <div class="footer-nav">
-    <a class="back-link" href="index.html">Back to solutions page</a>
+    <a class="back-link" href="index.html">Back to Power BI portfolio</a>
+  </div>
+    </div>
   </div>
 </main>
 
