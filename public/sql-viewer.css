@@ -102,24 +102,17 @@ a { color: inherit; }
 }
 
 main {
-  max-width: 1125px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 34px 32px 86px;
 }
 
 .page-grid {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 800px);
-  gap: 75px;
-  align-items: start;
+  display: block;
 }
 
 .side-nav {
-  position: sticky;
-  top: 92px;
-  color: var(--navy);
-  font-size: 15px;
-  line-height: 1.45;
+  display: none;
 }
 
 .side-nav-title {
@@ -168,7 +161,7 @@ main {
 }
 
 .content-column {
-  max-width: 800px;
+  max-width: none;
   min-width: 0;
 }
 
@@ -203,6 +196,7 @@ h1 {
 .script-list {
   display: grid;
   gap: 28px;
+  width: 100%;
 }
 
 .script-block h2 {
@@ -225,6 +219,7 @@ pre {
   overflow: auto;
   font-size: 13px;
   line-height: 1.45;
+  white-space: pre;
 }
 
 pre code.hljs {
