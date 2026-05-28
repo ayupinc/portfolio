@@ -133,6 +133,20 @@
     height: auto;
   }
 
+  .screenshot-note {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .hero-image .screenshot-note {
+    max-width: 1040px;
+    margin: 8px auto 10px;
+    padding: 0 32px;
+  }
+
   .back-link {
     display: inline-block;
     color: var(--navy);
@@ -281,7 +295,7 @@
     margin: 0;
     color: var(--body);
     font-family: var(--serif);
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.6;
   }
 
@@ -326,7 +340,7 @@
     padding: 3px 0 3px 18px;
     color: var(--body);
     font-family: var(--serif);
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.58;
   }
 
@@ -386,7 +400,7 @@
     main { padding: 32px 20px 64px; }
     .media-carousel { margin-bottom: 42px; }
     p,
-    .output-list li { font-size: 16px; }
+    .output-list li { font-size: 17px; }
   }
 </style>
 </head>
@@ -407,6 +421,7 @@
 
 <section class="hero-image" aria-label="Calls to Service report screenshot">
   <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
+  <p class="screenshot-note">Example data shown for portfolio presentation only; figures do not represent actual values from any organisation.</p>
 </section>
 
 <main>
@@ -483,6 +498,9 @@
     <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
       <div class="carousel-frame">
         <figure class="carousel-slide is-active">
+          <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
+        </figure>
+        <figure class="carousel-slide">
           <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
         </figure>
         <figure class="carousel-slide">
@@ -491,13 +509,11 @@
         <figure class="carousel-slide">
           <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
         </figure>
-        <figure class="carousel-slide">
-          <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
-        </figure>
         <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
         <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
       </div>
     </section>
+    <p class="screenshot-note">Example data shown for portfolio presentation only; figures do not represent actual values from any organisation.</p>
   </section>
 
   <div class="footer-nav">
