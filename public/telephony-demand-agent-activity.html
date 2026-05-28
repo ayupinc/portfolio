@@ -118,7 +118,19 @@
   main {
     max-width: 1040px;
     margin: 0 auto;
-    padding: 44px 32px 86px;
+    padding: 34px 32px 86px;
+  }
+
+  .hero-image {
+    width: 100%;
+    background: #F0F2F5;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .back-link {
@@ -146,7 +158,7 @@
 
   .case-header {
     max-width: 900px;
-    margin: 0 0 28px;
+    margin: 0 0 34px;
     text-align: left;
   }
 
@@ -159,18 +171,14 @@
     letter-spacing: 0;
   }
 
-  .case-subtitle {
-    max-width: 750px;
-    margin: 0;
-    color: var(--muted);
-    font-family: var(--serif);
-    font-size: 16px;
-    line-height: 1.58;
+  .case-header + .back-nav {
+    margin-top: -12px;
+    margin-bottom: 34px;
   }
 
   .media-carousel {
-    max-width: 900px;
-    margin: 34px 0 52px;
+    max-width: 1040px;
+    margin: 18px 0 0;
     border: 1px solid var(--rule);
     border-radius: 8px;
     overflow: hidden;
@@ -240,6 +248,23 @@
 
   .case-section + .case-section {
     margin-top: 46px;
+  }
+
+  .what-i-did {
+    width: 100%;
+    margin-bottom: 46px;
+    padding: 24px 28px;
+    border-left: 5px solid #1B4D8E;
+    border-radius: 8px;
+    background: #EAF0F9;
+  }
+
+  .what-i-did h2 {
+    margin-bottom: 14px;
+  }
+
+  .what-i-did .output-list {
+    margin-bottom: 0;
   }
 
   h2 {
@@ -336,6 +361,10 @@
 
   p + .output-list { margin-top: 12px; }
 
+  .additional-screenshots {
+    margin-top: 46px;
+  }
+
   .footer-nav {
     margin-top: 30px;
     text-align: left;
@@ -355,7 +384,6 @@
     .brand-name { font-size: 13px; }
     .top-actions { min-width: 40px; }
     main { padding: 32px 20px 64px; }
-    .case-subtitle { font-size: 16px; }
     .media-carousel { margin-bottom: 42px; }
     p,
     .output-list li { font-size: 16px; }
@@ -377,49 +405,30 @@
   </div>
 </div>
 
+<section class="hero-image" aria-label="Calls to Service report screenshot">
+  <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
+</section>
+
 <main>
+  <header class="case-header">
+    <h1>Telephony Demand & Agent Activity</h1>
+  </header>
+
   <div class="back-nav">
     <a class="back-link" href="index.html">&larr; Back to Power BI portfolio</a>
   </div>
 
-  <header class="case-header">
-    <h1>Telephony Demand & Agent Activity</h1>
-    <p class="case-subtitle">Power BI reporting for demand, answer performance, handling times, workforce utilisation and session-level agent activity.</p>
-  </header>
-
-  <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
-    <div class="carousel-frame">
-      <figure class="carousel-slide is-active">
-        <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
-      </figure>
-      <figure class="carousel-slide">
-        <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
-      </figure>
-      <figure class="carousel-slide">
-        <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot">
-      </figure>
-      <figure class="carousel-slide">
-        <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
-      </figure>
-      <figure class="carousel-slide">
-        <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
-      </figure>
-      <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
-      <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
-    </div>
-  </section>
-
   <article class="case-layout">
     <div class="case-content">
-      <section class="case-section">
+      <section class="what-i-did">
         <h2>What I Did Here</h2>
         <ul class="output-list">
-          <li>Created the reporting tables through the analytics engineering layer</li>
-          <li>Designed the Power BI semantic model across the four reconstructed source tables</li>
-          <li>Developed DAX measures for KPI, duration, percentile and filter-context reporting</li>
-          <li>Designed and built Power BI report pages for telephony demand and agent activity</li>
-          <li>Designed report layouts and user guidance for an operational audience</li>
-          <li>Optimised report performance across large operational datasets</li>
+          <li>Creation of the reporting tables through the analytics engineering layer (<a class="text-link" href="cisco-telephony-analytics-engineering.html">see link</a>)</li>
+          <li>Designing the Power BI semantic model across these four source tables</li>
+          <li>Developing DAX measures for KPI, duration, percentile and filter-context reporting</li>
+          <li>Designing and building Power BI report pages for demand and agent activity</li>
+          <li>Designing report layouts and user guidance for an operational audience</li>
+          <li>Optimising report performance across large operational datasets</li>
         </ul>
       </section>
 
@@ -440,126 +449,56 @@
           <li>Agent session activity including busy, idle and away time</li>
           <li>Workforce utilisation across operational periods</li>
           <li>Drill-through from summary KPIs to individual call and session detail</li>
-          <li>Transparent reporting logic that could be maintained internally</li>
+          <li>The reporting logic should be transparent, internally maintainable and not dependent on external vendors for future development</li>
         </ul>
-      </section>
-
-      <section class="case-section">
-        <h2>Business Problem</h2>
-        <p>The primary challenge was not visualising call volumes or agent metrics but reconstructing operational workflows from low-level telephony event streams.</p>
-        <p>Cisco telephony tables recorded individual call segments rather than complete calls, low-level routing and termination events rather than operational workflows, fragmented agent activity states, overlapping call activity and queue and routing behaviour spread across multiple related datasets.</p>
-        <p>The reporting environment therefore required reconstruction of:</p>
-        <ul class="output-list">
-          <li>complete operational calls</li>
-          <li>agent login sessions</li>
-          <li>activity timelines</li>
-          <li>call attribution</li>
-          <li>queue behaviour</li>
-          <li>handling durations</li>
-          <li>workforce utilisation</li>
-          <li>operational timelines</li>
-        </ul>
-        <p>Additional complexity existed where:</p>
-        <ul class="output-list">
-          <li>internal calls could reverse source and destination attribution depending on answer state</li>
-          <li>conference and transferred calls created overlapping call segments</li>
-          <li>some agent sessions contained no explicit logout event</li>
-          <li>call ownership changed depending on routing and termination behaviour</li>
-          <li>daylight saving adjustments introduced temporal inconsistencies</li>
-          <li>Cisco interval tables summarised activity differently to call-level datasets</li>
-        </ul>
-        <p>Without reconstruction and validation of these workflows, operational reporting would produce inaccurate call durations, attribution and workforce metrics. Cisco datasets recorded low-level events and call segments rather than complete operational workflows. Reporting structures required reconstruction of operational sessions, activity timelines, queue behaviour, and call attribution from multiple related event streams.</p>
       </section>
 
       <section class="case-section">
         <h2>Data Environment</h2>
-        <p>Technologies were Power BI for the semantic model, DAX measures and report canvas, with SQL Server and T-SQL for the underlying analytics engineering layer. The dataset approached two million records across the reporting tables.</p>
+        <p>Technologies were Power BI (semantic model, DAX measures, report canvas) and T-SQL Server for the underlying data layer. The dataset approached two million records across the reporting tables.</p>
         <p>Source data consisted of four reconstructed reporting tables: Call Data, Agent Call Data, Agent Session Data and Agent Activity Data. These provided one row per call, one row per call per agent, one row per session, and one row per activity period respectively.</p>
         <p>The four source tables were modelled directly in Power BI with relationships built around session and call keys. The model supported both high-level summary reporting and granular drill-through to individual call and agent activity records without requiring separate models for each use case.</p>
         <p>DAX measures supported operational KPI calculations, duration and average calculations, percentage and percentile reporting, and filter-context management for cross-filtering between call and session views. Calculated columns handled activity classification and session completeness flags.</p>
-        <div class="case-action">
-          <a class="case-action-link" href="cisco-telephony-analytics-engineering.html">View analytics engineering</a>
-        </div>
       </section>
 
       <section class="case-section">
-        <h2>Power BI Design</h2>
+        <h2>Report Design</h2>
         <p>Multiple report pages were developed to cover the full range of operational reporting requirements.</p>
         <p>Telephony demand reporting provided call volume analysis by queue, team and time period with answer and abandonment breakdowns. Handling time distributions used percentile measures to surface variability alongside averages.</p>
-        <p>Queue and KPI reporting tracked service-level performance against operational targets with period-over-period comparisons. Filter-context management ensured KPI measures remained stable across slicer and cross-filter interactions.</p>
+        <p>Queue and KPI reporting tracked service level performance against operational targets with period-over-period comparisons. Filter-context management ensured KPI measures remained stable across slicer and cross-filter interactions.</p>
         <p>Agent activity dashboards provided session-level summaries including busy, idle and away metrics, call handling counts and durations, and drill-through to individual session timelines. A session journal combined call and activity events into a complete chronological operational timeline per session.</p>
-        <p>Reporting outputs included:</p>
-        <ul class="output-list">
-          <li>telephony demand analysis</li>
-          <li>answer and abandonment reporting</li>
-          <li>handling time analysis</li>
-          <li>operational queue reporting</li>
-          <li>workforce utilisation metrics</li>
-          <li>session-level activity reporting</li>
-          <li>detailed operational timelines</li>
-          <li>agent performance and activity dashboards</li>
-        </ul>
-        <p>DAX measures supported:</p>
-        <ul class="output-list">
-          <li>operational KPI calculations</li>
-          <li>duration and average calculations</li>
-          <li>percentage and percentile reporting</li>
-          <li>filter-context management</li>
-          <li>operational time formatting</li>
-          <li>broader summary and comparative reporting</li>
-        </ul>
-        <p>An operational agent dashboard provided:</p>
-        <ul class="output-list">
-          <li>busy, idle and away metrics</li>
-          <li>call handling activity</li>
-          <li>session summaries</li>
-          <li>drill-through to call-level detail</li>
-          <li>operational timeline analysis</li>
-        </ul>
-        <p>Report layouts prioritised clarity and readability with visibility of key metrics along with access to detailed drill-through analysis, filters, definitions and calculation explanations and instructions for use to ensure clarity for the end user on what was being reported.</p>
+        <p>Report layouts prioritised clarity for an operational audience, with definitions, calculation explanations and instructions for use included wherever metrics were complex or non-obvious.</p>
       </section>
 
       <section class="case-section">
         <h2>Outcome</h2>
-        <p>The completed reporting environment replaced the deprecated third-party reporting structures and became the primary source for operational telephony reporting. The reconstructed reporting tables provided:</p>
-        <ul class="output-list">
-          <li>improved confidence in telephony KPIs</li>
-          <li>detailed operational visibility of call demand and workforce utilisation</li>
-          <li>session-level operational analysis</li>
-          <li>improved queue and handling reporting</li>
-          <li>accurate attribution of calls and activities</li>
-          <li>reusable reporting structures for future reporting development</li>
-        </ul>
-        <p>Operational managers gained visibility of:</p>
-        <ul class="output-list">
-          <li>demand patterns</li>
-          <li>abandonment behaviour</li>
-          <li>answer performance</li>
-          <li>workforce utilisation</li>
-          <li>session-level operational activity</li>
-          <li>detailed agent timelines</li>
-        </ul>
-        <p>Individual agent activity reports replaced externally generated reporting outputs, avoiding approximately £60k in additional third-party reporting expansion costs.</p>
-      </section>
-
-      <section class="case-section">
-        <h2>Personal Contribution</h2>
-        <p>Responsible for the end-to-end investigation, SQL development, operational modelling, validation and reporting implementation including:</p>
-        <ul class="output-list">
-          <li>Reverse engineering Cisco telephony event behaviour</li>
-          <li>Designing operational session and call reconstruction logic</li>
-          <li>Developing SQL Server transformation procedures and reporting tables</li>
-          <li>Implementing temporal modelling and event sequencing logic</li>
-          <li>Resolving call attribution and overlapping duration challenges</li>
-          <li>Validating KPI logic against operational and Cisco reporting outputs</li>
-          <li>Designing operational Power BI and SSRS reporting</li>
-          <li>Investigating workflow anomalies and telephony edge cases</li>
-          <li>Optimising reporting performance across large operational datasets</li>
-          <li>Establishing reusable operational reporting structures for future reporting development</li>
-        </ul>
+        <p>The completed reporting environment replaced the deprecated third-party structures and became the primary source for operational telephony reporting. Operational managers gained reliable visibility of demand patterns, abandonment behaviour, answer performance, workforce utilisation and session-level agent activity that had not been available previously.</p>
+        <p>The reconstruction of individual agent activity reports removed reliance on externally generated outputs, avoiding approximately £60k in additional third-party reporting expansion costs. The reporting structures were built for reuse, providing a stable foundation for future development without external dependencies.</p>
       </section>
     </div>
   </article>
+
+  <section class="additional-screenshots" aria-label="Additional report screenshots">
+    <h2>Additional Screenshots</h2>
+    <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
+      <div class="carousel-frame">
+        <figure class="carousel-slide is-active">
+          <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
+        </figure>
+        <figure class="carousel-slide">
+          <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot">
+        </figure>
+        <figure class="carousel-slide">
+          <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
+        </figure>
+        <figure class="carousel-slide">
+          <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
+        </figure>
+        <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
+        <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
+      </div>
+    </section>
+  </section>
 
   <div class="footer-nav">
     <a class="back-link" href="index.html">Back to Power BI portfolio</a>
