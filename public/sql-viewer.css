@@ -1,0 +1,259 @@
+:root {
+  --navy: #0F1F3D;
+  --accent: var(--navy);
+  --body: #242424;
+  --muted: #6B7A8F;
+  --rule: #D1D8E3;
+  --bg: #FFFFFF;
+  --white: #FFFFFF;
+  --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--body);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,0.94);
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(14px);
+}
+
+.topbar-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  min-height: 66px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 31px;
+  height: 31px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-fallback {
+  width: 31px;
+  height: 31px;
+  border: 2px solid var(--accent);
+  display: none;
+  place-items: center;
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  color: var(--accent);
+}
+
+.nav-link,
+.back-link {
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.social-link {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+main {
+  max-width: 1125px;
+  margin: 0 auto;
+  padding: 34px 32px 86px;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 800px);
+  gap: 75px;
+  align-items: start;
+}
+
+.side-nav {
+  position: sticky;
+  top: 92px;
+  color: var(--navy);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.side-nav-title {
+  margin: 0 0 10px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.side-nav-group { margin: 0 0 28px; }
+
+.side-nav-list,
+.side-nav-sublist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.side-nav-list { border-left: 4px solid var(--navy); }
+
+.side-nav-list a,
+.side-nav-current {
+  display: block;
+  padding: 9px 0 9px 14px;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.side-nav-current { font-weight: 700; }
+
+.side-nav-sublist {
+  margin: 0 0 6px 14px;
+  border-left: 2px solid var(--rule);
+}
+
+.side-nav-sublist a {
+  padding: 6px 0 6px 14px;
+  color: var(--body);
+  font-size: 14px;
+}
+
+.side-nav-list a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.content-column {
+  max-width: 800px;
+  min-width: 0;
+}
+
+.back-nav {
+  max-width: 800px;
+  margin: 0 0 28px;
+  text-align: left;
+}
+
+.case-header {
+  max-width: 800px;
+  margin: 0 0 34px;
+  text-align: left;
+}
+
+h1 {
+  margin: 0 0 14px;
+  color: var(--navy);
+  font-size: 36pt;
+  line-height: 1.06;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.case-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 25px;
+}
+
+.script-list {
+  display: grid;
+  gap: 28px;
+}
+
+.script-block h2 {
+  margin: 0 0 14px;
+  color: var(--navy);
+  font-size: 24px;
+  line-height: 1.18;
+}
+
+.sql-frame {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #F8FAFC;
+}
+
+pre {
+  margin: 0;
+  max-height: 78vh;
+  overflow: auto;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+pre code.hljs {
+  padding: 18px;
+}
+
+.script-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.72);
+  padding: 34px 32px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 780px) {
+  .topbar-inner { padding: 0 20px; }
+  .brand-name { font-size: 13px; }
+  .top-actions { gap: 12px; }
+  main { padding: 32px 20px 64px; }
+  .page-grid { display: block; }
+  .side-nav { display: none; }
+  h1 { font-size: 34px; }
+  pre { font-size: 12px; }
+}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clinical Queue Activity Monitoring | Maple Leaf Intelligence</title>
+<title>Clinical Queue Activity | Maple Leaf Intelligence</title>
 <style>
   :root { --navy:#0F1F3D; --accent:var(--navy); --body:#242424; --muted:#6B7A8F; --rule:#D1D8E3; --bg:#FFFFFF; --sans:Aptos,"Segoe UI",system-ui,sans-serif; --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif; }
   *,*::before,*::after{box-sizing:border-box}
@@ -104,10 +104,10 @@
       <nav class="side-nav-group" aria-label="Analytics engineering studies">
         <p class="side-nav-title">Analytics Engineering</p>
         <ul class="side-nav-list">
-          <li><a href="cisco-telephony-analytics-engineering.html">Cisco Telephony Analytics Engineering</a></li>
-          <li><a href="questionnaire-analytics-engineering.html">Questionnaire Analytics Engineering</a></li>
+          <li><a href="cisco-telephony-analytics-engineering.html">Cisco Telephony</a></li>
+          <li><a href="questionnaire-analytics-engineering.html">Questionnaire Responses</a></li>
           <li>
-            <span class="side-nav-current">Clinical Queue Activity Monitoring</span>
+            <span class="side-nav-current">Clinical Queue Activity</span>
             <ul class="side-nav-sublist" aria-label="Clinical queue page contents">
               <li><a href="#context">Context</a></li>
               <li><a href="#data-engineering-process">Data engineering process</a></li>
@@ -126,7 +126,7 @@
   </div>
 
   <header class="case-header">
-    <h1>Clinical Queue Activity Monitoring</h1>
+    <h1>Clinical Queue Activity</h1>
     <p class="case-subtitle">Building a validated queue episode model from CAD audit tables so clinical teams could understand queue placements, waiting times and actions taken while cases were waiting.</p>
   </header>
 
@@ -162,7 +162,7 @@
       </ul>
       <p>Downstream Power BI reporting was built against these tables rather than raw audit sources, centralising validation rules, temporal calculations and KPI definitions in the SQL transformation layer.</p>
       <div class="case-action">
-        <span class="case-action-note">SQL script listing to be added</span>
+        <a class="case-action-note" href="clinical-queue-activity-sql.html">View SQL scripts</a>
       </div>
     </section>
 
