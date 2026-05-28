@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cisco Telephony Analytics Engineering | Maple Leaf Intelligence</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #242424;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #FFFFFF;
+    --white: #FFFFFF;
+    --sans: Aptos, "Segoe UI", system-ui, sans-serif;
+    --serif: Charter, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .nav-link,
+  .back-link {
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 44px 32px 86px;
+  }
+
+  .back-nav {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  .case-header {
+    max-width: 900px;
+    margin: 0 auto 46px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: clamp(34px, 4.2vw, 50px);
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .case-subtitle {
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.58;
+  }
+
+  .case-layout {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .case-section + .case-section { margin-top: 46px; }
+
+  h2 {
+    margin: 0 0 16px;
+    color: var(--navy);
+    font-size: clamp(22px, 2vw, 25px);
+    line-height: 1.18;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  p + p { margin-top: 30px; }
+
+  .output-list {
+    margin: 10px 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 3px 0 3px 18px;
+    color: var(--body);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.58;
+  }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .case-action {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .case-action-link,
+  .case-action-note {
+    display: inline-block;
+    border: 1px solid var(--navy);
+    border-radius: 4px;
+    padding: 9px 13px;
+    color: var(--navy);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .case-action-note {
+    border-color: var(--rule);
+    color: var(--muted);
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .top-actions { gap: 12px; }
+    main { padding: 32px 20px 64px; }
+    .case-subtitle { font-size: 18px; }
+    p,
+    .output-list li { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Maple Leaf Intelligence home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Maple Leaf Intelligence</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="telephony-demand-agent-activity.html">Power BI case study</a>
+      <a class="nav-link" href="index.html">Portfolio</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="back-nav">
+    <a class="back-link" href="telephony-demand-agent-activity.html">&larr; Back to telephony Power BI case study</a>
+  </div>
+
+  <header class="case-header">
+    <h1>Cisco Telephony Analytics Engineering</h1>
+    <p class="case-subtitle">Reconstructing calls, agent calls, sessions and activities from native Cisco event data so Power BI and SSRS could report from a trusted operational layer.</p>
+  </header>
+
+  <article class="case-layout">
+    <section class="case-section">
+      <h2>Context</h2>
+      <p>The Cisco telephony work started as a reporting reliability problem. After a switchboard change, the existing third-party call reporting tables no longer provided consistent queue times, ring times or call presence.</p>
+      <p>The immediate requirement was to restore operational reporting, but the underlying issue was that the available Cisco source data did not describe calls in the way managers understood them.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Data Engineering Process</h2>
+      <p>I worked from the native Cisco tables rather than the broken reporting layer. Route Call Detail held one row per routed call, while Termination Call Detail held multiple rows for the segments of that call.</p>
+      <p>Agent Event Detail held login, logout and status activity, but events were split across Cisco interval boundaries rather than stored as complete activity periods. The engineering task was therefore to convert low-level event records into analytical entities: calls, agent calls, sessions and activities.</p>
+      <p>The first stage was interpretation. I analysed combinations of Peripheral Call Type, Call Disposition and Call Disposition Flag to identify which TCD rows represented routing, ringing, answering, talking, transfer, monitor and internal-call behaviour. This allowed call segments to be classified before aggregation.</p>
+      <p>The next stage was reconstruction. Routed calls were rebuilt from RCD and related TCD rows using RouterCallKeyDay and RouterCallKey, which were common keys in both tables. Dialled calls were taken directly from TCD but required separate attribution rules.</p>
+      <p>Internal calls needed particular care because the operational owner changed depending on whether the call was answered, transferred or conferenced. I built separate logic for Call Data and Agent Call Data so the same source event could support both call-volume reporting and agent-perspective reporting.</p>
+      <p>Agent sessions were reconstructed from Agent Event Detail. Login and logout events created the session boundary, while status-code events were collapsed into continuous activity periods. This produced one row per session and one row per meaningful activity rather than fragmented interval records.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Validation</h2>
+      <p>I validated the data using comparisons with interval reporting, comparisons with existing third-party and Cisco reports, and real-time analysis of agent activity.</p>
+    </section>
+
+    <section class="case-section">
+      <h2>Output Model</h2>
+      <p>The output was a reusable telephony analytics model:</p>
+      <ul class="output-list">
+        <li>Call Data</li>
+        <li>Agent Call Data</li>
+        <li>Agent Session Data</li>
+        <li>Agent Activity Data</li>
+      </ul>
+      <p>These tables became the shared reporting layer for Power BI and SSRS.</p>
+      <div class="case-action">
+        <span class="case-action-note">SQL script listing to be added</span>
+      </div>
+    </section>
+
+    <section class="case-section">
+      <h2>Outcome</h2>
+      <p>The outcome was not only replacement reporting. The model supported abandonment and demand reporting, handling-time analysis, Clinical Navigator telephony metrics, six agent-level SSRS reports and session-level activity reporting.</p>
+      <p>It also removed reliance on the unreliable third-party reporting tables and gave operational users a traceable route from KPI back to source event behaviour.</p>
+    </section>
+  </article>
+</main>
+
+<footer>
+  Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
+</footer>
+</body>
+</html>

@@ -131,6 +131,13 @@
     text-decoration: none;
   }
 
+  .text-link {
+    color: var(--navy);
+    font-weight: 650;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
   .back-nav {
     max-width: 900px;
     margin: 0 auto 28px;
@@ -305,6 +312,28 @@
     color: var(--muted);
   }
 
+  .case-action {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .case-action-link {
+    display: inline-block;
+    border: 1px solid var(--navy);
+    border-radius: 4px;
+    padding: 9px 13px;
+    color: var(--navy);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .case-action-link:hover { background: rgba(15,31,61,0.06); }
+
   p + .output-list { margin-top: 12px; }
 
   .footer-nav {
@@ -342,7 +371,7 @@
       <span class="brand-name">Maple Leaf Intelligence</span>
     </a>
     <div class="top-actions" aria-label="Portfolio links">
-      <a class="nav-link" href="index.html">Solutions page</a>
+      <a class="nav-link" href="index.html">Power BI portfolio</a>
       <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn">LinkedIn</a>
     </div>
   </div>
@@ -350,12 +379,12 @@
 
 <main>
   <div class="back-nav">
-    <a class="back-link" href="index.html">&larr; Back to solutions page</a>
+    <a class="back-link" href="index.html">&larr; Back to Power BI portfolio</a>
   </div>
 
   <header class="case-header">
     <h1>Telephony Demand & Agent Activity</h1>
-    <p class="case-subtitle">The project evolved beyond replacement reporting and became a reconstruction of operational call and agent behaviour directly from native Cisco event data.</p>
+    <p class="case-subtitle">Power BI reporting for demand, answer performance, handling times, workforce utilisation and session-level agent activity.</p>
   </header>
 
   <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
@@ -383,18 +412,36 @@
   <article class="case-layout">
     <div class="case-content">
       <section class="case-section">
-        <h2>Operational Context</h2>
-        <p>The organisation operated a high-volume emergency services clinical contact centre handling emergency calls, clinical support activity, internal operational calls and outbound clinical assessment activity across multiple operational teams.</p>
-        <p>All telephony reporting relied heavily on a third-party reporting dataset built from Cisco telephony data. Following a switchboard software change, the existing reporting tables became increasingly unreliable. Existing reporting also lacked sufficient detail to accurately represent operational call handling, agent activity and session-level behaviour.</p>
-        <p>A new reporting environment was required to:</p>
+        <h2>What I Did Here</h2>
         <ul class="output-list">
-          <li>replace the deprecated third-party reporting structures</li>
-          <li>provide transparent and internally maintainable reporting logic</li>
-          <li>improve operational confidence in telephony KPIs</li>
-          <li>support detailed operational analysis at call, session and agent level</li>
-          <li>enable future reporting development without reliance on external reporting vendors</li>
+          <li>Created the reporting tables through the analytics engineering layer</li>
+          <li>Designed the Power BI semantic model across the four reconstructed source tables</li>
+          <li>Developed DAX measures for KPI, duration, percentile and filter-context reporting</li>
+          <li>Designed and built Power BI report pages for telephony demand and agent activity</li>
+          <li>Designed report layouts and user guidance for an operational audience</li>
+          <li>Optimised report performance across large operational datasets</li>
         </ul>
-        <p>The project evolved beyond replacement reporting and became a reconstruction of operational call and agent behaviour directly from native Cisco event data.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Operational Context</h2>
+        <p>The organisation operated a high-volume emergency services clinical contact centre handling incoming emergency and urgent calls and outbound clinical assessment activity across multiple operational teams.</p>
+        <p>Following a switchboard upgrade, the third-party telephony reporting tables became unreliable. The existing interval-based reporting also lacked the depth needed to accurately represent call handling, agent activity and session behaviour desired by operational managers.</p>
+        <p>The project began as a replacement exercise but evolved into a full reconstruction of operational call and agent behaviour from native Cisco tables. The data engineering underpinning that reconstruction is described in the <a class="text-link" href="cisco-telephony-analytics-engineering.html">Cisco Telephony Analytics Engineering</a> section.</p>
+      </section>
+
+      <section class="case-section">
+        <h2>Reporting Requirements</h2>
+        <p>Operational managers needed visibility across several reporting dimensions that the previous environment had not been able to support reliably:</p>
+        <ul class="output-list">
+          <li>Demand patterns by queue, team and time period</li>
+          <li>Answer and abandonment performance against operational targets</li>
+          <li>Handling time analysis at call and agent level</li>
+          <li>Agent session activity including busy, idle and away time</li>
+          <li>Workforce utilisation across operational periods</li>
+          <li>Drill-through from summary KPIs to individual call and session detail</li>
+          <li>Transparent reporting logic that could be maintained internally</li>
+        </ul>
       </section>
 
       <section class="case-section">
@@ -425,93 +472,22 @@
       </section>
 
       <section class="case-section">
-        <h2>Technical Environment</h2>
-        <p>The source systems were Cisco tables landed into the data warehouse; Route Call Detail (RCD), Termination Call Detail (TCD), Agent Event Detail (AED), interval reporting tables which mimicked what was available in Cisco internal reports and existing static lookup and enrichment tables.</p>
-        <p>The technologies used were SQL Server, T-SQL stored procedures, Power BI, SQL Server Reporting Services (SSRS) and daily ETL processing.</p>
-        <p>The reporting environment processed datasets approaching two million records across multiple operational reporting tables.</p>
-      </section>
-
-      <section class="case-section">
-        <h2>Data Flow</h2>
-        <figure class="data-flow-figure">
-          <img src="screenshots/telephony-data-flow.png" alt="Data flow from Cisco event data through SQL transformation and operational reporting outputs">
-        </figure>
-      </section>
-
-      <section class="case-section">
-        <h2>Investigation and Workflow Interpretation</h2>
-        <p>A significant proportion of the work involved interpreting Cisco telephony behaviour and determining how operational workflows were represented within the underlying event data.</p>
-        <p>This required heavy analysis of Cisco technical table documentation and in some cases investigation through online technical forums dedicated to Cisco interpretation where the functionality was not clear. The majority of this work focused on interpreting how actions within the call were represented in the core Termination Call Details table, especially the combination of two pivotal fields, Peripheral Call Type (PCT) and Call Disposition Flag (CDF). This helped identify relevant and irrelevant call segments.</p>
-        <p>Call event level data was compared extensively against interval reporting outputs, real-world call scenarios, Cisco's internal CUIC reporting and reconstruction of call flows from multiple related event streams. The work extended beyond straightforward call reporting and became a detailed reconstruction of operational telephony behaviour.</p>
-        <p>Some call aspects received specific investigation such as:</p>
-        <ul class="output-list">
-          <li>Agent attribution for internal calls between source and destination agents</li>
-          <li>Internal calls which were not answered</li>
-          <li>Conference and transferred calls which overlapped</li>
-          <li>Agent sessions where logout events were missing</li>
-          <li>Sequencing of activity states which crossed interval boundaries</li>
-          <li>Time sequence of calls and agent activities from separate tables</li>
-          <li>Queue behaviour and status from routing events</li>
-          <li>Clear identification of valid talk, ring, hold and queue segments</li>
-          <li>Local user defined fields created by network engineers</li>
-        </ul>
-        <p>Operational activity could not be derived from a single row or timestamp. Instead, operational state was reconstructed dynamically through event sequencing, temporal modelling and workflow interpretation across multiple datasets.</p>
-      </section>
-
-      <section class="case-section">
-        <h2>Validation</h2>
-        <p>Validation formed a substantial component of the work due to the complexity and ambiguity of the underlying telephony datasets. Validation methods included:</p>
-        <ul class="output-list">
-          <li>comparison against Cisco interval tables</li>
-          <li>comparison against Cisco reporting outputs</li>
-          <li>custom SQL comparison scripts</li>
-          <li>operational walkthroughs and test scenarios</li>
-          <li>review of individual call and session histories</li>
-          <li>cross-validation of durations and attribution from differing perspectives</li>
-          <li>investigation of anomalous routing and termination behaviour</li>
-        </ul>
-        <p>During validation, several inaccuracies were identified within existing third-party reporting outputs, not present in the reconstructed reporting environment.</p>
-        <p>During the validation process particular attention was given to call attribution consistency, overlapping call durations, session completeness, unanswered call behaviour, missing logout events, activity sequencing, timestamp accuracy and the handling of transferred and conference calls.</p>
-      </section>
-
-      <section class="case-section">
-        <h2>SQL Transformation</h2>
-        <p>SQL Server stored procedures transformed native Cisco event tables into more user-friendly operational reporting tables designed for Power BI and SSRS reporting. Transformation outputs consisted of:</p>
-        <ul class="output-list">
-          <li>call-level table (one row per call)</li>
-          <li>agent calls (one row per call per agent)</li>
-          <li>agent session (one row per session) and</li>
-          <li>agent activity (one row per activity per agent)</li>
-        </ul>
-        <p>Transformation logic to create these tables included several techniques:</p>
-        <ul class="output-list">
-          <li>Reconstructing sessions from Agent Event Detail</li>
-          <li>Sequencing events across multiple telephony tables</li>
-          <li>Temporal modelling to associate calls and activities to correct sessions</li>
-          <li>Call attribution logic where multiple agents were involved</li>
-          <li>Overlapping duration handling for conference and consultation activity</li>
-          <li>Activity classification through lookup enrichment</li>
-          <li>Duration derivation and timestamp correction</li>
-          <li>Daylight saving time correction logic</li>
-          <li>UNION-based schema normalisation</li>
-          <li>Conditional aggregation using CASE logic</li>
-          <li>Staged temporary-table processing for performance optimisation</li>
-        </ul>
-        <p>The resulting reporting structures transformed low-level Cisco event streams into operationally meaningful entities including:</p>
-        <ul class="output-list">
-          <li>complete calls</li>
-          <li>agent sessions</li>
-          <li>agent activities</li>
-          <li>operational timelines</li>
-          <li>queue and handling metrics</li>
-          <li>workforce utilisation summaries</li>
-        </ul>
-        <p>A further session journal view combined call and activity events into a complete chronological operational timeline for each agent session.</p>
+        <h2>Data Environment</h2>
+        <p>Technologies were Power BI for the semantic model, DAX measures and report canvas, with SQL Server and T-SQL for the underlying analytics engineering layer. The dataset approached two million records across the reporting tables.</p>
+        <p>Source data consisted of four reconstructed reporting tables: Call Data, Agent Call Data, Agent Session Data and Agent Activity Data. These provided one row per call, one row per call per agent, one row per session, and one row per activity period respectively.</p>
+        <p>The four source tables were modelled directly in Power BI with relationships built around session and call keys. The model supported both high-level summary reporting and granular drill-through to individual call and agent activity records without requiring separate models for each use case.</p>
+        <p>DAX measures supported operational KPI calculations, duration and average calculations, percentage and percentile reporting, and filter-context management for cross-filtering between call and session views. Calculated columns handled activity classification and session completeness flags.</p>
+        <div class="case-action">
+          <a class="case-action-link" href="cisco-telephony-analytics-engineering.html">View analytics engineering</a>
+        </div>
       </section>
 
       <section class="case-section">
         <h2>Power BI Design</h2>
-        <p>The transformed reporting tables were modelled directly in Power BI and SSRS. Multiple operational reports were developed to support workforce management, operational review and service performance reporting.</p>
+        <p>Multiple report pages were developed to cover the full range of operational reporting requirements.</p>
+        <p>Telephony demand reporting provided call volume analysis by queue, team and time period with answer and abandonment breakdowns. Handling time distributions used percentile measures to surface variability alongside averages.</p>
+        <p>Queue and KPI reporting tracked service-level performance against operational targets with period-over-period comparisons. Filter-context management ensured KPI measures remained stable across slicer and cross-filter interactions.</p>
+        <p>Agent activity dashboards provided session-level summaries including busy, idle and away metrics, call handling counts and durations, and drill-through to individual session timelines. A session journal combined call and activity events into a complete chronological operational timeline per session.</p>
         <p>Reporting outputs included:</p>
         <ul class="output-list">
           <li>telephony demand analysis</li>
@@ -586,7 +562,7 @@
   </article>
 
   <div class="footer-nav">
-    <a class="back-link" href="index.html">Back to solutions page</a>
+    <a class="back-link" href="index.html">Back to Power BI portfolio</a>
   </div>
 </main>
 
