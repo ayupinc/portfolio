@@ -230,10 +230,12 @@ pre {
   font-size: 13px;
   line-height: 1.45;
   white-space: pre;
+  tab-size: 4;
 }
 
 pre code.hljs {
   padding: 18px;
+  tab-size: 4;
 }
 
 .script-note {
