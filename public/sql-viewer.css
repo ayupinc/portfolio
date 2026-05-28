@@ -19,6 +19,7 @@ body {
   font-size: 15px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 a { color: inherit; }
@@ -197,6 +198,12 @@ h1 {
   display: grid;
   gap: 28px;
   width: 100%;
+  max-width: 100%;
+}
+
+.script-block {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .script-block h2 {
@@ -211,12 +218,15 @@ h1 {
   border-radius: 8px;
   overflow: hidden;
   background: #F8FAFC;
+  max-width: 100%;
 }
 
 pre {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   max-height: 78vh;
-  overflow: auto;
+  overflow: scroll;
   font-size: 13px;
   line-height: 1.45;
   white-space: pre;
