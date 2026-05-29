@@ -669,6 +669,7 @@
               <tbody>
                 <tr><td><label for="lDpw">Days per week</label></td><td><input id="lDpw" data-save="lDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
                 <tr><td><label for="lHpd">Hours per day</label></td><td><input id="lHpd" data-save="lHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                <tr><td>Hours per week</td><td><span id="lHoursWeekText"></span></td><td class="note" id="lHoursWeekNote"></td></tr>
                 <tr><td><label for="lLeave">Annual leave days</label></td><td><input id="lLeave" data-save="lLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays.</td></tr>
                 <tr><td><label for="lBh">Bank holidays</label></td><td><input id="lBh" data-save="lBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
                 <tr><td>Billable weeks per year</td><td><span id="lWeeksText"></span></td><td class="note" id="lWeeksNote"></td></tr>
@@ -739,6 +740,7 @@
               <tbody>
                 <tr><td><label for="uDpw">Days per week</label></td><td><input id="uDpw" data-save="uDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
                 <tr><td><label for="uHpd">Hours per day</label></td><td><input id="uHpd" data-save="uHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                <tr><td>Hours per week</td><td><span id="uHoursWeekText"></span></td><td class="note" id="uHoursWeekNote"></td></tr>
                 <tr><td><label for="uLeave">Annual leave days</label></td><td><input id="uLeave" data-save="uLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays. Holiday pay under umbrella does not add income — it is built into the assignment rate and redistributed by the umbrella.</td></tr>
                 <tr><td><label for="uBh">Bank holidays</label></td><td><input id="uBh" data-save="uBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
                 <tr><td>Billable weeks per year</td><td><span id="uWeeksText"></span></td><td class="note" id="uWeeksNote"></td></tr>
@@ -805,6 +807,7 @@
               <tbody>
                 <tr><td><label for="sDpw">Days per week</label></td><td><input id="sDpw" data-save="sDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
                 <tr><td><label for="sHpd">Hours per day</label></td><td><input id="sHpd" data-save="sHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate the hourly equivalent rate only.</td></tr>
+                <tr><td>Hours per week</td><td><span id="sHoursWeekText"></span></td><td class="note" id="sHoursWeekNote"></td></tr>
                 <tr><td><label for="sLeave">Annual leave days</label></td><td><input id="sLeave" data-save="sLeave" type="number" step="1" value="19"></td><td class="note">Paid holiday days per year, excluding bank holidays. UK statutory minimum is 20 days.</td></tr>
                 <tr><td><label for="sBh">Bank holidays</label></td><td><input id="sBh" data-save="sBh" type="number" step="1" value="11"></td><td class="note">Public bank holidays per year. England & Wales has 8 statutory days plus 3 additional common holidays.</td></tr>
                 <tr><td>Worked weeks per year</td><td><span id="sWeeksText"></span></td><td class="note" id="sWeeksNote"></td></tr>
@@ -1036,6 +1039,9 @@ function calculateAll() {
   $("uRateLabel").textContent = rateLabels[$("uRatePeriod").value];
 
   const lWeeks = workingWeeks(value("lDpw"), value("lLeave"), value("lBh"));
+  const lHoursWeek = value("lDpw") * value("lHpd");
+  $("lHoursWeekText").textContent = lHoursWeek.toFixed(1);
+  $("lHoursWeekNote").textContent = `${value("lDpw")} days/week x ${value("lHpd")} hours/day`;
   $("lWeeksText").textContent = lWeeks.toFixed(1);
   $("lWeeksNote").textContent = `52 - (${value("lLeave").toFixed(0)} + ${value("lBh").toFixed(0)}) days / ${value("lDpw").toFixed(0)} days/week`;
   const lDayRate = dayRateFrom($("lRatePeriod").value, value("lRateInput"), value("lDpw"), lWeeks);
@@ -1070,6 +1076,9 @@ function calculateAll() {
   ], lDisplayPeriod);
 
   const uWeeks = workingWeeks(value("uDpw"), value("uLeave"), value("uBh"));
+  const uHoursWeek = value("uDpw") * value("uHpd");
+  $("uHoursWeekText").textContent = uHoursWeek.toFixed(1);
+  $("uHoursWeekNote").textContent = `${value("uDpw")} days/week x ${value("uHpd")} hours/day`;
   $("uWeeksText").textContent = uWeeks.toFixed(1);
   $("uWeeksNote").textContent = `52 - (${value("uLeave").toFixed(0)} + ${value("uBh").toFixed(0)}) days / ${value("uDpw").toFixed(0)} days/week`;
   const uDayRate = dayRateFrom($("uRatePeriod").value, value("uRateInput"), value("uDpw"), uWeeks);
@@ -1099,6 +1108,9 @@ function calculateAll() {
   ], uDisplayPeriod);
 
   const sWeeks = workingWeeks(value("sDpw"), value("sLeave"), value("sBh"));
+  const sHoursWeek = value("sDpw") * value("sHpd");
+  $("sHoursWeekText").textContent = sHoursWeek.toFixed(1);
+  $("sHoursWeekNote").textContent = `${value("sDpw")} days/week x ${value("sHpd")} hours/day`;
   $("sWeeksText").textContent = sWeeks.toFixed(1);
   $("sWeeksNote").textContent = `52 - (${value("sLeave").toFixed(0)} + ${value("sBh").toFixed(0)}) days / ${value("sDpw").toFixed(0)} days/week`;
   const salaried = calculateSalaried(value("sSalary"), { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_pension_rate: 0.2897, employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked, employer_sick_pay_rate: 0.02 });
