@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rate Calculator | Maple Leaf Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-sans: "Source Sans Pro", "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --navy: #0F1F3D;
+    --ink: #182235;
+    --body: #3D4A5C;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+    --paper: #FAFBFC;
+    --green: #1A5C35;
+    --red: #9A2E2E;
+    --teal: #006B5E;
+    --amber: #8B5E00;
+    --blue: #1B4D8E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1220px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+  }
+
+  .portfolio-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .portfolio-nav a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .portfolio-nav a:hover,
+  .portfolio-nav a[aria-current="page"] {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .social-link {
+    display: flex;
+    justify-content: flex-end;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  header {
+    background: var(--navy);
+    color: white;
+  }
+
+  .hero {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 34px 32px 28px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    color: white;
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .subtitle {
+    margin: 0;
+    max-width: 780px;
+    color: rgba(255,255,255,0.72);
+    font-size: 16px;
+  }
+
+  main {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 24px 32px 76px;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+    gap: 14px;
+    align-items: end;
+    margin-bottom: 18px;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  input,
+  select {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: white;
+    color: var(--ink);
+    font: inherit;
+    padding: 8px 10px;
+  }
+
+  input:focus,
+  select:focus,
+  button:focus-visible,
+  summary:focus-visible {
+    outline: 3px solid rgba(27,77,142,0.24);
+    outline-offset: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0 18px;
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+
+  .tab {
+    border: 1px solid var(--rule);
+    border-bottom: 0;
+    background: var(--paper);
+    color: var(--muted);
+    border-radius: 4px 4px 0 0;
+    padding: 10px 14px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab[aria-selected="true"] {
+    background: white;
+    color: var(--navy);
+  }
+
+  .calculator {
+    display: none;
+  }
+
+  .calculator.is-active {
+    display: block;
+  }
+
+  .workbench {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+
+  .calculator-heading {
+    margin: 0;
+  }
+
+  .calculator-heading h2 {
+    margin: 0 0 5px;
+    color: var(--navy);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .calculator-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .top-grid {
+    display: grid;
+    grid-template-columns: minmax(250px, 280px) minmax(0, 1fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+
+  .panel {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: white;
+  }
+
+  .panel-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .panel-header h2,
+  .panel-header h3 {
+    margin: 0 0 5px;
+    color: var(--navy);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .panel-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .controls {
+    padding: 18px 20px 20px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .rate-card .controls {
+    gap: 16px;
+  }
+
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .rate-controls {
+    display: grid;
+    gap: 12px;
+  }
+
+  .rate-controls.is-paired {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  details {
+    border-top: 1px solid var(--rule);
+    padding-top: 14px;
+  }
+
+  summary {
+    color: var(--navy);
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .rollup {
+    display: block;
+    padding-top: 0;
+    overflow: hidden;
+  }
+
+  .rollup > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+    list-style: none;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .rollup > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .rollup > summary::after {
+    content: "Click to edit";
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .rollup[open] > summary::after {
+    content: "Click to hide";
+  }
+
+  .rollup:not([open]) > summary {
+    border-bottom: 0;
+  }
+
+  .rollup-title {
+    display: block;
+    grid-column: 1;
+    margin: 0 0 5px;
+    color: var(--navy);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .rollup-subtitle {
+    display: block;
+    grid-column: 1;
+    margin: 0;
+    padding-right: 28px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .rollup-body {
+    padding: 18px 20px 20px;
+  }
+
+  .assumption-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .assumption-table input,
+  .assumption-table select {
+    min-width: 0;
+  }
+
+  .assumption-table label {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .assumption-table .computed {
+    display: block;
+  }
+
+  .computed {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 4px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+    padding: 18px 20px 20px;
+  }
+
+  .metric-grid.has-tax-rate {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .metric {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .metric-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .metric-value {
+    color: #31333F;
+    font-size: clamp(20px, 2.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .breakdown {
+    overflow-x: auto;
+  }
+
+  .breakdown-period {
+    max-width: 240px;
+  }
+
+  .breakdown-table {
+    width: 100%;
+    margin-top: 14px;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+
+  .breakdown-table col:nth-child(1) { width: 30%; }
+  .breakdown-table col:nth-child(2) { width: 10%; }
+  .breakdown-table col:nth-child(3) { width: 60%; }
+
+  .breakdown-table th,
+  .breakdown-table td {
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .breakdown-table th {
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .breakdown-table td:nth-child(2),
+  .breakdown-table th:nth-child(2) {
+    text-align: right;
+  }
+
+  .assumption-table td:nth-child(2),
+  .assumption-table th:nth-child(2) {
+    text-align: left;
+  }
+
+  .assumption-table th,
+  .assumption-table td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .assumption-table input,
+  .assumption-table select {
+    height: 32px;
+    min-height: 32px;
+    padding: 5px 8px;
+  }
+
+  .section-row td {
+    padding-top: 18px;
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .deduction td:nth-child(1),
+  .deduction td:nth-child(2) {
+    color: var(--red);
+  }
+
+  .total td:nth-child(1),
+  .total td:nth-child(2) {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+  }
+
+  .checkbox-row input {
+    width: 18px;
+    height: 18px;
+    min-height: 18px;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-height: 18px;
+  }
+
+  .footer-note {
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 980px) {
+    .top-grid,
+    .support-grid,
+    .toolbar {
+      grid-template-columns: 1fr;
+    }
+    .metric-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .topbar-inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      padding: 12px 20px;
+    }
+    .portfolio-nav {
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .social-link {
+      justify-content: center;
+    }
+    .hero,
+    main {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .control-grid,
+    .rate-controls.is-paired,
+    .metric-grid {
+      grid-template-columns: 1fr;
+    }
+    .breakdown {
+      overflow-x: auto;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Maple Leaf Intelligence home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="">
+      <span>Maple Leaf Intelligence</span>
+    </a>
+    <nav class="portfolio-nav" aria-label="Portfolio sections">
+      <a href="index.html">Power BI Portfolio</a>
+      <a href="analytics-engineering.html">Analytics Engineering Portfolio</a>
+      <a href="rate-calculator.html" aria-current="page">Rate Calculator</a>
+    </nav>
+    <a class="social-link" href="https://www.linkedin.com/in/stephenclinton">LinkedIn</a>
+  </div>
+</div>
+
+<header>
+  <section class="hero">
+    <h1>Rate Calculator</h1>
+    <p class="subtitle">UK contracting and employment calculator for Ltd Co outside IR35, umbrella inside IR35, and full-time salaried roles. Net take-home stays annual, with breakdowns available by selected period.</p>
+  </section>
+</header>
+
+<main>
+  <section class="toolbar" aria-label="Calculator settings">
+    <div class="field">
+      <label for="taxYear">Tax year</label>
+      <select id="taxYear" data-save="taxYear"></select>
+    </div>
+    <div class="computed" id="taxYearNote">Rates and thresholds update across all calculators.</div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Calculator type">
+    <button class="tab" id="tab-ltd" type="button" role="tab" aria-controls="ltd" aria-selected="true">Ltd Co</button>
+    <button class="tab" id="tab-umbrella" type="button" role="tab" aria-controls="umbrella" aria-selected="false">Umbrella</button>
+    <button class="tab" id="tab-salaried" type="button" role="tab" aria-controls="salaried" aria-selected="false">Salaried</button>
+  </div>
+
+  <section class="calculator is-active" id="ltd" role="tabpanel" aria-labelledby="tab-ltd">
+    <div class="workbench">
+      <div class="calculator-heading">
+        <h2>Ltd Co Rate Calculator</h2>
+        <p>Outside IR35. Salary plus dividends extraction.</p>
+      </div>
+      <div class="top-grid">
+        <aside class="panel rate-card">
+          <div class="panel-header">
+            <h3>Rate</h3>
+            <p>Enter rate / salary</p>
+          </div>
+          <div class="controls rate-controls is-paired">
+            <div class="field">
+              <label for="lRateInput" id="lRateLabel">Day rate</label>
+              <input id="lRateInput" data-save="lRateInput" type="number" min="1" max="500000" step="0.5" value="440">
+            </div>
+            <div class="field">
+              <label for="lRatePeriod">Rate quoted as</label>
+              <select id="lRatePeriod" data-save="lRatePeriod"><option>Per Day</option><option>Per Week</option><option>Per Month</option><option>Per Year</option></select>
+            </div>
+          </div>
+        </aside>
+        <section class="panel" aria-live="polite">
+          <div class="panel-header"><h3>Before Tax & Deductions</h3><p id="lGrossSummary"></p></div>
+          <div class="metric-grid" id="lGrossMetrics"></div>
+        </section>
+      </div>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation.</span></summary>
+          <div class="rollup-body">
+            <table class="breakdown-table assumption-table">
+              <colgroup><col><col><col></colgroup>
+              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td><label for="lDpw">Days per week</label></td><td><input id="lDpw" data-save="lDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                <tr><td><label for="lHpd">Hours per day</label></td><td><input id="lHpd" data-save="lHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                <tr><td><label for="lLeave">Annual leave days</label></td><td><input id="lLeave" data-save="lLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays.</td></tr>
+                <tr><td><label for="lBh">Bank holidays</label></td><td><input id="lBh" data-save="lBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                <tr><td>Billable weeks per year</td><td><span id="lWeeksText"></span></td><td class="note" id="lWeeksNote"></td></tr>
+                <tr><td><label for="lSalary">Director salary</label></td><td><input id="lSalary" type="number" step="100"></td><td class="note" id="lSalaryNote"></td></tr>
+                <tr><td><label for="lCorpTax">Corporation tax %</label></td><td><input id="lCorpTax" type="number" step="0.1"></td><td class="note" id="lCorpTaxNote"></td></tr>
+                <tr><td><label for="lDivAllowance">Dividend allowance</label></td><td><input id="lDivAllowance" type="number" step="100"></td><td class="note" id="lDivAllowanceNote"></td></tr>
+                <tr><td><label for="lErNiRate">Employer NI %</label></td><td><input id="lErNiRate" type="number" step="0.1"></td><td class="note" id="lErNiRateNote"></td></tr>
+                <tr><td><label for="lErNiThreshold">Secondary threshold</label></td><td><input id="lErNiThreshold" type="number" step="100"></td><td class="note" id="lErNiThresholdNote"></td></tr>
+                <tr><td><label for="lPi">Professional indemnity insurance</label></td><td><input id="lPi" data-save="lPi" type="number" step="100" value="1200"></td><td class="note">Enter your yearly premium. Typical contractor cost — check your actual quote.</td></tr>
+                <tr><td><label for="lLife">Relevant Life insurance</label></td><td><input id="lLife" data-save="lLife" type="number" step="50" value="864"></td><td class="note">Company-paid life cover. Premiums paid from pre-tax profit.</td></tr>
+                <tr><td><label for="lCi">Critical illness / IP insurance</label></td><td><input id="lCi" data-save="lCi" type="number" step="50" value="600"></td><td class="note">Income protection if you cannot work. Contractor equivalent of employer sick pay.</td></tr>
+                <tr><td><label for="lAccountancy">Accountancy fees</label></td><td><input id="lAccountancy" data-save="lAccountancy" type="number" step="100" value="1800"></td><td class="note">Adjust to your actual accountant's fee.</td></tr>
+                <tr><td><label for="lOther">Other business expenses</label></td><td><input id="lOther" data-save="lOther" type="number" step="100" value="1000"></td><td class="note">Phone, software, home office, travel etc.</td></tr>
+                <tr><td><label for="lPension">Employer pension contribution</label></td><td><input id="lPension" data-save="lPension" type="number" step="100" value="6000"></td><td class="note">Company contribution paid directly into your pension before corporation tax. Adjust to your actual contribution.</td></tr>
+              </tbody>
+            </table>
+          </div>
+      </details>
+      <section class="panel" aria-live="polite">
+        <div class="panel-header"><h3>Net Take-Home</h3><p id="lSummary"></p></div>
+        <div class="metric-grid has-tax-rate" id="lMetrics"></div>
+      </section>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period.</span></summary>
+          <div class="rollup-body breakdown">
+            <div class="field breakdown-period">
+              <label for="lDisplayPeriod">Display figures</label>
+              <select id="lDisplayPeriod" data-save="lDisplayPeriod">
+                <option>Per Year</option>
+                <option>Per Month</option>
+                <option>Per Week</option>
+              </select>
+            </div>
+            <table class="breakdown-table" id="lBreakdown"></table>
+          </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="calculator" id="umbrella" role="tabpanel" aria-labelledby="tab-umbrella">
+    <div class="workbench">
+      <div class="calculator-heading">
+        <h2>Umbrella Rate Calculator</h2>
+        <p>Inside IR35. Assignment rate processed via umbrella PAYE.</p>
+      </div>
+      <div class="top-grid">
+        <aside class="panel rate-card">
+          <div class="panel-header">
+            <h3>Rate</h3>
+            <p>Enter rate / salary</p>
+          </div>
+          <div class="controls rate-controls is-paired">
+            <div class="field"><label for="uRateInput" id="uRateLabel">Day rate</label><input id="uRateInput" data-save="uRateInput" type="number" min="1" max="500000" step="0.5" value="500"></div>
+            <div class="field"><label for="uRatePeriod">Rate quoted as</label><select id="uRatePeriod" data-save="uRatePeriod"><option>Per Day</option><option>Per Week</option><option>Per Month</option><option>Per Year</option></select></div>
+          </div>
+        </aside>
+        <section class="panel" aria-live="polite">
+          <div class="panel-header"><h3>Before Tax & Deductions</h3><p id="uGrossSummary"></p></div>
+          <div class="metric-grid" id="uGrossMetrics"></div>
+        </section>
+      </div>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation.</span></summary>
+          <div class="rollup-body">
+            <table class="breakdown-table assumption-table">
+              <colgroup><col><col><col></colgroup>
+              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td><label for="uDpw">Days per week</label></td><td><input id="uDpw" data-save="uDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                <tr><td><label for="uHpd">Hours per day</label></td><td><input id="uHpd" data-save="uHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                <tr><td><label for="uLeave">Annual leave days</label></td><td><input id="uLeave" data-save="uLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays. Holiday pay under umbrella does not add income — it is built into the assignment rate and redistributed by the umbrella.</td></tr>
+                <tr><td><label for="uBh">Bank holidays</label></td><td><input id="uBh" data-save="uBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                <tr><td>Billable weeks per year</td><td><span id="uWeeksText"></span></td><td class="note" id="uWeeksNote"></td></tr>
+                <tr><td><label for="uMargin">Umbrella margin</label></td><td><input id="uMargin" data-save="uMargin" type="number" step="50" value="1300"></td><td class="note">Annual umbrella fee charged 52 weeks/year regardless of billable weeks. Typical £15-£30/week. Default is £25 x 52 weeks.</td></tr>
+                <tr><td><label for="uLevy">Apprenticeship Levy</label></td><td><input id="uLevy" data-save="uLevy" type="number" step="0.1" value="0.5"></td><td class="note">0.5% of your gross PAYE salary, passed through by most umbrellas. Set to 0 if your umbrella does not charge this.</td></tr>
+                <tr><td><label for="uErNiRate">Employer NI %</label></td><td><input id="uErNiRate" type="number" step="0.1"></td><td class="note" id="uErNiRateNote"></td></tr>
+                <tr><td><label for="uErNiThreshold">Secondary threshold</label></td><td><input id="uErNiThreshold" type="number" step="100"></td><td class="note" id="uErNiThresholdNote"></td></tr>
+                <tr><td><label for="uPensionType">Pension scheme</label></td><td><select id="uPensionType" data-save="uPensionType"><option>Net pay arrangement</option><option>Relief at source</option><option>Salary sacrifice</option></select></td><td class="note" id="uPensionTypeNote"></td></tr>
+                <tr><td><label for="uEePension">Employee contribution</label></td><td><input id="uEePension" data-save="uEePension" type="number" step="0.5" value="5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings (£6,240-£50,270).</td></tr>
+                <tr><td><label for="uErPension">Employer contribution</label></td><td><input id="uErPension" data-save="uErPension" type="number" step="0.5" value="3"></td><td class="note">Statutory minimum is 3%. Deducted from your assignment rate in Step 1 — this is not new money from the client, it reduces your gross PAYE salary.</td></tr>
+                <tr id="uNiPassbackRow"><td><label for="uNiPassback">Employer passes NI saving to pension?</label></td><td><input id="uNiPassback" data-save="uNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
+              </tbody>
+            </table>
+          </div>
+      </details>
+      <section class="panel" aria-live="polite">
+        <div class="panel-header"><h3>Net Take-Home</h3><p id="uSummary"></p></div>
+        <div class="metric-grid has-tax-rate" id="uMetrics"></div>
+      </section>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period.</span></summary>
+          <div class="rollup-body breakdown">
+            <div class="field breakdown-period">
+              <label for="uDisplayPeriod">Display figures</label>
+              <select id="uDisplayPeriod" data-save="uDisplayPeriod">
+                <option>Per Year</option>
+                <option>Per Month</option>
+                <option>Per Week</option>
+              </select>
+            </div>
+            <table class="breakdown-table" id="uBreakdown"></table>
+          </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="calculator" id="salaried" role="tabpanel" aria-labelledby="tab-salaried">
+    <div class="workbench">
+      <div class="calculator-heading">
+        <h2>Full-Time Salaried Calculator</h2>
+        <p>Direct employment. PAYE income tax and NI.</p>
+      </div>
+      <div class="top-grid">
+        <aside class="panel rate-card">
+          <div class="panel-header">
+            <h3>Rate</h3>
+            <p>Enter rate / salary</p>
+          </div>
+          <div class="controls rate-controls">
+            <div class="field"><label for="sSalary">Annual salary</label><input id="sSalary" data-save="sSalary" type="number" min="10000" max="500000" step="500" value="98500"></div>
+          </div>
+        </aside>
+        <section class="panel" aria-live="polite">
+          <div class="panel-header"><h3>Before Tax & Deductions</h3><p id="sGrossSummary"></p></div>
+          <div class="metric-grid" id="sGrossMetrics"></div>
+        </section>
+      </div>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation.</span></summary>
+          <div class="rollup-body">
+            <table class="breakdown-table assumption-table">
+              <colgroup><col><col><col></colgroup>
+              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td><label for="sDpw">Days per week</label></td><td><input id="sDpw" data-save="sDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                <tr><td><label for="sHpd">Hours per day</label></td><td><input id="sHpd" data-save="sHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate the hourly equivalent rate only.</td></tr>
+                <tr><td><label for="sLeave">Annual leave days</label></td><td><input id="sLeave" data-save="sLeave" type="number" step="1" value="19"></td><td class="note">Paid holiday days per year, excluding bank holidays. UK statutory minimum is 20 days.</td></tr>
+                <tr><td><label for="sBh">Bank holidays</label></td><td><input id="sBh" data-save="sBh" type="number" step="1" value="11"></td><td class="note">Public bank holidays per year. England & Wales has 8 statutory days plus 3 additional common holidays.</td></tr>
+                <tr><td>Worked weeks per year</td><td><span id="sWeeksText"></span></td><td class="note" id="sWeeksNote"></td></tr>
+                <tr><td><label for="sErNiRate">Employer NI %</label></td><td><input id="sErNiRate" type="number" step="0.1"></td><td class="note" id="sErNiRateNote"></td></tr>
+                <tr><td><label for="sErNiThreshold">Secondary threshold</label></td><td><input id="sErNiThreshold" type="number" step="100"></td><td class="note" id="sErNiThresholdNote"></td></tr>
+                <tr><td><label for="sPensionType">Pension scheme</label></td><td><select id="sPensionType" data-save="sPensionType"><option>Relief at source</option><option>Net pay arrangement</option><option>Salary sacrifice</option></select></td><td class="note" id="sPensionTypeNote"></td></tr>
+                <tr><td><label for="sEePension">Employee contribution</label></td><td><input id="sEePension" data-save="sEePension" type="number" step="0.5" value="13.5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings. NHS default is 13.5%.</td></tr>
+                <tr id="sNiPassbackRow"><td><label for="sNiPassback">Employer passes NI saving to pension?</label></td><td><input id="sNiPassback" data-save="sNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
+              </tbody>
+            </table>
+          </div>
+      </details>
+      <section class="panel" aria-live="polite">
+        <div class="panel-header"><h3>Net Take-Home</h3><p id="sSummary"></p></div>
+        <div class="metric-grid has-tax-rate" id="sMetrics"></div>
+      </section>
+      <details class="panel rollup">
+          <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period.</span></summary>
+          <div class="rollup-body breakdown">
+            <div class="field breakdown-period">
+              <label for="sDisplayPeriod">Display figures</label>
+              <select id="sDisplayPeriod" data-save="sDisplayPeriod">
+                <option>Per Year</option>
+                <option>Per Month</option>
+                <option>Per Week</option>
+              </select>
+            </div>
+            <table class="breakdown-table" id="sBreakdown"></table>
+          </div>
+      </details>
+    </div>
+  </section>
+
+  <p class="footer-note">Figures are indicative only. Tax rates are drawn from the original Python calculator constants. This is not financial advice.</p>
+</main>
+
+<footer>
+  Rate calculator duplicated from the Python version as a static JavaScript page for portfolio hosting.
+</footer>
+
+<script>
+const TAX_YEARS = {
+  "2026/27": { label: "2026/27 (current)", personal_allowance: 12570, basic_rate_ceiling: 50270, higher_rate_ceiling: 125140, income_tax_basic: 0.20, income_tax_higher: 0.40, income_tax_additional: 0.45, ni_primary_threshold: 12570, ni_rate_standard: 0.08, ni_upper_earnings_limit: 50270, ni_rate_above_uel: 0.02, employer_ni_threshold: 5000, employer_ni_rate: 0.15, dividend_allowance: 500, dividend_basic_rate: 0.0875, dividend_higher_rate: 0.3375, corporation_tax_rate: 0.25, notes: { employer_ni_rate: "Increased from 13.8% to 15% in April 2025. Unchanged for 2026/27.", employer_ni_threshold: "Dropped from £9,100 to £5,000 in April 2025. Unchanged for 2026/27." } },
+  "2025/26": { label: "2025/26", personal_allowance: 12570, basic_rate_ceiling: 50270, higher_rate_ceiling: 125140, income_tax_basic: 0.20, income_tax_higher: 0.40, income_tax_additional: 0.45, ni_primary_threshold: 12570, ni_rate_standard: 0.08, ni_upper_earnings_limit: 50270, ni_rate_above_uel: 0.02, employer_ni_threshold: 5000, employer_ni_rate: 0.15, dividend_allowance: 500, dividend_basic_rate: 0.0875, dividend_higher_rate: 0.3375, corporation_tax_rate: 0.25, notes: { employer_ni_rate: "Increased from 13.8% to 15% from April 2025 (Autumn Budget 2024).", employer_ni_threshold: "Dropped from £9,100 to £5,000 from April 2025 (Autumn Budget 2024)." } },
+  "2024/25": { label: "2024/25", personal_allowance: 12570, basic_rate_ceiling: 50270, higher_rate_ceiling: 125140, income_tax_basic: 0.20, income_tax_higher: 0.40, income_tax_additional: 0.45, ni_primary_threshold: 12570, ni_rate_standard: 0.08, ni_upper_earnings_limit: 50270, ni_rate_above_uel: 0.02, employer_ni_threshold: 9100, employer_ni_rate: 0.138, dividend_allowance: 500, dividend_basic_rate: 0.0875, dividend_higher_rate: 0.3375, corporation_tax_rate: 0.25, notes: {} },
+  "2023/24": { label: "2023/24", personal_allowance: 12570, basic_rate_ceiling: 50270, higher_rate_ceiling: 125140, income_tax_basic: 0.20, income_tax_higher: 0.40, income_tax_additional: 0.45, ni_primary_threshold: 12570, ni_rate_standard: 0.12, ni_upper_earnings_limit: 50270, ni_rate_above_uel: 0.02, employer_ni_threshold: 9100, employer_ni_rate: 0.138, dividend_allowance: 1000, dividend_basic_rate: 0.0875, dividend_higher_rate: 0.3375, corporation_tax_rate: 0.25, notes: { ni_rate_standard: "Rate was 12% from April 2023, cut to 10% from January 2024, then 8% from April 2024. This calculator uses the April 2023 opening rate of 12% for the full year.", dividend_allowance: "Allowance was £1,000 (halved from £2,000 in 2022/23, halved again to £500 from 2024/25)." } }
+};
+
+const $ = (id) => document.getElementById(id);
+const value = (id) => Number($(id).value || 0);
+const pct = (id) => value(id) / 100;
+const periodOptions = ["Per Day", "Per Week", "Per Month", "Per Year"];
+const rateLabels = { "Per Day": "Day rate", "Per Week": "Weekly rate", "Per Month": "Monthly rate", "Per Year": "Annual rate" };
+
+function currency(amount, decimals = 2) {
+  return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(amount || 0);
+}
+
+function moneyByDisplay(annual, displayPeriod) {
+  if (displayPeriod === "Per Month") return currency(annual / 12, 0);
+  if (displayPeriod === "Per Week") return currency(annual / 52, 2);
+  return currency(annual, 0);
+}
+
+function workingWeeks(daysPerWeek, leaveDays, bankHolidays) {
+  return daysPerWeek > 0 ? Math.round((52 - ((leaveDays + bankHolidays) / daysPerWeek)) * 10) / 10 : 0;
+}
+
+function dayRateFrom(period, input, daysPerWeek, weeksPerYear) {
+  if (period === "Per Week") return input / daysPerWeek;
+  if (period === "Per Month") return input / (weeksPerYear * daysPerWeek / 12);
+  if (period === "Per Year") return input / (weeksPerYear * daysPerWeek);
+  return input;
+}
+
+function calculateLtd(dayRate, a) {
+  const daysPerYear = a.days_per_week * a.weeks_per_year;
+  const hoursPerYear = daysPerYear * a.hours_per_day;
+  const annualGross = dayRate * daysPerYear;
+  const employerNiOnSalary = Math.max(0, a.director_salary - a.employer_ni_secondary_threshold) * a.employer_ni_rate;
+  const employerPensionAnnual = a.employer_pension_per_month * 12;
+  const taxableProfit = annualGross - a.director_salary - employerNiOnSalary - employerPensionAnnual - a.professional_indemnity_per_year - (a.relevant_life_insurance_per_month * 12) - (a.critical_illness_per_month * 12) - a.accountancy_per_year - a.other_expenses_per_year;
+  const corporationTax = taxableProfit * a.corporation_tax_rate;
+  const distributableProfit = taxableProfit - corporationTax;
+  const taxableSalary = Math.max(0, a.director_salary - a.personal_allowance);
+  const basicBand = Math.max(0, a.basic_rate_band_upper - a.personal_allowance);
+  const higherBand = Math.max(0, a.higher_rate_band_upper - a.basic_rate_band_upper);
+  const incomeTaxOnSalary = Math.min(taxableSalary, basicBand) * a.income_tax_basic + Math.min(Math.max(0, taxableSalary - basicBand), higherBand) * a.income_tax_higher + Math.max(0, taxableSalary - basicBand - higherBand) * a.income_tax_additional;
+  const employeeNiOnSalary = Math.min(Math.max(0, a.director_salary - a.ni_primary_threshold), a.ni_upper_earnings_limit - a.ni_primary_threshold) * a.ni_rate_standard + Math.max(0, a.director_salary - a.ni_upper_earnings_limit) * a.ni_rate_above_uel;
+  const taxableDividends = Math.max(0, distributableProfit - a.dividend_allowance);
+  const basicRateSpace = Math.max(0, a.basic_rate_band_upper - a.director_salary - a.dividend_allowance);
+  const dividendsBasic = Math.min(taxableDividends, basicRateSpace);
+  const dividendsHigher = Math.max(0, taxableDividends - basicRateSpace - a.dividend_allowance);
+  const dividendTax = dividendsBasic * a.dividend_basic_rate + dividendsHigher * a.dividend_higher_rate;
+  const annualNet = a.director_salary - incomeTaxOnSalary - employeeNiOnSalary + distributableProfit - dividendTax;
+  return { dayRate, daysPerYear, hoursPerYear, annualGross, employerNiOnSalary, employerPensionAnnual, taxableProfit, corporationTax, distributableProfit, incomeTaxOnSalary, employeeNiOnSalary, dividendsBasic, dividendsHigher, dividendTax, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: 1 - (annualNet / annualGross) };
+}
+
+function calculateUmbrella(dayRate, a) {
+  const daysPerYear = a.days_per_week * a.weeks_per_year;
+  const hoursPerYear = daysPerYear * a.hours_per_day;
+  const annualGross = dayRate * daysPerYear;
+  const umbrellaMarginAnnual = a.umbrella_margin_per_week * a.weeks_per_year;
+  const afterMargin = annualGross - umbrellaMarginAnnual;
+  const qeFixed = Math.max(0, a.qualifying_earnings_upper - a.qualifying_earnings_lower);
+  const employerPensionFixed = qeFixed * a.employer_pension_rate;
+  let grossPaye = (afterMargin - employerPensionFixed + a.employer_ni_secondary_threshold * a.employer_ni_rate) / (1 + a.apprenticeship_levy_rate + a.employer_ni_rate);
+  if (grossPaye < a.qualifying_earnings_upper) {
+    grossPaye = (afterMargin + a.employer_ni_secondary_threshold * a.employer_ni_rate + a.qualifying_earnings_lower * a.employer_pension_rate) / (1 + a.apprenticeship_levy_rate + a.employer_ni_rate + a.employer_pension_rate);
+  }
+  const qualifyingBase = Math.max(0, Math.min(grossPaye, a.qualifying_earnings_upper) - a.qualifying_earnings_lower);
+  const employerPension = qualifyingBase * a.employer_pension_rate;
+  const employerNi = Math.max(0, grossPaye - a.employer_ni_secondary_threshold) * a.employer_ni_rate;
+  const levy = grossPaye * a.apprenticeship_levy_rate;
+  const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_scheme_type) ? qualifyingBase * a.employee_pension_rate : 0;
+  const grossTaxable = grossPaye - employeePensionPretax;
+  const tax = taxAndNi(grossTaxable, a);
+  const employeePensionPosttax = a.pension_scheme_type === "Relief at source" ? qualifyingBase * a.employee_pension_rate : 0;
+  const hmrcTopup = a.pension_scheme_type === "Relief at source" ? employeePensionPosttax * a.income_tax_basic : 0;
+  const niSaving = a.pension_scheme_type === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? qualifyingBase * a.employee_pension_rate * a.employer_ni_rate : 0;
+  const annualNet = grossTaxable - tax.totalIncomeTax - tax.totalEmployeeNi - employeePensionPosttax;
+  return { dayRate, daysPerYear, hoursPerYear, annualGross, umbrellaMarginAnnual, qualifyingBase, employerPension, employerNi, levy, grossPaye, employeePensionPretax, grossTaxable, ...tax, employeePensionPosttax, hmrcTopup, niSaving, totalPensionPot: employeePensionPretax + employeePensionPosttax + hmrcTopup + niSaving, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: 1 - (annualNet / annualGross) };
+}
+
+function calculateSalaried(annualSalary, a) {
+  const daysPerYear = a.days_per_week * a.weeks_per_year;
+  const hoursPerYear = daysPerYear * a.hours_per_day;
+  const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_scheme_type) ? annualSalary * a.employee_pension_rate : 0;
+  const grossTaxable = annualSalary - employeePensionPretax;
+  const tax = taxAndNi(grossTaxable, a);
+  const employeePensionPosttax = a.pension_scheme_type === "Relief at source" ? annualSalary * a.employee_pension_rate : 0;
+  const hmrcTopup = a.pension_scheme_type === "Relief at source" ? employeePensionPosttax * a.income_tax_basic : 0;
+  const niSaving = a.pension_scheme_type === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? annualSalary * a.employee_pension_rate * a.employer_ni_rate : 0;
+  const annualNet = grossTaxable - tax.totalIncomeTax - tax.totalEmployeeNi - employeePensionPosttax;
+  const employerNi = Math.max(0, annualSalary - a.employer_ni_secondary_threshold) * a.employer_ni_rate;
+  const employerPension = annualSalary * a.employer_pension_rate;
+  const sickPay = annualSalary * a.employer_sick_pay_rate;
+  const employerCost = annualSalary + employerNi + employerPension + sickPay;
+  return { annualSalary, daysPerYear, hoursPerYear, equivalentDayRate: annualSalary / daysPerYear, employeePensionPretax, grossTaxable, ...tax, employeePensionPosttax, hmrcTopup, niSaving, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, employerNi, employerPension, sickPay, employerCost, breakevenDayRate: employerCost / daysPerYear, effectiveTaxRate: (tax.totalIncomeTax + tax.totalEmployeeNi + employeePensionPretax + employeePensionPosttax) / annualSalary };
+}
+
+function taxAndNi(grossTaxable, a) {
+  const taxableIncome = Math.max(0, grossTaxable - a.personal_allowance);
+  const basicBand = Math.max(0, a.basic_rate_ceiling - a.personal_allowance);
+  const higherBand = Math.max(0, a.higher_rate_ceiling - a.basic_rate_ceiling);
+  const incomeTaxBasic = Math.min(taxableIncome, basicBand) * a.income_tax_basic;
+  const incomeTaxHigher = Math.min(Math.max(0, taxableIncome - basicBand), higherBand) * a.income_tax_higher;
+  const incomeTaxAdditional = Math.max(0, taxableIncome - basicBand - higherBand) * a.income_tax_additional;
+  const employeeNiStandard = Math.min(Math.max(0, grossTaxable - a.ni_primary_threshold), a.ni_upper_earnings_limit - a.ni_primary_threshold) * a.ni_rate_standard;
+  const employeeNiAbove = Math.max(0, grossTaxable - a.ni_upper_earnings_limit) * a.ni_rate_above_uel;
+  return { taxableIncome, incomeTaxBasic, incomeTaxHigher, incomeTaxAdditional, totalIncomeTax: incomeTaxBasic + incomeTaxHigher + incomeTaxAdditional, employeeNiStandard, employeeNiAbove, totalEmployeeNi: employeeNiStandard + employeeNiAbove };
+}
+
+function renderMetrics(target, primaryLabel, annual, monthly, daily, hourly) {
+  target.innerHTML = [
+    [primaryLabel, currency(annual, 0)],
+    ["Monthly", currency(monthly, 0)],
+    ["Weekly", currency(annual / 52, 0)],
+    ["Daily", currency(daily, 2)],
+    ["Hourly", currency(hourly, 2)]
+  ].map(([label, val]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${val}</span></div>`).join("");
+}
+
+function renderNetMetrics(target, result) {
+  renderMetrics(target, "Net take-home", result.annualNet, result.monthlyNet, result.dailyNet, result.hourlyNet);
+  target.insertAdjacentHTML("beforeend", `<div class="metric"><span class="metric-label">Effective tax rate</span><span class="metric-value">${(result.effectiveTaxRate * 100).toFixed(1)}%</span></div>`);
+}
+
+function renderTable(table, rows, displayPeriod) {
+  table.innerHTML = `<colgroup><col><col><col></colgroup><thead><tr><th>Description</th><th>Amount</th><th>Note</th></tr></thead><tbody>${rows.map((row) => {
+    if (row.section) return `<tr class="section-row"><td colspan="3">${row.section}</td></tr>`;
+    const cls = `${row.deduction ? "deduction" : ""} ${row.total ? "total" : ""}`;
+    return `<tr class="${cls}"><td>${row.label}</td><td>${moneyByDisplay(row.value, displayPeriod)}</td><td class="note">${row.note || ""}</td></tr>`;
+  }).join("")}</tbody>`;
+}
+
+function taxNote(ty, key, fallback) {
+  return ty.notes && ty.notes[key] ? `${fallback} ${ty.notes[key]}` : fallback;
+}
+
+function pensionNote() {
+  return "Relief at source: deducted post-tax, HMRC tops up at 20%. Net pay: deducted before tax and NI. Salary sacrifice: reduces gross salary, saves employee and employer NI.";
+}
+
+function updateAssumptionNotes(ty) {
+  $("lSalaryNote").textContent = "Set at personal allowance by default — no income tax and minimal employer NI on the salary itself.";
+  $("lCorpTaxNote").textContent = `${(ty.corporation_tax_rate * 100).toFixed(0)}% is the HMRC rate for ${$("taxYear").value}. Main rate 25% on profits >= £250k. Small profits relief may apply below £50k — check with your accountant.`;
+  $("lDivAllowanceNote").textContent = taxNote(ty, "dividend_allowance", `${currency(ty.dividend_allowance, 0)} is the HMRC rate for ${$("taxYear").value}. Dividends within this allowance are tax-free.`);
+  $("lErNiRateNote").textContent = taxNote(ty, "employer_ni_rate", `${(ty.employer_ni_rate * 100).toFixed(1)}% is the HMRC rate for ${$("taxYear").value}. Charged on director salary above the secondary threshold.`);
+  $("lErNiThresholdNote").textContent = taxNote(ty, "employer_ni_threshold", `${currency(ty.employer_ni_threshold, 0)} is the HMRC rate for ${$("taxYear").value}. Salary below this is not subject to employer NI.`);
+  $("uErNiRateNote").textContent = taxNote(ty, "employer_ni_rate", `${(ty.employer_ni_rate * 100).toFixed(1)}% is the HMRC rate for ${$("taxYear").value}. Under umbrella this is deducted from your assignment rate, not paid by the client on top.`);
+  $("uErNiThresholdNote").textContent = taxNote(ty, "employer_ni_threshold", `${currency(ty.employer_ni_threshold, 0)} is the HMRC rate for ${$("taxYear").value}. Employer NI only applies to gross PAYE salary above this amount.`);
+  $("uPensionTypeNote").textContent = pensionNote();
+  $("sErNiRateNote").textContent = taxNote(ty, "employer_ni_rate", `${(ty.employer_ni_rate * 100).toFixed(1)}% is the HMRC rate for ${$("taxYear").value}. Paid by employer on top of your salary.`);
+  $("sErNiThresholdNote").textContent = taxNote(ty, "employer_ni_threshold", `${currency(ty.employer_ni_threshold, 0)} is the HMRC rate for ${$("taxYear").value}. Salary below this is not subject to employer NI.`);
+  $("sPensionTypeNote").textContent = pensionNote();
+  $("uNiPassbackRow").hidden = $("uPensionType").value !== "Salary sacrifice";
+  $("sNiPassbackRow").hidden = $("sPensionType").value !== "Salary sacrifice";
+}
+
+function readPersisted() {
+  document.querySelectorAll("[data-save]").forEach((el) => {
+    const saved = localStorage.getItem(`rateCalc.${el.id}`);
+    if (saved === null) return;
+    if (el.type === "checkbox") el.checked = saved === "true";
+    else el.value = saved;
+  });
+}
+
+function persist(event) {
+  const el = event.target;
+  if (!el.matches("[data-save]")) return;
+  localStorage.setItem(`rateCalc.${el.id}`, el.type === "checkbox" ? String(el.checked) : el.value);
+}
+
+function setTaxDefaults(ty) {
+  [["lSalary", ty.personal_allowance], ["lCorpTax", ty.corporation_tax_rate * 100], ["lDivAllowance", ty.dividend_allowance], ["lErNiRate", ty.employer_ni_rate * 100], ["lErNiThreshold", ty.employer_ni_threshold], ["uErNiRate", ty.employer_ni_rate * 100], ["uErNiThreshold", ty.employer_ni_threshold], ["sErNiRate", ty.employer_ni_rate * 100], ["sErNiThreshold", ty.employer_ni_threshold]].forEach(([id, val]) => { $(id).value = val; });
+}
+
+function calculateAll() {
+  const taxYear = $("taxYear").value;
+  const ty = TAX_YEARS[taxYear];
+  const lDisplayPeriod = $("lDisplayPeriod").value;
+  const uDisplayPeriod = $("uDisplayPeriod").value;
+  const sDisplayPeriod = $("sDisplayPeriod").value;
+  updateAssumptionNotes(ty);
+  $("taxYearNote").textContent = `${taxYear}: employer NI ${(ty.employer_ni_rate * 100).toFixed(1)}%, secondary threshold ${currency(ty.employer_ni_threshold, 0)}, dividend allowance ${currency(ty.dividend_allowance, 0)}.`;
+  $("lRateLabel").textContent = rateLabels[$("lRatePeriod").value];
+  $("uRateLabel").textContent = rateLabels[$("uRatePeriod").value];
+
+  const lWeeks = workingWeeks(value("lDpw"), value("lLeave"), value("lBh"));
+  $("lWeeksText").textContent = lWeeks.toFixed(1);
+  $("lWeeksNote").textContent = `52 - (${value("lLeave").toFixed(0)} + ${value("lBh").toFixed(0)}) days / ${value("lDpw").toFixed(0)} days/week`;
+  const lDayRate = dayRateFrom($("lRatePeriod").value, value("lRateInput"), value("lDpw"), lWeeks);
+  const ltd = calculateLtd(lDayRate, { days_per_week: value("lDpw"), weeks_per_year: lWeeks, hours_per_day: value("lHpd"), director_salary: value("lSalary"), employer_ni_secondary_threshold: value("lErNiThreshold"), employer_ni_rate: pct("lErNiRate"), corporation_tax_rate: pct("lCorpTax"), dividend_allowance: value("lDivAllowance"), dividend_basic_rate: ty.dividend_basic_rate, dividend_higher_rate: ty.dividend_higher_rate, basic_rate_band_upper: ty.basic_rate_ceiling, higher_rate_band_upper: ty.higher_rate_ceiling, personal_allowance: ty.personal_allowance, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_standard: ty.ni_rate_standard, ni_rate_above_uel: ty.ni_rate_above_uel, professional_indemnity_per_year: value("lPi"), employer_pension_per_month: value("lPension") / 12, relevant_life_insurance_per_month: value("lLife") / 12, critical_illness_per_month: value("lCi") / 12, accountancy_per_year: value("lAccountancy"), other_expenses_per_year: value("lOther") });
+  $("lGrossSummary").textContent = `${taxYear}, contract value before company and personal deductions.`;
+  renderMetrics($("lGrossMetrics"), "Gross contract", ltd.annualGross, ltd.annualGross / 12, lDayRate, lDayRate / value("lHpd"));
+  $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate.`;
+  renderNetMetrics($("lMetrics"), ltd);
+  renderTable($("lBreakdown"), [
+    { section: "Step 1 — Company-level deductions" },
+    { label: "Gross contract income", value: ltd.annualGross, note: `${value("lDpw")} days x ${lWeeks} weeks x ${currency(lDayRate, 2)}/day`, total: true },
+    { label: "Less: Director salary", value: -value("lSalary"), note: "Set at personal allowance — no income tax, minimal employer NI", deduction: true },
+    { label: "Less: Employer NI on salary", value: -ltd.employerNiOnSalary, note: `(${currency(value("lSalary"), 0)} - ${currency(value("lErNiThreshold"), 0)}) x ${(pct("lErNiRate") * 100).toFixed(1)}%`, deduction: true },
+    { label: "Less: Professional indemnity insurance", value: -value("lPi"), note: "From assumptions", deduction: true },
+    { label: "Less: Relevant Life insurance", value: -value("lLife"), note: "From assumptions", deduction: true },
+    { label: "Less: Critical illness / IP insurance", value: -value("lCi"), note: "From assumptions", deduction: true },
+    { label: "Less: Accountancy fees", value: -value("lAccountancy"), note: "From assumptions", deduction: true },
+    { label: "Less: Other business expenses", value: -value("lOther"), note: "From assumptions", deduction: true },
+    { label: "Less: Employer pension", value: -ltd.employerPensionAnnual, note: "From assumptions — deducted before corporation tax", deduction: true },
+    { label: "= Taxable profit", value: ltd.taxableProfit, note: "Gross income minus all allowable deductions", total: true },
+    { label: "Less: Corporation tax", value: -ltd.corporationTax, note: `${currency(ltd.taxableProfit, 0)} x ${(pct("lCorpTax") * 100).toFixed(0)}%`, deduction: true },
+    { label: "= Distributable profit", value: ltd.distributableProfit, note: "Available to draw as dividends", total: true },
+    { section: "Step 2 — Personal income" },
+    { label: "Director salary received", value: value("lSalary"), note: "Paid via payroll — within personal allowance" },
+    { label: "Dividends drawn", value: ltd.distributableProfit, note: "Full distributable profit drawn as dividends" },
+    { label: "Total personal income", value: value("lSalary") + ltd.distributableProfit, note: "Salary + dividends", total: true },
+    { section: "Step 3 — Personal tax" },
+    { label: "Less: Income tax on salary", value: -ltd.incomeTaxOnSalary, note: ltd.incomeTaxOnSalary === 0 ? "Salary at personal allowance — no income tax due." : `(${currency(value("lSalary"), 0)} - ${currency(ty.personal_allowance, 0)}) x ${(ty.income_tax_basic * 100).toFixed(0)}%`, deduction: true },
+    { label: "Less: Employee NI on salary", value: -ltd.employeeNiOnSalary, note: ltd.employeeNiOnSalary === 0 ? `Salary at or below NI primary threshold ${currency(ty.ni_primary_threshold, 0)} — no employee NI due.` : `(${currency(value("lSalary"), 0)} - ${currency(ty.ni_primary_threshold, 0)}) x ${(ty.ni_rate_standard * 100).toFixed(0)}%`, deduction: true },
+    { label: "Less: Dividend tax", value: -ltd.dividendTax, note: `Allowance ${currency(value("lDivAllowance"), 0)} tax-free | Basic ${(ty.dividend_basic_rate * 100).toFixed(2)}% ${currency(ltd.dividendsBasic * ty.dividend_basic_rate, 0)} | Higher ${(ty.dividend_higher_rate * 100).toFixed(2)}% ${currency(ltd.dividendsHigher * ty.dividend_higher_rate, 0)}`, deduction: true },
+    { label: "= Net take-home", value: ltd.annualNet, note: "Salary + dividends minus all personal tax", total: true }
+  ], lDisplayPeriod);
+
+  const uWeeks = workingWeeks(value("uDpw"), value("uLeave"), value("uBh"));
+  $("uWeeksText").textContent = uWeeks.toFixed(1);
+  $("uWeeksNote").textContent = `52 - (${value("uLeave").toFixed(0)} + ${value("uBh").toFixed(0)}) days / ${value("uDpw").toFixed(0)} days/week`;
+  const uDayRate = dayRateFrom($("uRatePeriod").value, value("uRateInput"), value("uDpw"), uWeeks);
+  const umbrella = calculateUmbrella(uDayRate, { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked });
+  $("uGrossSummary").textContent = `${taxYear}, assignment income before umbrella deductions and PAYE.`;
+  renderMetrics($("uGrossMetrics"), "Gross contract", umbrella.annualGross, umbrella.annualGross / 12, uDayRate, uDayRate / value("uHpd"));
+  $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate.`;
+  renderNetMetrics($("uMetrics"), umbrella);
+  renderTable($("uBreakdown"), [
+    { section: "Step 1 — Umbrella deductions (from assignment rate)" },
+    { label: "Gross contract income", value: umbrella.annualGross, note: `${value("uDpw")} days x ${uWeeks} weeks x ${currency(uDayRate, 2)}/day`, total: true },
+    { label: "Less: Umbrella margin", value: -umbrella.umbrellaMarginAnnual, note: `${currency(value("uMargin") / 52, 2)}/week x 52 weeks (charged year-round, not just billable weeks)`, deduction: true },
+    { label: "Less: Employer pension contribution", value: -umbrella.employerPension, note: `${pct("uErPension").toLocaleString("en-GB", { style: "percent", minimumFractionDigits: 1 })} of qualifying earnings (${currency(umbrella.qualifyingBase, 0)})`, deduction: true },
+    { label: "Less: Employer NI", value: -umbrella.employerNi, note: `(Gross PAYE - ${currency(value("uErNiThreshold"), 0)}) x ${(pct("uErNiRate") * 100).toFixed(1)}%. Gross PAYE is unknown until NI and levy are deducted, so the equation is solved simultaneously: assignment rate minus margin equals Gross PAYE plus NI plus levy, all expressed as a function of Gross PAYE.`, deduction: true },
+    { label: "Less: Apprenticeship Levy", value: -umbrella.levy, note: `Gross PAYE x ${(pct("uLevy") * 100).toFixed(1)}%`, deduction: true },
+    { label: "= Gross PAYE salary", value: umbrella.grossPaye, note: `${currency(umbrella.grossPaye / umbrella.daysPerYear, 2)}/day · ${currency(umbrella.grossPaye / 52, 2)}/wk · ${currency(umbrella.grossPaye / 12, 2)}/mo`, total: true },
+    { section: "Step 2 — Pre-tax deductions" },
+    { label: "Gross PAYE salary", value: umbrella.grossPaye, note: "Starting point for employee deductions" },
+    { label: "Less: Employee pension (pre-tax)", value: -umbrella.employeePensionPretax, note: `${(pct("uEePension") * 100).toFixed(1)}% of qualifying earnings — deducted before tax`, deduction: true },
+    { label: "= Gross taxable pay", value: umbrella.grossTaxable, note: "Income subject to income tax and NI", total: true },
+    { section: "Step 3 — Income tax & employee NI" },
+    { label: "Gross taxable pay", value: umbrella.grossTaxable, note: "Starting point for tax calculation" },
+    { label: "Less: Income tax", value: -umbrella.totalIncomeTax, note: `Basic 20% ${currency(umbrella.incomeTaxBasic, 0)} | Higher 40% ${currency(umbrella.incomeTaxHigher, 0)} | Additional 45% ${currency(umbrella.incomeTaxAdditional, 0)}`, deduction: true },
+    { label: "Less: Employee NI", value: -umbrella.totalEmployeeNi, note: `Standard ${(ty.ni_rate_standard * 100).toFixed(0)}% ${currency(umbrella.employeeNiStandard, 0)} | Above UEL ${(ty.ni_rate_above_uel * 100).toFixed(0)}% ${currency(umbrella.employeeNiAbove, 0)}`, deduction: true },
+    { label: "Less: Employee pension (post-tax)", value: -umbrella.employeePensionPosttax, note: $("uPensionType").value === "Relief at source" ? "Relief at source only — deducted after tax" : "Not applicable for this scheme type", deduction: true },
+    { label: "= Net take-home", value: umbrella.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true }
+  ], uDisplayPeriod);
+
+  const sWeeks = workingWeeks(value("sDpw"), value("sLeave"), value("sBh"));
+  $("sWeeksText").textContent = sWeeks.toFixed(1);
+  $("sWeeksNote").textContent = `52 - (${value("sLeave").toFixed(0)} + ${value("sBh").toFixed(0)}) days / ${value("sDpw").toFixed(0)} days/week`;
+  const salaried = calculateSalaried(value("sSalary"), { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_pension_rate: 0.2897, employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked, employer_sick_pay_rate: 0.02 });
+  $("sGrossSummary").textContent = `${taxYear}, contracted salary before tax and employee deductions.`;
+  renderMetrics($("sGrossMetrics"), "Gross salary", salaried.annualSalary, salaried.annualSalary / 12, salaried.equivalentDayRate, salaried.annualSalary / salaried.hoursPerYear);
+  $("sSummary").textContent = `${taxYear}, ${currency(value("sSalary"), 0)} salary.`;
+  renderNetMetrics($("sMetrics"), salaried);
+  renderTable($("sBreakdown"), [
+    { section: "Step 1 — Gross salary" },
+    { label: "Gross annual salary", value: salaried.annualSalary, note: "Contracted salary before any deductions", total: true },
+    { label: "Equivalent day rate", value: salaried.equivalentDayRate, note: `${currency(value("sSalary"), 0)} / (${value("sDpw")} days x ${sWeeks} weeks)` },
+    { section: "Step 2 — Pre-tax deductions" },
+    { label: "Gross salary", value: salaried.annualSalary, note: "Starting point" },
+    { label: "Less: Employee pension (pre-tax)", value: -salaried.employeePensionPretax, note: `${(pct("sEePension") * 100).toFixed(1)}% of qualifying earnings — deducted before tax`, deduction: true },
+    { label: "= Gross taxable pay", value: salaried.grossTaxable, note: "Income subject to income tax and NI", total: true },
+    { section: "Step 3 — Income tax & employee NI" },
+    { label: "Gross taxable pay", value: salaried.grossTaxable, note: "Starting point for tax" },
+    { label: "Less: Income tax", value: -salaried.totalIncomeTax, note: `Basic 20% ${currency(salaried.incomeTaxBasic, 0)} | Higher 40% ${currency(salaried.incomeTaxHigher, 0)} | Additional 45% ${currency(salaried.incomeTaxAdditional, 0)}`, deduction: true },
+    { label: "Less: Employee NI", value: -salaried.totalEmployeeNi, note: `Standard ${(ty.ni_rate_standard * 100).toFixed(0)}% ${currency(salaried.employeeNiStandard, 0)} | Above UEL ${(ty.ni_rate_above_uel * 100).toFixed(0)}% ${currency(salaried.employeeNiAbove, 0)}`, deduction: true },
+    { label: "Less: Employee pension (post-tax)", value: -salaried.employeePensionPosttax, note: $("sPensionType").value === "Relief at source" ? "Relief at source only — HMRC tops up at 20%" : "Not applicable for this scheme type", deduction: true },
+    { label: "= Net take-home", value: salaried.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true },
+    { section: "Employer cost" },
+    { label: "Employer NI", value: salaried.employerNi },
+    { label: "Employer pension", value: salaried.employerPension },
+    { label: "Sick pay liability", value: salaried.sickPay },
+    { label: "Total employer cost", value: salaried.employerCost, total: true },
+    { label: "Breakeven day rate", value: salaried.breakevenDayRate }
+  ], sDisplayPeriod);
+}
+
+function init() {
+  const taxYearSelect = $("taxYear");
+  Object.keys(TAX_YEARS).forEach((year) => taxYearSelect.add(new Option(TAX_YEARS[year].label, year)));
+  $("taxYear").value = "2026/27";
+  periodOptions.forEach((period) => {
+    if (![...$("lRatePeriod").options].some((option) => option.value === period)) $("lRatePeriod").add(new Option(period));
+  });
+  setTaxDefaults(TAX_YEARS[$("taxYear").value]);
+  readPersisted();
+  setTaxDefaults(TAX_YEARS[$("taxYear").value]);
+  document.addEventListener("input", (event) => { persist(event); calculateAll(); });
+  document.addEventListener("change", (event) => {
+    persist(event);
+    if (event.target.id === "taxYear") setTaxDefaults(TAX_YEARS[$("taxYear").value]);
+    calculateAll();
+  });
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
+      document.querySelectorAll(".calculator").forEach((panel) => panel.classList.toggle("is-active", panel.id === tab.getAttribute("aria-controls")));
+    });
+  });
+  calculateAll();
+}
+
+init();
+</script>
+</body>
+</html>
