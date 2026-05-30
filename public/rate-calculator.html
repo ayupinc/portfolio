@@ -439,6 +439,70 @@
     line-height: 1.1;
   }
 
+  .chart-panel .panel-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .chart {
+    padding: 16px 20px 20px;
+    overflow-x: auto;
+  }
+
+  .chart svg {
+    display: block;
+    width: 100%;
+    min-width: 680px;
+    height: auto;
+  }
+
+  .chart-axis,
+  .chart-grid {
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+
+  .chart-line {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 3;
+  }
+
+  .chart-point {
+    fill: white;
+    stroke: var(--blue);
+    stroke-width: 2;
+  }
+
+  .chart-label {
+    fill: var(--muted);
+    font: 12px var(--font-sans);
+  }
+
+  .chart-value {
+    fill: var(--navy);
+    font: 700 12px var(--font-sans);
+  }
+
+  .chart-guide {
+    stroke: var(--amber);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+  }
+
+  .chart-guide-point {
+    fill: var(--amber);
+    stroke: white;
+    stroke-width: 2;
+  }
+
+  .chart-guide-label {
+    fill: var(--amber);
+    font: 700 12px var(--font-sans);
+  }
+
   .breakdown {
     overflow-x: auto;
   }
@@ -706,6 +770,10 @@
             <table class="breakdown-table" id="lBreakdown"></table>
           </div>
       </details>
+      <section class="panel chart-panel">
+        <div class="panel-header"><h3>Monthly Take-Home by Day Rate</h3><p>Uses the current Ltd Co assumptions.</p></div>
+        <div class="chart" id="lChart" aria-label="Monthly take-home by day rate chart"></div>
+      </section>
     </div>
   </section>
 
@@ -774,6 +842,10 @@
             <table class="breakdown-table" id="uBreakdown"></table>
           </div>
       </details>
+      <section class="panel chart-panel">
+        <div class="panel-header"><h3>Monthly Take-Home by Day Rate</h3><p>Uses the current umbrella assumptions.</p></div>
+        <div class="chart" id="uChart" aria-label="Monthly take-home by day rate chart"></div>
+      </section>
     </div>
   </section>
 
@@ -838,6 +910,10 @@
             <table class="breakdown-table" id="sBreakdown"></table>
           </div>
       </details>
+      <section class="panel chart-panel">
+        <div class="panel-header"><h3>Monthly Take-Home by Salary</h3><p>Uses the current salaried assumptions.</p></div>
+        <div class="chart" id="sChart" aria-label="Monthly take-home by salary chart"></div>
+      </section>
     </div>
   </section>
 
@@ -976,6 +1052,56 @@ function renderNetMetrics(target, result) {
   target.insertAdjacentHTML("beforeend", `<div class="metric"><span class="metric-label">Effective tax rate</span><span class="metric-value">${(result.effectiveTaxRate * 100).toFixed(1)}%</span></div>`);
 }
 
+function renderLineChart(target, points, xFormatter) {
+  const width = 900;
+  const height = 300;
+  const margin = { top: 26, right: 26, bottom: 48, left: 74 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const guideY = 4000;
+  const yStep = 500;
+  const minX = Math.min(...points.map((point) => point.x));
+  const maxX = Math.max(...points.map((point) => point.x));
+  const minDataY = Math.min(...points.map((point) => point.y));
+  const maxY = Math.max(...points.map((point) => point.y));
+  const minY = Math.max(0, Math.floor(Math.min(minDataY, guideY) / yStep) * yStep);
+  const yTop = Math.ceil(Math.max(maxY, guideY) / yStep) * yStep || yStep;
+  const xScale = (x) => margin.left + ((x - minX) / (maxX - minX || 1)) * plotWidth;
+  const yScale = (y) => margin.top + plotHeight - ((y - minY) / (yTop - minY || 1)) * plotHeight;
+  const yTicks = [];
+  for (let tick = minY; tick <= yTop; tick += yStep) yTicks.push(tick);
+  const linePoints = points.map((point) => `${xScale(point.x).toFixed(1)},${yScale(point.y).toFixed(1)}`).join(" ");
+  let guideX = null;
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const a = points[index];
+    const b = points[index + 1];
+    const crossesGuide = (a.y <= guideY && b.y >= guideY) || (a.y >= guideY && b.y <= guideY);
+    if (crossesGuide) {
+      const ratio = b.y === a.y ? 0 : (guideY - a.y) / (b.y - a.y);
+      guideX = a.x + (b.x - a.x) * ratio;
+      break;
+    }
+  }
+  const guideXLabel = guideX === null ? "" : xFormatter(Math.round(guideX));
+  const guideMarkup = guideX === null ? "" : `
+      <line class="chart-guide" x1="${margin.left}" y1="${yScale(guideY)}" x2="${xScale(guideX)}" y2="${yScale(guideY)}"></line>
+      <line class="chart-guide" x1="${xScale(guideX)}" y1="${yScale(guideY)}" x2="${xScale(guideX)}" y2="${height - margin.bottom}"></line>
+      <circle class="chart-guide-point" cx="${xScale(guideX)}" cy="${yScale(guideY)}" r="5"><title>${guideXLabel} reaches ${currency(guideY, 0)} monthly take-home</title></circle>
+      <text class="chart-guide-label" x="${margin.left + 8}" y="${yScale(guideY) - 8}">${currency(guideY, 0)}</text>
+      <text class="chart-guide-label" x="${xScale(guideX)}" y="${height - margin.bottom + 34}" text-anchor="middle">${guideXLabel}</text>`;
+
+  target.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Monthly take-home chart">
+      ${yTicks.map((tick) => `<line class="chart-grid" x1="${margin.left}" y1="${yScale(tick)}" x2="${width - margin.right}" y2="${yScale(tick)}"></line><text class="chart-label" x="${margin.left - 12}" y="${yScale(tick) + 4}" text-anchor="end">${currency(tick, 0)}</text>`).join("")}
+      <line class="chart-axis" x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}"></line>
+      <line class="chart-axis" x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}"></line>
+      ${guideMarkup}
+      <polyline class="chart-line" points="${linePoints}"></polyline>
+      ${points.map((point) => `<g><circle class="chart-point" cx="${xScale(point.x)}" cy="${yScale(point.y)}" r="4"><title>${xFormatter(point.x)}: ${currency(point.y, 0)} monthly take-home</title></circle><text class="chart-label" x="${xScale(point.x)}" y="${height - 22}" text-anchor="middle">${xFormatter(point.x)}</text></g>`).join("")}
+      <text class="chart-value" x="${margin.left}" y="16">Monthly take-home pay</text>
+    </svg>`;
+}
+
 function renderTable(table, rows, displayPeriod) {
   table.innerHTML = `<colgroup><col><col><col></colgroup><thead><tr><th>Description</th><th>Amount</th><th>Note</th></tr></thead><tbody>${rows.map((row) => {
     if (row.section) return `<tr class="section-row"><td colspan="3">${row.section}</td></tr>`;
@@ -1045,7 +1171,9 @@ function calculateAll() {
   $("lWeeksText").textContent = lWeeks.toFixed(1);
   $("lWeeksNote").textContent = `52 - (${value("lLeave").toFixed(0)} + ${value("lBh").toFixed(0)}) days / ${value("lDpw").toFixed(0)} days/week`;
   const lDayRate = dayRateFrom($("lRatePeriod").value, value("lRateInput"), value("lDpw"), lWeeks);
-  const ltd = calculateLtd(lDayRate, { days_per_week: value("lDpw"), weeks_per_year: lWeeks, hours_per_day: value("lHpd"), director_salary: value("lSalary"), employer_ni_secondary_threshold: value("lErNiThreshold"), employer_ni_rate: pct("lErNiRate"), corporation_tax_rate: pct("lCorpTax"), dividend_allowance: value("lDivAllowance"), dividend_basic_rate: ty.dividend_basic_rate, dividend_higher_rate: ty.dividend_higher_rate, basic_rate_band_upper: ty.basic_rate_ceiling, higher_rate_band_upper: ty.higher_rate_ceiling, personal_allowance: ty.personal_allowance, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_standard: ty.ni_rate_standard, ni_rate_above_uel: ty.ni_rate_above_uel, professional_indemnity_per_year: value("lPi"), employer_pension_per_month: value("lPension") / 12, relevant_life_insurance_per_month: value("lLife") / 12, critical_illness_per_month: value("lCi") / 12, accountancy_per_year: value("lAccountancy"), other_expenses_per_year: value("lOther") });
+  const ltdAssumptions = { days_per_week: value("lDpw"), weeks_per_year: lWeeks, hours_per_day: value("lHpd"), director_salary: value("lSalary"), employer_ni_secondary_threshold: value("lErNiThreshold"), employer_ni_rate: pct("lErNiRate"), corporation_tax_rate: pct("lCorpTax"), dividend_allowance: value("lDivAllowance"), dividend_basic_rate: ty.dividend_basic_rate, dividend_higher_rate: ty.dividend_higher_rate, basic_rate_band_upper: ty.basic_rate_ceiling, higher_rate_band_upper: ty.higher_rate_ceiling, personal_allowance: ty.personal_allowance, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_standard: ty.ni_rate_standard, ni_rate_above_uel: ty.ni_rate_above_uel, professional_indemnity_per_year: value("lPi"), employer_pension_per_month: value("lPension") / 12, relevant_life_insurance_per_month: value("lLife") / 12, critical_illness_per_month: value("lCi") / 12, accountancy_per_year: value("lAccountancy"), other_expenses_per_year: value("lOther") };
+  const ltd = calculateLtd(lDayRate, ltdAssumptions);
+  renderLineChart($("lChart"), [250, 300, 350, 400, 450, 500, 550, 600].map((rate) => ({ x: rate, y: calculateLtd(rate, ltdAssumptions).monthlyNet })), (rate) => `£${rate}`);
   $("lGrossSummary").textContent = `${taxYear}, contract value before company and personal deductions.`;
   renderMetrics($("lGrossMetrics"), "Gross contract", ltd.annualGross, ltd.annualGross / 12, lDayRate, lDayRate / value("lHpd"));
   $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate.`;
@@ -1082,7 +1210,9 @@ function calculateAll() {
   $("uWeeksText").textContent = uWeeks.toFixed(1);
   $("uWeeksNote").textContent = `52 - (${value("uLeave").toFixed(0)} + ${value("uBh").toFixed(0)}) days / ${value("uDpw").toFixed(0)} days/week`;
   const uDayRate = dayRateFrom($("uRatePeriod").value, value("uRateInput"), value("uDpw"), uWeeks);
-  const umbrella = calculateUmbrella(uDayRate, { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked });
+  const umbrellaAssumptions = { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked };
+  const umbrella = calculateUmbrella(uDayRate, umbrellaAssumptions);
+  renderLineChart($("uChart"), [250, 300, 350, 400, 450, 500, 550, 600].map((rate) => ({ x: rate, y: calculateUmbrella(rate, umbrellaAssumptions).monthlyNet })), (rate) => `£${rate}`);
   $("uGrossSummary").textContent = `${taxYear}, assignment income before umbrella deductions and PAYE.`;
   renderMetrics($("uGrossMetrics"), "Gross contract", umbrella.annualGross, umbrella.annualGross / 12, uDayRate, uDayRate / value("uHpd"));
   $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate.`;
@@ -1113,7 +1243,9 @@ function calculateAll() {
   $("sHoursWeekNote").textContent = `${value("sDpw")} days/week x ${value("sHpd")} hours/day`;
   $("sWeeksText").textContent = sWeeks.toFixed(1);
   $("sWeeksNote").textContent = `52 - (${value("sLeave").toFixed(0)} + ${value("sBh").toFixed(0)}) days / ${value("sDpw").toFixed(0)} days/week`;
-  const salaried = calculateSalaried(value("sSalary"), { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_pension_rate: 0.2897, employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked, employer_sick_pay_rate: 0.02 });
+  const salariedAssumptions = { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_pension_rate: 0.2897, employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked, employer_sick_pay_rate: 0.02 };
+  const salaried = calculateSalaried(value("sSalary"), salariedAssumptions);
+  renderLineChart($("sChart"), [50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000].map((salary) => ({ x: salary, y: calculateSalaried(salary, salariedAssumptions).monthlyNet })), (salary) => `£${Math.round(salary / 1000)}k`);
   $("sGrossSummary").textContent = `${taxYear}, contracted salary before tax and employee deductions.`;
   renderMetrics($("sGrossMetrics"), "Gross salary", salaried.annualSalary, salaried.annualSalary / 12, salaried.equivalentDayRate, salaried.annualSalary / salaried.hoursPerYear);
   $("sSummary").textContent = `${taxYear}, ${currency(value("sSalary"), 0)} salary.`;
