@@ -141,7 +141,7 @@
 
   .toolbar {
     display: grid;
-    grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+    grid-template-columns: minmax(180px, 260px);
     gap: 14px;
     align-items: end;
     margin-bottom: 18px;
@@ -391,19 +391,6 @@
   .assumption-table label {
     color: var(--ink);
     font-weight: 600;
-  }
-
-  .assumption-table .computed {
-    display: block;
-  }
-
-  .computed {
-    padding: 10px 12px;
-    border: 1px solid var(--rule);
-    background: var(--paper);
-    border-radius: 4px;
-    color: var(--ink);
-    font-weight: 700;
   }
 
   .metric-grid {
@@ -707,7 +694,6 @@
       <label for="taxYear">Tax year</label>
       <select id="taxYear" data-save="taxYear"></select>
     </div>
-    <div class="computed" id="taxYearNote">Rates and thresholds update across all calculators.</div>
   </section>
 
   <div class="tabs" role="tablist" aria-label="Calculator type">
@@ -1220,7 +1206,6 @@ function calculateAll() {
   const uDisplayPeriod = $("uDisplayPeriod").value;
   const sDisplayPeriod = $("sDisplayPeriod").value;
   updateAssumptionNotes(ty);
-  $("taxYearNote").textContent = `${taxYear}: employer NI ${(ty.employer_ni_rate * 100).toFixed(1)}%, secondary threshold ${currency(ty.employer_ni_threshold, 0)}, dividend allowance ${currency(ty.dividend_allowance, 0)}.`;
   $("lRateLabel").textContent = rateLabels[$("lRatePeriod").value];
   $("uRateLabel").textContent = rateLabels[$("uRatePeriod").value];
 
