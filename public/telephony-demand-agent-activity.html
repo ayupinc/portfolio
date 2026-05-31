@@ -206,11 +206,6 @@
     height: auto;
   }
 
-  .hero-image img,
-  .carousel-slide img {
-    cursor: zoom-in;
-  }
-
   .screenshot-note {
     margin: 8px 0 0;
     color: var(--muted);
@@ -329,48 +324,6 @@
   .carousel-button.prev { left: 10px; }
   .carousel-button.next { right: 10px; }
 
-  .image-lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
-    background: rgba(8, 15, 29, 0.88);
-  }
-
-  .image-lightbox.is-open {
-    display: flex;
-  }
-
-  .image-lightbox img {
-    max-width: min(96vw, 1500px);
-    max-height: 90vh;
-    object-fit: contain;
-    background: #F0F2F5;
-    border: 1px solid rgba(255,255,255,0.22);
-    box-shadow: 0 18px 60px rgba(0,0,0,0.34);
-  }
-
-  .lightbox-close {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 42px;
-    height: 42px;
-    border: 1px solid rgba(255,255,255,0.38);
-    background: rgba(255,255,255,0.94);
-    color: var(--navy);
-    font-size: 28px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .lightbox-close:hover {
-    background: var(--white);
-  }
-
   .case-layout {
     max-width: 800px;
     margin: 0;
@@ -416,7 +369,7 @@
     color: var(--body);
     font-family: var(--sans);
     font-size: 19px;
-    line-height: 28px;
+    line-height: 25px;
   }
 
   p + p { margin-block-start: 20pt; }
@@ -461,7 +414,7 @@
     color: var(--body);
     font-family: var(--sans);
     font-size: 19px;
-    line-height: 28px;
+    line-height: 25px;
   }
 
   .output-list li::before {
@@ -525,7 +478,7 @@
     p,
     .output-list li {
       font-size: 19px;
-      line-height: 28px;
+      line-height: 25px;
     }
   }
 </style>
@@ -551,7 +504,7 @@
       <nav class="side-nav-group" aria-label="Power BI reports">
         <a class="side-nav-title" href="index.html">Power BI Reports</a>
         <ul class="side-nav-list">
-          <li><a href="real-time-queue-monitoring.html">Real-Time Queue Monitoring</a></li>
+          <li><a href="real-time-clinical-queue-monitoring-operational-wallboard.html">Real-Time Clinical Queue Monitoring and Operational Wallboard</a></li>
           <li><a href="index.html">Key Performance Indicator</a></li>
           <li><a href="index.html">Resource Utilisation</a></li>
           <li><a href="index.html">Call Flow Analysis</a></li>
@@ -592,7 +545,7 @@
       </div>
 
       <section class="hero-image" aria-label="Calls to Service report screenshot">
-        <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot" data-lightbox>
+        <img src="screenshots/calls-to-service.png" alt="Calls to Service report screenshot">
         <p class="screenshot-note">Example data shown for portfolio presentation only; figures do not represent actual values from any organisation.</p>
       </section>
 
@@ -606,7 +559,7 @@
           <li>Developed DAX measures for KPI, duration, percentile and filter-context reporting</li>
           <li>Built 5 Power BI reports with 42 pages of telephony demand and agent activity</li>
           <li>Designed report layouts and provided user guidance for an operational audience</li>
-          <li>Optimised report performance across several large datasets</li>
+          <li>Optimised report performance across large datasets</li>
         </ul>
       </section>
 
@@ -653,16 +606,16 @@
     <section class="media-carousel" aria-label="Telephony and agent activity report screenshots">
       <div class="carousel-frame">
         <figure class="carousel-slide is-active">
-          <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot" data-lightbox>
+          <img src="screenshots/agent-session-journal.png" alt="Agent Session Journal report screenshot">
         </figure>
         <figure class="carousel-slide">
-          <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot" data-lightbox>
+          <img src="screenshots/agent-summary.png" alt="Agent Activity Overview report screenshot">
         </figure>
         <figure class="carousel-slide">
-          <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot" data-lightbox>
+          <img src="screenshots/agent-session-summary.png" alt="Agent Activity Session Summary report screenshot">
         </figure>
         <figure class="carousel-slide">
-          <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot" data-lightbox>
+          <img src="screenshots/agent-calls.png" alt="Agent Activity Calls report screenshot">
         </figure>
         <button class="carousel-button prev" type="button" aria-label="Previous screenshot" data-carousel-prev>&lsaquo;</button>
         <button class="carousel-button next" type="button" aria-label="Next screenshot" data-carousel-next>&rsaquo;</button>
@@ -681,16 +634,9 @@
 <footer>
   Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
 </footer>
-<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
-  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
-  <img src="" alt="">
-</div>
 <script>
 const slides = [...document.querySelectorAll(".carousel-slide")];
 let activeSlide = 0;
-const lightbox = document.querySelector("#imageLightbox");
-const lightboxImage = lightbox.querySelector("img");
-const lightboxClose = lightbox.querySelector(".lightbox-close");
 
 function showSlide(index) {
   activeSlide = (index + slides.length) % slides.length;
@@ -701,31 +647,6 @@ function showSlide(index) {
 
 document.querySelector("[data-carousel-prev]").addEventListener("click", () => showSlide(activeSlide - 1));
 document.querySelector("[data-carousel-next]").addEventListener("click", () => showSlide(activeSlide + 1));
-
-function openLightbox(image) {
-  lightboxImage.src = image.currentSrc || image.src;
-  lightboxImage.alt = image.alt;
-  lightbox.classList.add("is-open");
-  lightboxClose.focus();
-}
-
-function closeLightbox() {
-  lightbox.classList.remove("is-open");
-  lightboxImage.src = "";
-  lightboxImage.alt = "";
-}
-
-document.querySelectorAll("[data-lightbox]").forEach((image) => {
-  image.addEventListener("click", () => openLightbox(image));
-});
-
-lightboxClose.addEventListener("click", closeLightbox);
-lightbox.addEventListener("click", (event) => {
-  if (event.target === lightbox) closeLightbox();
-});
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
-});
 </script>
 </body>
 </html>
