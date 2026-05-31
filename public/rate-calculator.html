@@ -889,6 +889,7 @@
                 <tr><td><label for="sLeave">Annual leave days</label></td><td><input id="sLeave" data-save="sLeave" type="number" step="1" value="19"></td><td class="note">Paid holiday days per year, excluding bank holidays. UK statutory minimum is 20 days.</td></tr>
                 <tr><td><label for="sBh">Bank holidays</label></td><td><input id="sBh" data-save="sBh" type="number" step="1" value="11"></td><td class="note">Public bank holidays per year. England & Wales has 8 statutory days plus 3 additional common holidays.</td></tr>
                 <tr><td>Worked weeks per year</td><td><span id="sWeeksText"></span></td><td class="note" id="sWeeksNote"></td></tr>
+                <tr><td><label for="sSalarySacrifice">Salary sacrifice</label></td><td><input id="sSalarySacrifice" data-save="sSalarySacrifice" type="number" step="100" value="0"></td><td class="note">Annual pre-tax salary sacrifice deducted before pension is calculated.</td></tr>
                 <tr><td><label for="sErNiRate">Employer NI %</label></td><td><input id="sErNiRate" type="number" step="0.1"></td><td class="note" id="sErNiRateNote"></td></tr>
                 <tr><td><label for="sErNiThreshold">Secondary threshold</label></td><td><input id="sErNiThreshold" type="number" step="100"></td><td class="note" id="sErNiThresholdNote"></td></tr>
                 <tr><td><label for="sPensionType">Pension scheme</label></td><td><select id="sPensionType" data-save="sPensionType"><option>Relief at source</option><option>Net pay arrangement</option><option>Salary sacrifice</option></select></td><td class="note" id="sPensionTypeNote"></td></tr>
@@ -1017,7 +1018,8 @@ function calculateUmbrella(dayRate, a) {
   const levy = grossPaye * a.apprenticeship_levy_rate;
   const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_scheme_type) ? qualifyingBase * a.employee_pension_rate : 0;
   const grossTaxable = grossPaye - employeePensionPretax;
-  const tax = taxAndNi(grossTaxable, a);
+  const niablePay = a.pension_scheme_type === "Salary sacrifice" ? grossTaxable : grossPaye;
+  const tax = taxAndNi(grossTaxable, a, niablePay);
   const employeePensionPosttax = a.pension_scheme_type === "Relief at source" ? qualifyingBase * a.employee_pension_rate : 0;
   const hmrcTopup = a.pension_scheme_type === "Relief at source" ? employeePensionPosttax * a.income_tax_basic : 0;
   const niSaving = a.pension_scheme_type === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? qualifyingBase * a.employee_pension_rate * a.employer_ni_rate : 0;
@@ -1028,29 +1030,28 @@ function calculateUmbrella(dayRate, a) {
 function calculateSalaried(annualSalary, a) {
   const daysPerYear = a.days_per_week * a.weeks_per_year;
   const hoursPerYear = daysPerYear * a.hours_per_day;
-  const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_scheme_type) ? annualSalary * a.employee_pension_rate : 0;
-  const grossTaxable = annualSalary - employeePensionPretax;
-  const tax = taxAndNi(grossTaxable, a);
-  const employeePensionPosttax = a.pension_scheme_type === "Relief at source" ? annualSalary * a.employee_pension_rate : 0;
+  const salarySacrifice = Math.min(Math.max(0, a.salary_sacrifice || 0), annualSalary);
+  const pensionableSalary = Math.max(0, annualSalary - salarySacrifice);
+  const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_scheme_type) ? pensionableSalary * a.employee_pension_rate : 0;
+  const grossTaxable = pensionableSalary - employeePensionPretax;
+  const niablePay = a.pension_scheme_type === "Salary sacrifice" ? grossTaxable : pensionableSalary;
+  const tax = taxAndNi(grossTaxable, a, niablePay);
+  const employeePensionPosttax = a.pension_scheme_type === "Relief at source" ? pensionableSalary * a.employee_pension_rate : 0;
   const hmrcTopup = a.pension_scheme_type === "Relief at source" ? employeePensionPosttax * a.income_tax_basic : 0;
-  const niSaving = a.pension_scheme_type === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? annualSalary * a.employee_pension_rate * a.employer_ni_rate : 0;
+  const niSaving = a.pension_scheme_type === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? employeePensionPretax * a.employer_ni_rate : 0;
   const annualNet = grossTaxable - tax.totalIncomeTax - tax.totalEmployeeNi - employeePensionPosttax;
-  const employerNi = Math.max(0, annualSalary - a.employer_ni_secondary_threshold) * a.employer_ni_rate;
-  const employerPension = annualSalary * a.employer_pension_rate;
-  const sickPay = annualSalary * a.employer_sick_pay_rate;
-  const employerCost = annualSalary + employerNi + employerPension + sickPay;
-  return { annualSalary, daysPerYear, hoursPerYear, equivalentDayRate: annualSalary / daysPerYear, employeePensionPretax, grossTaxable, ...tax, employeePensionPosttax, hmrcTopup, niSaving, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, employerNi, employerPension, sickPay, employerCost, breakevenDayRate: employerCost / daysPerYear, effectiveTaxRate: (tax.totalIncomeTax + tax.totalEmployeeNi + employeePensionPretax + employeePensionPosttax) / annualSalary };
+  return { annualSalary, salarySacrifice, pensionableSalary, niablePay, daysPerYear, hoursPerYear, employeePensionPretax, grossTaxable, ...tax, employeePensionPosttax, hmrcTopup, niSaving, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: annualSalary > 0 ? 1 - (annualNet / annualSalary) : 0 };
 }
 
-function taxAndNi(grossTaxable, a) {
+function taxAndNi(grossTaxable, a, niablePay = grossTaxable) {
   const taxableIncome = Math.max(0, grossTaxable - a.personal_allowance);
   const basicBand = Math.max(0, a.basic_rate_ceiling - a.personal_allowance);
   const higherBand = Math.max(0, a.higher_rate_ceiling - a.basic_rate_ceiling);
   const incomeTaxBasic = Math.min(taxableIncome, basicBand) * a.income_tax_basic;
   const incomeTaxHigher = Math.min(Math.max(0, taxableIncome - basicBand), higherBand) * a.income_tax_higher;
   const incomeTaxAdditional = Math.max(0, taxableIncome - basicBand - higherBand) * a.income_tax_additional;
-  const employeeNiStandard = Math.min(Math.max(0, grossTaxable - a.ni_primary_threshold), a.ni_upper_earnings_limit - a.ni_primary_threshold) * a.ni_rate_standard;
-  const employeeNiAbove = Math.max(0, grossTaxable - a.ni_upper_earnings_limit) * a.ni_rate_above_uel;
+  const employeeNiStandard = Math.min(Math.max(0, niablePay - a.ni_primary_threshold), a.ni_upper_earnings_limit - a.ni_primary_threshold) * a.ni_rate_standard;
+  const employeeNiAbove = Math.max(0, niablePay - a.ni_upper_earnings_limit) * a.ni_rate_above_uel;
   return { taxableIncome, incomeTaxBasic, incomeTaxHigher, incomeTaxAdditional, totalIncomeTax: incomeTaxBasic + incomeTaxHigher + incomeTaxAdditional, employeeNiStandard, employeeNiAbove, totalEmployeeNi: employeeNiStandard + employeeNiAbove };
 }
 
@@ -1157,7 +1158,7 @@ function taxNote(ty, key, fallback) {
 }
 
 function pensionNote() {
-  return "Relief at source: deducted post-tax, HMRC tops up at 20%. Net pay: deducted before tax and NI. Salary sacrifice: reduces gross salary, saves employee and employer NI.";
+  return "Relief at source: deducted post-tax, HMRC tops up at 20%. Net pay: deducted before income tax but not employee NI. Salary sacrifice: reduces gross salary, saves employee and employer NI.";
 }
 
 function hoursWeeksSummary(hoursPerWeek, weeksPerYear, weeksLabel) {
@@ -1219,7 +1220,7 @@ function calculateAll() {
   const lDayRate = dayRateFrom($("lRatePeriod").value, value("lRateInput"), value("lDpw"), lWeeks);
   const ltdAssumptions = { days_per_week: value("lDpw"), weeks_per_year: lWeeks, hours_per_day: value("lHpd"), director_salary: value("lSalary"), employer_ni_secondary_threshold: value("lErNiThreshold"), employer_ni_rate: pct("lErNiRate"), corporation_tax_rate: pct("lCorpTax"), dividend_allowance: value("lDivAllowance"), dividend_basic_rate: ty.dividend_basic_rate, dividend_higher_rate: ty.dividend_higher_rate, basic_rate_band_upper: ty.basic_rate_ceiling, higher_rate_band_upper: ty.higher_rate_ceiling, personal_allowance: ty.personal_allowance, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_standard: ty.ni_rate_standard, ni_rate_above_uel: ty.ni_rate_above_uel, professional_indemnity_per_year: value("lPi"), employer_pension_per_month: value("lPension") / 12, relevant_life_insurance_per_month: value("lLife") / 12, critical_illness_per_month: value("lCi") / 12, accountancy_per_year: value("lAccountancy"), other_expenses_per_year: value("lOther") };
   const ltd = calculateLtd(lDayRate, ltdAssumptions);
-  renderLineChart($("lChart"), [250, 300, 350, 400, 450, 500, 550, 600].map((rate) => ({ x: rate, y: calculateLtd(rate, ltdAssumptions).monthlyNet })), (rate) => `£${rate}`);
+  renderLineChart($("lChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: calculateLtd(rate, ltdAssumptions).monthlyNet })), (rate) => `£${rate}`);
   $("lGrossSummary").textContent = `${taxYear}, contract value before company and personal deductions.`;
   renderMetrics($("lGrossMetrics"), "Gross contract", ltd.annualGross, ltd.annualGross / 12, lDayRate, lDayRate / value("lHpd"));
   $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate.`;
@@ -1260,7 +1261,7 @@ function calculateAll() {
   const uDayRate = dayRateFrom($("uRatePeriod").value, value("uRateInput"), value("uDpw"), uWeeks);
   const umbrellaAssumptions = { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked };
   const umbrella = calculateUmbrella(uDayRate, umbrellaAssumptions);
-  renderLineChart($("uChart"), [250, 300, 350, 400, 450, 500, 550, 600].map((rate) => ({ x: rate, y: calculateUmbrella(rate, umbrellaAssumptions).monthlyNet })), (rate) => `£${rate}`);
+  renderLineChart($("uChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: calculateUmbrella(rate, umbrellaAssumptions).monthlyNet })), (rate) => `£${rate}`);
   $("uGrossSummary").textContent = `${taxYear}, assignment income before umbrella deductions and PAYE.`;
   renderMetrics($("uGrossMetrics"), "Gross contract", umbrella.annualGross, umbrella.annualGross / 12, uDayRate, uDayRate / value("uHpd"));
   $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate.`;
@@ -1292,35 +1293,31 @@ function calculateAll() {
   $("sHoursWeekNote").textContent = `${value("sDpw")} days/week x ${value("sHpd")} hours/day`;
   $("sWeeksText").textContent = sWeeks.toFixed(1);
   $("sWeeksNote").textContent = `52 - (${value("sLeave").toFixed(0)} + ${value("sBh").toFixed(0)}) days / ${value("sDpw").toFixed(0)} days/week`;
-  $("sAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(sHoursWeek, sWeeks, "worked weeks")}, ${value("sLeave").toFixed(0)} annual leave days, ${value("sBh").toFixed(0)} bank holidays, ${$("sPensionType").value.toLowerCase()} pension, ${(pct("sEePension") * 100).toFixed(1)}% employee contribution.`;
-  const salariedAssumptions = { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_pension_rate: 0.2897, employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked, employer_sick_pay_rate: 0.02 };
+  $("sAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(sHoursWeek, sWeeks, "worked weeks")}, ${value("sLeave").toFixed(0)} annual leave days, ${value("sBh").toFixed(0)} bank holidays, ${currency(value("sSalarySacrifice"), 0)} salary sacrifice, ${$("sPensionType").value.toLowerCase()} pension, ${(pct("sEePension") * 100).toFixed(1)}% employee contribution.`;
+  const salariedAssumptions = { days_per_week: value("sDpw"), weeks_per_year: sWeeks, hours_per_day: value("sHpd"), salary_sacrifice: value("sSalarySacrifice"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_secondary_threshold: value("sErNiThreshold"), employer_ni_rate: pct("sErNiRate"), pension_scheme_type: $("sPensionType").value, employee_pension_rate: pct("sEePension"), employer_passes_ni_saving_to_pension: $("sPensionType").value === "Salary sacrifice" && $("sNiPassback").checked };
   const salaried = calculateSalaried(value("sSalary"), salariedAssumptions);
-  renderLineChart($("sChart"), [50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000].map((salary) => ({ x: salary, y: calculateSalaried(salary, salariedAssumptions).monthlyNet })), (salary) => `£${Math.round(salary / 1000)}k`, NHS_AFC_BANDS_2026, 5000);
+  renderLineChart($("sChart"), [50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000].map((salary) => ({ x: salary, y: calculateSalaried(salary, salariedAssumptions).monthlyNet })), (salary) => `£${Math.round(salary / 1000)}k`, NHS_AFC_BANDS_2026, 5000);
   $("sGrossSummary").textContent = `${taxYear}, contracted salary before tax and employee deductions.`;
-  renderMetrics($("sGrossMetrics"), "Gross salary", salaried.annualSalary, salaried.annualSalary / 12, salaried.equivalentDayRate, salaried.annualSalary / salaried.hoursPerYear);
+  $("sGrossMetrics").innerHTML = [
+    ["Gross salary", currency(salaried.annualSalary, 0)],
+    ["After sacrifice", currency(salaried.pensionableSalary, 0)],
+    ["Monthly gross", currency(salaried.pensionableSalary / 12, 0)],
+    ["Hourly", currency(salaried.pensionableSalary / salaried.hoursPerYear, 2)]
+  ].map(([label, val]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${val}</span></div>`).join("");
   $("sSummary").textContent = `${taxYear}, ${currency(value("sSalary"), 0)} salary.`;
   renderNetMetrics($("sMetrics"), salaried);
   $("sBreakdownSummary").textContent = `Pension summary: employee pension ${currency(salaried.employeePensionPretax + salaried.employeePensionPosttax, 0)}/year.`;
   renderTable($("sBreakdown"), [
-    { section: "Step 1 — Gross salary" },
-    { label: "Gross annual salary", value: salaried.annualSalary, note: "Contracted salary before any deductions", total: true },
-    { label: "Equivalent day rate", value: salaried.equivalentDayRate, note: `${currency(value("sSalary"), 0)} / (${value("sDpw")} days x ${sWeeks} weeks)` },
-    { section: "Step 2 — Pre-tax deductions" },
-    { label: "Gross salary", value: salaried.annualSalary, note: "Starting point" },
-    { label: "Less: Employee pension (pre-tax)", value: -salaried.employeePensionPretax, note: `${(pct("sEePension") * 100).toFixed(1)}% of qualifying earnings — deducted before tax`, deduction: true },
-    { label: "= Gross taxable pay", value: salaried.grossTaxable, note: "Income subject to income tax and NI", total: true },
-    { section: "Step 3 — Income tax & employee NI" },
-    { label: "Gross taxable pay", value: salaried.grossTaxable, note: "Starting point for tax" },
+    { label: "Gross annual salary", value: salaried.annualSalary, note: "Contracted salary before salary sacrifice and deductions", total: true },
+    { label: "Less: Salary sacrifice", value: -salaried.salarySacrifice, note: "Annual pre-tax sacrifice deducted before pension is calculated", deduction: true },
+    { label: "= Salary after sacrifice", value: salaried.pensionableSalary, note: "Pension is calculated on this salary", total: true },
+    { label: "Less: Employee pension (pre-tax)", value: -salaried.employeePensionPretax, note: $("sPensionType").value === "Relief at source" ? "Not applicable for relief at source" : `${(pct("sEePension") * 100).toFixed(1)}% of salary after sacrifice`, deduction: true },
+    { label: "= Gross taxable pay", value: salaried.grossTaxable, note: "Income subject to income tax", total: true },
+    { label: "NI-able pay", value: salaried.niablePay, note: $("sPensionType").value === "Net pay arrangement" ? "Net pay pension reduces tax, but employee NI is still calculated before the pension deduction" : "Pay used for employee NI calculation" },
     { label: "Less: Income tax", value: -salaried.totalIncomeTax, note: `Basic 20% ${currency(salaried.incomeTaxBasic, 0)} | Higher 40% ${currency(salaried.incomeTaxHigher, 0)} | Additional 45% ${currency(salaried.incomeTaxAdditional, 0)}`, deduction: true },
     { label: "Less: Employee NI", value: -salaried.totalEmployeeNi, note: `Standard ${(ty.ni_rate_standard * 100).toFixed(0)}% ${currency(salaried.employeeNiStandard, 0)} | Above UEL ${(ty.ni_rate_above_uel * 100).toFixed(0)}% ${currency(salaried.employeeNiAbove, 0)}`, deduction: true },
     { label: "Less: Employee pension (post-tax)", value: -salaried.employeePensionPosttax, note: $("sPensionType").value === "Relief at source" ? "Relief at source only — HMRC tops up at 20%" : "Not applicable for this scheme type", deduction: true },
-    { label: "= Net take-home", value: salaried.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true },
-    { section: "Employer cost" },
-    { label: "Employer NI", value: salaried.employerNi },
-    { label: "Employer pension", value: salaried.employerPension },
-    { label: "Sick pay liability", value: salaried.sickPay },
-    { label: "Total employer cost", value: salaried.employerCost, total: true },
-    { label: "Breakeven day rate", value: salaried.breakevenDayRate }
+    { label: "= Net take-home", value: salaried.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true }
   ], sDisplayPeriod);
 }
 
