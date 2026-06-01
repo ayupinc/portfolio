@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rate Calculator | Maple Leaf Intelligence</title>
+<title>Rate Calculator | Stephen Clinton</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@
     min-height: 66px;
     padding: 0 32px;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 24px;
   }
@@ -78,7 +78,7 @@
   .portfolio-nav {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 22px;
     color: var(--navy);
     font-size: 15px;
@@ -668,13 +668,13 @@
 <body>
 <div class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Maple Leaf Intelligence home">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
       <img class="brand-mark" src="assets/maple-leaf.png" alt="">
-      <span>Maple Leaf Intelligence</span>
+      <span>Stephen Clinton</span>
     </a>
     <nav class="portfolio-nav" aria-label="Portfolio sections">
-      <a href="index.html">Power BI Portfolio</a>
-      <a href="analytics-engineering.html">Analytics Engineering Portfolio</a>
+      <a href="index.html">Power BI</a>
+      <a href="analytics-engineering.html">Analytics Engineering</a>
       <a href="rate-calculator.html" aria-current="page">Rate Calculator</a>
     </nav>
     <a class="social-link" href="https://www.linkedin.com/in/stephenclinton">LinkedIn</a>
