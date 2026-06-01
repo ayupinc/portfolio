@@ -173,8 +173,8 @@
 
   .portfolio-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
     align-items: start;
   }
 
@@ -184,8 +184,8 @@
     border-radius: 8px;
     overflow: hidden;
     min-height: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    display: flex;
+    flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
@@ -200,7 +200,7 @@
   .thumb-link {
     padding: 0;
     border: 0;
-    border-left: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
     background: #F0F2F5;
     cursor: pointer;
     display: block;
@@ -210,13 +210,12 @@
   }
 
   .project-card > .thumb-link {
-    height: 100%;
+    height: auto;
   }
 
   .thumb-button img,
   .thumb-link img {
     width: 100%;
-    min-height: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
@@ -225,13 +224,12 @@
   .thumb-carousel {
     position: relative;
     aspect-ratio: 16 / 9;
-    min-height: 100%;
     overflow: hidden;
     background: #F0F2F5;
   }
 
   .project-card > .thumb-carousel {
-    border-left: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
   }
 
   .thumb-image-link {
@@ -279,26 +277,26 @@
   .thumb-carousel-button.next { right: 8px; }
 
   .card-body {
-    padding: 28px 30px;
+    padding: 18px 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     flex: 1;
   }
 
   .project-title {
     margin: 0;
     color: var(--navy);
-    font-size: clamp(22px, 2.4vw, 31px);
+    font-size: 20px;
     font-weight: 650;
-    line-height: 1.12;
+    line-height: 1.16;
   }
 
   .summary {
     margin: 0;
     color: var(--body);
-    font-size: 16px;
-    line-height: 1.55;
+    font-size: 14px;
+    line-height: 1.45;
   }
 
   .details-button,
@@ -309,7 +307,7 @@
     background: transparent;
     color: var(--accent);
     border-radius: 4px;
-    padding: 8px 12px;
+    padding: 7px 10px;
     font: inherit;
     font-size: 12px;
     font-weight: 700;
@@ -439,12 +437,11 @@
     }
     .hero { padding: 38px 24px 34px; }
     main { padding: 28px 20px 64px; }
-    .project-card { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
     .thumb-button,
     .thumb-link,
     .project-card > .thumb-carousel {
-      border-left: 0;
-      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
     }
     .modal { padding: 14px; }
     .modal-content { padding: 22px; }
@@ -526,10 +523,8 @@ const projects = [
   {
     title: "Call Flow Analysis",
     image: "images-anon/flow-anon.png",
-    summary: "Flow analysis showing how calls move through clinical teams, statuses and outcomes.",
-    requirement: "Report the flow of calls through clinical teams, showing call status on entry to the queue and the outcome type, to identify patterns in how calls are processed across different clinical levels. Audience: Clinical leadership groups to enable identification of repeatable call pathways and bottlenecks, directly influencing operational decision-making.",
-    solution: "New dashboard with visualisations that aid the viewer in comparing the input and outcome for maximum usability of complex scenarios. Also includes pages for different perspectives and drill through detail pages with a separate page for help, information and version updates. DAX measures include CALCULATE with REMOVEFILTERS, SWITCH and SELECTEDVALUE.",
-    engineering: "Designed a new state-transition model from clinical queue event data using indicators with ordered event streams using LEAD/LAG logic to capture the time a case spends within each clinician group. Enforced temporal accuracy to prevent overlaps between levels, used CTEs, ranked window functions and complex CASE statements, and created persistent tables for downstream reporting."
+    url: "call-flow-analysis.html",
+    summary: "Flow analysis showing how cases move through teams, classifications and outcomes."
   },
   {
     title: "Remote Assessments Summary",
@@ -625,13 +620,6 @@ projects.forEach((project, index) => {
       </div>`
     : `<img src="${project.image}" alt="${project.title}">`;
   article.innerHTML = `
-    <div class="card-body">
-      <h2 class="project-title">${project.title}</h2>
-      <p class="summary">${project.summary}</p>
-      ${project.url
-        ? `<a class="details-link" href="${project.url}">Read case study</a>`
-        : `<button class="details-button" type="button">View detail</button>`}
-    </div>
     ${project.url && project.images ? thumbMedia : project.url ? `
     <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
       ${thumbMedia}
@@ -639,6 +627,13 @@ projects.forEach((project, index) => {
     <button class="thumb-button" type="button" aria-label="Open details for ${project.title}">
       ${thumbMedia}
     </button>`}
+    <div class="card-body">
+      <h2 class="project-title">${project.title}</h2>
+      <p class="summary">${project.summary}</p>
+      ${project.url
+        ? `<a class="details-link" href="${project.url}">Read case study</a>`
+        : `<button class="details-button" type="button">View detail</button>`}
+    </div>
   `;
   if (!project.url) {
     article.querySelectorAll("button").forEach((button) => {
