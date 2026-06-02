@@ -153,16 +153,20 @@ function renderSiteNav(container) {
 
 document.querySelectorAll("[data-site-nav]").forEach(renderSiteNav);
 
+function formatReturnText(text) {
+  return text.startsWith("\u2190") ? text : `\u2190 ${text}`;
+}
+
 document.querySelectorAll("[data-return-link]").forEach((link) => {
   const defaultHref = link.dataset.defaultHref || "analytics-engineering.html";
   const defaultText = link.dataset.defaultText || "Return to Analytics Engineering";
   const sourcePage = new URLSearchParams(window.location.search).get("from");
 
   link.href = defaultHref;
-  link.textContent = defaultText;
+  link.textContent = formatReturnText(defaultText);
 
   if (sourcePage && sourcePage === link.dataset.sourcePage) {
     link.href = link.dataset.referrerHref;
-    link.textContent = link.dataset.referrerText;
+    link.textContent = formatReturnText(link.dataset.referrerText);
   }
 });
