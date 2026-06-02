@@ -145,6 +145,74 @@
     line-height: 1.58;
   }
 
+  .hero-image {
+    width: 100%;
+    background: #F0F2F5;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    margin: 0 0 46px;
+    overflow: hidden;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+
+  .screenshot-note {
+    margin: 0;
+    padding: 10px 14px 12px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.4;
+    background: var(--white);
+    border-top: 1px solid var(--rule);
+  }
+
+  .image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(8, 15, 29, 0.88);
+  }
+
+  .image-lightbox.is-open {
+    display: flex;
+  }
+
+  .image-lightbox img {
+    max-width: min(96vw, 1500px);
+    max-height: 90vh;
+    object-fit: contain;
+    background: #F0F2F5;
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.34);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.94);
+    color: var(--navy);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover {
+    background: var(--white);
+  }
+
   .case-layout {
     max-width: 680px;
     margin: 0 auto;
@@ -193,30 +261,12 @@
     color: var(--muted);
   }
 
-  .case-action {
-    margin-top: 28px;
-    padding-top: 22px;
-    border-top: 1px solid var(--rule);
-  }
-
-  .case-action-link,
-  .case-action-note {
-    display: inline-block;
-    border: 1px solid var(--navy);
-    border-radius: 4px;
-    padding: 9px 13px;
+  .text-link {
     color: var(--navy);
     font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-
-  .case-action-note {
-    border-color: var(--rule);
-    color: var(--muted);
+    font-weight: 650;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   footer {
@@ -256,6 +306,7 @@
   .content-column { max-width: 800px; min-width: 0; }
   .back-nav,
   .case-header,
+  .hero-image,
   .case-layout { max-width: 800px; margin-left: 0; margin-right: 0; text-align: left; }
   h1 { font-size: 36pt; }
   .case-subtitle,
@@ -300,50 +351,33 @@
 
   <header class="case-header">
     <h1>Cisco Telephony</h1>
-    <p class="case-subtitle">Reconstructing calls, agent calls, sessions and activities from native Cisco event data so Power BI and SSRS could report from a trusted operational layer.</p>
   </header>
+
+  <section class="hero-image" aria-label="Cisco telephony engineering screenshot">
+    <img src="screenshots/cisco-engineering.png" alt="Cisco telephony engineering screenshot" data-lightbox>
+    <p class="screenshot-note">Example data shown for portfolio presentation only; figures do not represent actual values from any organisation.</p>
+  </section>
 
   <article class="case-layout">
     <section class="case-section" id="context">
       <h2>Context</h2>
-      <p>The Cisco telephony work started as a reporting reliability problem. After a switchboard change, the existing third-party call reporting tables no longer provided consistent queue times, ring times or call presence.</p>
-      <p>The immediate requirement was to restore operational reporting, but the underlying issue was that the available Cisco source data did not describe calls in the way managers understood them.</p>
+      <p>After a switchboard change, the existing third-party call reporting tables became unreliable with missing information. A fix was required to restore operational reporting, but the table construction was too opaque to repair so a new solution was required.</p>
     </section>
 
     <section class="case-section" id="data-engineering-process">
       <h2>Data Engineering Process</h2>
-      <p>I worked from the native Cisco tables rather than the broken reporting layer. Route Call Detail held one row per routed call, while Termination Call Detail held multiple rows for the segments of that call.</p>
-      <p>Agent Event Detail held login, logout and status activity, but events were split across Cisco interval boundaries rather than stored as complete activity periods. The engineering task was therefore to convert low-level event records into analytical entities: calls, agent calls, sessions and activities.</p>
-      <p>The first stage was interpretation. I analysed combinations of Peripheral Call Type, Call Disposition and Call Disposition Flag to identify which TCD rows represented routing, ringing, answering, talking, transfer, monitor and internal-call behaviour. This allowed call segments to be classified before aggregation.</p>
-      <p>The next stage was reconstruction. Routed calls were rebuilt from RCD and related TCD rows using RouterCallKeyDay and RouterCallKey, which were common keys in both tables. Dialled calls were taken directly from TCD but required separate attribution rules.</p>
-      <p>Internal calls needed particular care because the operational owner changed depending on whether the call was answered, transferred or conferenced. I built separate logic for Call Data and Agent Call Data so the same source event could support both call-volume reporting and agent-perspective reporting.</p>
-      <p>Agent sessions were reconstructed from Agent Event Detail. Login and logout events created the session boundary, while status-code events were collapsed into continuous activity periods. This produced one row per session and one row per meaningful activity rather than fragmented interval records.</p>
-    </section>
-
-    <section class="case-section" id="validation">
-      <h2>Validation</h2>
-      <p>I validated the data using comparisons with interval reporting, comparisons with existing third-party and Cisco reports, and real-time analysis of agent activity.</p>
-    </section>
-
-    <section class="case-section" id="output-model">
-      <h2>Output Model</h2>
-      <p>The output was a reusable telephony analytics model:</p>
-      <ul class="output-list">
-        <li>Call Data</li>
-        <li>Agent Call Data</li>
-        <li>Agent Session Data</li>
-        <li>Agent Activity Data</li>
-      </ul>
-      <p>These tables became the shared reporting layer for Power BI and SSRS.</p>
-      <div class="case-action">
-        <a class="case-action-link" href="cisco-telephony-sql.html">View SQL script</a>
-      </div>
+      <p>I worked from the native Cisco tables rather than the broken reporting layer, which held one row per record for routed calls and one row per segment of all calls, with multiple rows per call, joined by a common call key. I analysed combinations of call types and dispositions to identify which rows represented routing, ringing, answering, talking, transfer, monitor and other internal call behaviour, allowing call segments to be classified before aggregation. Using a complex stored procedure, I was able to create a new call table for all call analytics across the organisation.</p>
+      <p>An anonymised example of the SQL script is available <a class="text-link" href="cisco-telephony-sql.html">here</a>.</p>
+      <p>Agent events were also derived from the third-party tables and needed recreating. Given the deeper understanding of Cisco tables, I was able to analyse the same call data along with agent event details tables and derive login and logout events to create a session for the agent and temporally assign events to the session for a true picture of activity.</p>
+      <p>Details of each call attributed to an agent were captured from the new calls table and, where attribution was unclear, such as internal calls between agents, I applied logic to assign each side of the call to the appropriate agent. This allowed calls to also be included per session to give a clear attribution of activity per agent on every logged-in session.</p>
+      <p>I validated the data using comparisons with interval reporting, existing reports and real-time analysis of agent activity.</p>
+      <p>Once complete for the changed switchboard, I applied the same procedure and table structure to an existing switchboard, taking care to manage more complicated internal routing challenges in the data. This provided call-by-call reporting for the first time, replacing older, interval-only reporting for that part of the organisation.</p>
     </section>
 
     <section class="case-section" id="outcome">
       <h2>Outcome</h2>
-      <p>The outcome was not only replacement reporting. The model supported abandonment and demand reporting, handling-time analysis, Clinical Navigator telephony metrics, six agent-level SSRS reports and session-level activity reporting.</p>
-      <p>It also removed reliance on the unreliable third-party reporting tables and gave operational users a traceable route from KPI back to source event behaviour.</p>
+      <p>The output was a reusable telephony analytics model for call and agent call data, and agent session and activity tables. These not only replaced the existing tables but also enhanced the suite of reporting tables with detailed agent session analysis and, for the second switchboard, call-by-call reporting replacing what had only been available by summarised intervals.</p>
+      <p>All telephony and agent reports in the organisation moved to the new suite of tables and were able to provide accurate, defensible telephony metrics supporting call-level answer and abandonment metrics with handling and wait times, demand analysis and staff workforce planning and agent-level performance reporting.</p>
     </section>
   </article>
     </div>
@@ -353,5 +387,39 @@
 <footer>
   Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
 </footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
 </body>
 </html>

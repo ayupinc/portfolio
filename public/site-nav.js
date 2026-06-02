@@ -59,8 +59,6 @@ const siteNavSections = [
         links: [
           ["Context", "#context"],
           ["Data engineering process", "#data-engineering-process"],
-          ["Validation", "#validation"],
-          ["Output model", "#output-model"],
           ["Outcome", "#outcome"]
         ]
       },
