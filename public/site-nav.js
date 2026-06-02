@@ -6,7 +6,7 @@ const siteNavSections = [
     items: [
       {
         id: "telephony-demand-agent-activity",
-        title: "Telephony Demand & Agent Activity",
+        title: "Telephony & Agent Activity",
         href: "telephony-demand-agent-activity.html",
         sublistLabel: "Telephony page contents",
         links: [
@@ -33,9 +33,9 @@ const siteNavSections = [
       },
       {
         id: "call-flow-analysis",
-        title: "Call Flow Analysis",
+        title: "Case Flow Analysis",
         href: "call-flow-analysis.html",
-        sublistLabel: "Call Flow page contents",
+        sublistLabel: "Case Flow page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
