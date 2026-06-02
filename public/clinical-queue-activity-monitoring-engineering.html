@@ -68,6 +68,7 @@
     .output-list li { font-size: 19px; line-height: 25px; }
   }
 </style>
+<script src="site-nav.js" defer></script>
 </head>
 <body>
 <div class="topbar">
@@ -88,43 +89,11 @@
 
 <main>
   <div class="page-grid">
-    <aside class="side-nav" aria-label="Portfolio structure">
-      <nav class="side-nav-group" aria-label="Power BI reports">
-        <a class="side-nav-title" href="index.html">Power BI Reports</a>
-        <ul class="side-nav-list">
-          <li><a href="real-time-queue-monitoring.html">Real-Time Queue Monitoring</a></li>
-          <li><a href="index.html">Key Performance Indicator</a></li>
-          <li><a href="index.html">Resource Utilisation</a></li>
-          <li><a href="call-flow-analysis.html">Call Flow Analysis</a></li>
-          <li><a href="index.html">Remote Assessments Summary</a></li>
-          <li><a href="telephony-demand-agent-activity.html">Telephony Demand &amp; Agent Activity</a></li>
-          <li><a href="index.html">Operations Summary</a></li>
-          <li><a href="index.html">Electronic Patient Care Record</a></li>
-        </ul>
-      </nav>
-
-      <nav class="side-nav-group" aria-label="Analytics engineering studies">
-        <a class="side-nav-title" href="analytics-engineering.html">Analytics Engineering</a>
-        <ul class="side-nav-list">
-          <li><a href="cisco-telephony-analytics-engineering.html">Cisco Telephony</a></li>
-          <li><a href="questionnaire-analytics-engineering.html">Questionnaire Responses</a></li>
-          <li>
-            <span class="side-nav-current">Clinical Queue Activity</span>
-            <ul class="side-nav-sublist" aria-label="Clinical queue page contents">
-              <li><a href="#context">Context</a></li>
-              <li><a href="#data-engineering-process">Data engineering process</a></li>
-              <li><a href="#validation">Validation</a></li>
-              <li><a href="#output-model">Output model</a></li>
-              <li><a href="#outcome">Outcome</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    <aside class="side-nav" data-site-nav data-current-page="clinical-queue-activity-monitoring-engineering"></aside>
 
     <div class="content-column">
   <div class="back-nav">
-    <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+    <a class="back-link" href="analytics-engineering.html" data-return-link data-default-href="analytics-engineering.html" data-default-text="Return to Analytics Engineering" data-referrer-page="call-flow-analysis.html" data-referrer-href="call-flow-analysis.html" data-referrer-text="Return to Call Flow Analysis">Return to Analytics Engineering</a>
   </div>
 
   <header class="case-header">

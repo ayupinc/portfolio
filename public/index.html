@@ -179,6 +179,13 @@
     align-items: start;
   }
 
+  .portfolio-separator {
+    grid-column: 1 / -1;
+    height: 1px;
+    margin: 64px 0;
+    background: #4d4d4d;
+  }
+
   .project-card {
     border: 1px solid var(--rule);
     background: var(--white);
@@ -476,7 +483,7 @@
 </header>
 
 <main>
-  <p class="intro">Power BI examples for contact centre information, case management queues, key performance indicators and questionnaire summaries. Selected case studies link through to analytics engineering work that sits underneath the report layer.</p>
+  <p class="intro">These examples represent real reports and dashboards I have created for clients with all the identifying elements removed and figures changed from actual activity. They are here to showcase design style and structure, attention to detail and the range and use of visuals. Clicking through to the detail will explore the audience and purpose, the data model and manipulation and DAX measures.</p>
   <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
 </main>
 
@@ -499,10 +506,16 @@
 <script>
 const projects = [
   {
-    title: "Real-Time Outbound Queue Monitoring",
+    title: "Real-Time Queue Monitoring",
     image: "screenshots/queue-wallboard.png",
     url: "real-time-queue-monitoring.html",
     summary: "Near-live wallboard supporting team leaders managing multiple queues continuously throughout the day."
+  },
+  {
+    title: "Call Flow Analysis",
+    image: "images-anon/flow-anon.png",
+    url: "call-flow-analysis.html",
+    summary: "Flow analysis showing how cases move through teams, classifications and outcomes."
   },
   {
     title: "Key Performance Indicator",
@@ -519,12 +532,6 @@ const projects = [
     requirement: "A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.",
     solution: "Power BI report presenting headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. Report also contains detail pages for review of individual responses and a separate help, information and version page.",
     engineering: "Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing. Captured event times and calculated availability durations using temporal modelling."
-  },
-  {
-    title: "Call Flow Analysis",
-    image: "images-anon/flow-anon.png",
-    url: "call-flow-analysis.html",
-    summary: "Flow analysis showing how cases move through teams, classifications and outcomes."
   },
   {
     title: "Remote Assessments Summary",
@@ -654,6 +661,13 @@ projects.forEach((project, index) => {
     carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
   });
   grid.appendChild(article);
+
+  if (index === 2) {
+    const separator = document.createElement("div");
+    separator.className = "portfolio-separator";
+    separator.setAttribute("role", "presentation");
+    grid.appendChild(separator);
+  }
 });
 
 modal.addEventListener("click", (event) => {
