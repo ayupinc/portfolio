@@ -210,6 +210,25 @@
 
   .case-section + .case-section { margin-top: 46px; }
 
+  .what-i-did {
+    width: 100%;
+    margin: 30px 0 46px;
+    padding: 24px 28px;
+    border-left: 5px solid #1B4D8E;
+    border-radius: 8px;
+    background: #EAF0F9;
+  }
+
+  .what-i-did h2 {
+    margin-bottom: 14px;
+  }
+
+  .what-i-did p {
+    font-family: var(--sans);
+    font-size: 19px;
+    line-height: 1.55;
+  }
+
   h2 {
     margin: 0 0 16px;
     color: var(--navy);
@@ -353,20 +372,26 @@
       <p>After a switchboard change, the existing third-party call reporting tables became unreliable with missing information. A fix was required to restore operational reporting, but the table construction was too opaque to repair so a new solution was required.</p>
     </section>
 
+    <section class="what-i-did" id="what-i-did">
+      <h2>What I Did</h2>
+      <p>I built a new telephony model from native Cisco event data, where I translated low-level call and agent events into analytical tables holding calls, agent calls, sessions and activity data. I applied classification to each event, reconstructed the agent sessions, attributed events temporally to the sessions and applied agent ownership logic to the calls to enable the data to be used consistently for reporting.</p>
+    </section>
+
     <section class="case-section" id="data-engineering-process">
       <h2>Data Engineering Process</h2>
-      <p>I worked from the native Cisco tables rather than the broken reporting layer, which held one row per record for routed calls and one row per segment of all calls, with multiple rows per call, joined by a common call key. I analysed combinations of call types and dispositions to identify which rows represented routing, ringing, answering, talking, transfer, monitor and other internal call behaviour, allowing call segments to be classified before aggregation. Using a complex stored procedure, I was able to create a new call table for all call analytics across the organisation.</p>
+      <p>I worked from the native Cisco tables, which held one row per record for routed calls and one row for each segment of each call, all joined by a common key. I analysed combinations of call types and dispositions to identify which rows represented routing, ringing, answering, talking, transfer, monitor and other internal call behaviour, allowing call segments to be classified before aggregation.</p>
+      <p>The challenge was that Cisco records the call lifecycle as multiple independent events rather than a single transaction, so the meaning of each record had to be inferred from the information within it before the call could be reconstructed accurately. Using a complex stored procedure, I was able to do this and create a new call table for all call analytics across the organisation.</p>
       <p>An anonymised example of the SQL script is available <a class="text-link" href="cisco-telephony-sql.html">here</a>.</p>
-      <p>Agent events were also derived from the third-party tables and needed recreating. Given the deeper understanding of Cisco tables, I was able to analyse the same call data along with agent event details tables and derive login and logout events to create a session for the agent and temporally assign events to the session for a true picture of activity.</p>
-      <p>Details of each call attributed to an agent were captured from the new calls table and, where attribution was unclear, such as internal calls between agents, I applied logic to assign each side of the call to the appropriate agent. This allowed calls to also be included per session to give a clear attribution of activity per agent on every logged-in session.</p>
-      <p>I validated the data using comparisons with interval reporting, existing reports and real-time analysis of agent activity.</p>
-      <p>Once complete for the changed switchboard, I applied the same procedure and table structure to an existing switchboard, taking care to manage more complicated internal routing challenges in the data. This provided call-by-call reporting for the first time, replacing older, interval-only reporting for that part of the organisation.</p>
+      <p>Agent events were also derived from the third-party tables and needed recreating. Cisco stored agent activity as individual events which were often fragmented over consecutive reporting intervals rather than as complete sessions or activity periods. I reconstructed the login, logout and status events into continuous analytical sessions and activity periods, which meant calls and activities could be analysed together within an individual agent session.</p>
+      <p>Calls attributed to agents were captured from the new calls table and where attribution was unclear, particularly for internal, transferred and monitored calls, I applied ownership rules to assign each side of the call to the appropriate agent perspective. This allowed agent calls to also be included per session to give a clear attribution of activity per agent on every logged-in session, even if only one call record existed.</p>
+      <p>I validated the outputs against Cisco interval reporting, existing reports and agent activity to make sure reconstructed calls, sessions and activities reflected operational behaviour.</p>
+      <p>I also applied the same procedure and table structure to another switchboard which had no call or agent-level reporting tables. This switchboard had more complex routing plans for internal as well as external calls, which made the attribution more challenging.</p>
     </section>
 
     <section class="case-section" id="outcome">
       <h2>Outcome</h2>
-      <p>The output was a reusable telephony analytics model for call and agent call data, and agent session and activity tables. These not only replaced the existing tables but also enhanced the suite of reporting tables with detailed agent session analysis and, for the second switchboard, call-by-call reporting replacing what had only been available by summarised intervals.</p>
-      <p>All telephony and agent reports in the organisation moved to the new suite of tables and were able to provide accurate, defensible telephony metrics supporting call-level answer and abandonment metrics with handling and wait times, demand analysis and staff workforce planning and agent-level performance reporting.</p>
+      <p>The output was a reusable telephony analytics model consisting of call, agent call, session and activity tables which became the shared reporting layer for telephony reporting across the organisation. The model not only replaced the existing tables but also introduced detailed agent session-level data and provided call-by-call reporting for both switchboards.</p>
+      <p>All telephony and agent reports in the organisation moved to the new model, providing an accurate single source of truth for telephony metrics supporting call-level answer and abandonment metrics with handling and wait times, demand analysis, staff workforce planning and agent-level performance reporting.</p>
     </section>
   </article>
     </div>

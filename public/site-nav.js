@@ -58,6 +58,7 @@ const siteNavSections = [
         sublistLabel: "Cisco telephony page contents",
         links: [
           ["Context", "#context"],
+          ["What I did", "#what-i-did"],
           ["Data engineering process", "#data-engineering-process"],
           ["Outcome", "#outcome"]
         ]
