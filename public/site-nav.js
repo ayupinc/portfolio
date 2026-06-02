@@ -158,12 +158,12 @@ document.querySelectorAll("[data-site-nav]").forEach(renderSiteNav);
 document.querySelectorAll("[data-return-link]").forEach((link) => {
   const defaultHref = link.dataset.defaultHref || "analytics-engineering.html";
   const defaultText = link.dataset.defaultText || "Return to Analytics Engineering";
-  const referrerPage = document.referrer ? document.referrer.split("/").pop() : "";
+  const sourcePage = new URLSearchParams(window.location.search).get("from");
 
   link.href = defaultHref;
   link.textContent = defaultText;
 
-  if (referrerPage && referrerPage === link.dataset.referrerPage) {
+  if (sourcePage && sourcePage === link.dataset.sourcePage) {
     link.href = link.dataset.referrerHref;
     link.textContent = link.dataset.referrerText;
   }
