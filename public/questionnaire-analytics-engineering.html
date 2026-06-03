@@ -23,8 +23,20 @@
   .case-header{max-width:900px;margin:0 auto 46px;text-align:center}
   h1{margin:0 0 14px;color:var(--navy);font-size:clamp(34px,4.2vw,50px);line-height:1.06;font-weight:600;letter-spacing:0}
   .case-subtitle{max-width:700px;margin:0 auto;color:var(--muted);font-family:var(--serif);font-size:20px;line-height:1.58}
+  .hero-image{width:100%;background:#F0F2F5;border:1px solid var(--rule);border-radius:8px;margin:0 0 46px;overflow:hidden}
+  .hero-image img{display:block;width:100%;height:auto;cursor:zoom-in}
+  .image-lightbox{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;background:rgba(8,15,29,.88)}
+  .image-lightbox.is-open{display:flex}
+  .image-lightbox img{max-width:min(96vw,1500px);max-height:90vh;object-fit:contain;background:#F0F2F5;border:1px solid rgba(255,255,255,.22);box-shadow:0 18px 60px rgba(0,0,0,.34)}
+  .lightbox-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.94);color:var(--navy);font-size:28px;line-height:1;cursor:pointer}
+  .lightbox-close:hover{background:#fff}
   .case-layout{max-width:680px;margin:0 auto}
   .case-section+.case-section{margin-top:46px}
+  .intro-section{margin-bottom:30px}
+  .what-i-did{width:100%;margin:30px 0 46px;padding:24px 28px;border-left:5px solid #1B4D8E;border-radius:8px;background:#EAF0F9}
+  .what-i-did h2{margin-bottom:14px}
+  .what-i-did .output-list{margin-bottom:0}
+  .what-i-did .output-list li{font-family:var(--sans);font-size:19px;line-height:1.55}
   h2{margin:0 0 16px;color:var(--navy);font-size:clamp(22px,2vw,25px);line-height:1.18;font-weight:650;letter-spacing:0}
   p{margin:0;color:var(--body);font-family:var(--serif);font-size:20px;line-height:1.6}
   p+p{margin-top:30px}
@@ -33,6 +45,7 @@
   .output-list li::before{content:"-";position:absolute;left:0;color:var(--muted)}
   .case-action{margin-top:28px;padding-top:22px;border-top:1px solid var(--rule)}
   .case-action-note{display:inline-block;border:1px solid var(--rule);border-radius:4px;padding:9px 13px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+  .text-link{color:var(--navy);font-family:var(--sans);font-weight:650;text-decoration:underline;text-underline-offset:3px}
   footer{background:var(--navy);color:rgba(255,255,255,.72);padding:34px 32px;text-align:center;font-size:11px;letter-spacing:.03em}
   @media (max-width:780px){.topbar-inner{padding:0 20px}.brand-name{font-size:13px}.top-actions{gap:12px}main{padding:32px 20px 64px}.case-subtitle{font-size:18px}p,.output-list li{font-size:18px}}
   /* Shared case-study layout */
@@ -54,7 +67,9 @@
   .content-column { max-width: 800px; min-width: 0; }
   .back-nav,
   .case-header,
+  .hero-image,
   .case-layout { max-width: 800px; margin-left: 0; margin-right: 0; text-align: left; }
+  .case-header { margin-bottom: 24px; }
   h1 { font-size: 36pt; }
   .case-subtitle,
   p,
@@ -97,51 +112,56 @@
 
   <header class="case-header">
     <h1>Questionnaire Responses</h1>
-    <p class="case-subtitle">Structuring raw CAD questionnaire responses into episode and response tables that could support clinical quality, outcome and pathway reporting.</p>
   </header>
 
   <article class="case-layout">
-    <section class="case-section" id="context">
-      <h2>Context</h2>
-      <p>The questionnaire system is built into the CAD Patient Management System and is used by clinicians to prompt questions and capture responses during telephone assessment.</p>
-      <p>Data included question text, responses, outcome codes and timestamps, but it was stored as one row per question response rather than one row per assessment episode. A single questionnaire completion could produce dozens of rows, and multiple questionnaires had different structures and branch pathways.</p>
-      <p>The data also carried quality problems inherited from its collection context: inconsistent free-text responses, response categories with multiple spellings, and question text that differed across questionnaire versions covering the same clinical concept.</p>
+    <section class="case-section intro-section" id="context">
+      <p>The questionnaire system is built into the case management system and is used to prompt questions and capture responses in telephone assessments. Local technical teams create the question and response flow in a module and make them available to use in the call. Data includes question text, responses, outcome codes and timestamps, and is stored as one row per question response rather than one row per assessment episode. A single questionnaire completion could produce dozens of rows. There are multiple questionnaires, each with different structures and branch pathways used by different clinical teams.</p>
+      <p>The data also carried quality problems inherited from its collection context. Free-text responses were inconsistently formatted, response categories existed under multiple spellings and variations, and question text differed across questionnaire versions covering the same clinical concept. None of this could be resolved inside a report; it required a dedicated transformation layer built before any reporting logic was applied.</p>
     </section>
+  </article>
 
-    <section class="case-section" id="what-i-did">
+  <section class="hero-image" aria-label="Questionnaire responses engineering screenshot">
+    <img src="screenshots/new-question-engineering.png" alt="Questionnaire responses engineering screenshot" data-lightbox>
+  </section>
+
+  <article class="case-layout">
+    <section class="what-i-did" id="what-i-did">
       <h2>What I Did</h2>
-      <p>I designed and built the full transformation pipeline in T-SQL, from raw questionnaire source data through to two structured analytical tables consumed by Power BI dashboards.</p>
-      <p>This included authoring the episode view, the response cleaning stored procedure and the classification logic, as well as investigating and resolving source data behaviours that were not documented.</p>
-      <p>I identified a branch loop-back issue while validating branch attribution, traced it to the way the CAD system timestamped repeated pathway selections, and changed the approach from max-based selection to row-number-based selection.</p>
-      <p>I also identified and documented re-open behaviour, where CAD copies original response timestamps into a new instance, and built detection logic to flag affected episodes rather than leaving the distortion hidden inside duration calculations.</p>
+      <ul class="output-list">
+        <li>Designed and built the full T-SQL transformation pipeline from raw questionnaire source data to reusable reporting tables</li>
+        <li>Authored the episode view, response cleaning stored procedure and classification logic consumed by Power BI dashboards</li>
+        <li>Created stable questionnaire episode keys and episode-in-call sequencing where the source system held no completed assessment entity</li>
+        <li>Identified a branch loop-back issue and replaced max-based branch selection with row-number logic to capture the first selected pathway</li>
+        <li>Investigated questionnaire re-open behaviour and built detection flags so duplicated timestamps did not distort duration calculations</li>
+        <li>Standardised question text, response text and response categories so reporting could aggregate across questionnaire versions</li>
+      </ul>
     </section>
 
     <section class="case-section" id="data-engineering-process">
       <h2>Data Engineering Process</h2>
-      <p>The first stage was episode identification. The source table held no persistent identifier representing a completed questionnaire attempt, so one had to be constructed from the incident identifier, questionnaire set identifier and run number within the incident.</p>
-      <p>A separate derived field ranked each episode within the incident using a dense rank over start time, providing an episode-in-call sequence useful for tracking activity across a single call.</p>
-      <p>Branch identification required particular care for questionnaire sets where clinicians navigate different pathways. The branch name was extracted from the response to the pathway selection question, with row-number logic used to capture the first selected branch rather than a later loop-back value.</p>
-      <p>Re-open detection identified sessions sharing the same incident, questionnaire set, branch and start time, flagging the earlier instance as a potential donor and the later as a re-opened episode.</p>
-      <p>Response normalisation and text cleaning assigned consistent question identifiers and clean question text to each response. A cleaning pass standardised free-text responses before classification, and unmapped responses were flagged explicitly so coverage could be monitored.</p>
+      <p>The first stage was episode identification. The source table held no persistent identifier representing a completed questionnaire attempt, so one had to be constructed. An episode key was derived from the incident identifier, questionnaire set identifier and run number within the incident. This produced a key that was both human-readable and sortable, making it practical for use in downstream reports and investigations. A separate derived field ranked each episode within the incident using a dense rank over start time, providing an episode-in-call sequence useful for tracking activity across a single call.</p>
+      <p>Branch identification required particular care for questionnaire sets where clinicians navigate different pathways depending on the type of call. The branch name was extracted from the response to the pathway selection question, but a construction issue in one questionnaire set created a loop back to other questionnaire sets, overwriting the branch timestamp with a later time. The logic was changed to use a row number ordered by the earliest response time rather than the latest, ensuring the branch captured was always the one first selected rather than the last.</p>
+      <p>A further edge case arose from how the system handles questionnaire re-opening. When a clinician reopened a completed questionnaire to amend responses, a new instance with an incremented run number was created but copied the original response timestamps into it. This made the new instance appear to have started much earlier than it actually did, distorting duration calculations. Detection logic was built to identify sessions sharing the same incident, questionnaire set, branch and start time, flagging the earlier instance as a potential donor and the later as a re-opened episode. This gave reporting the means to exclude or caveat re-opened sessions without silently distorting duration figures.</p>
+      <p>Response normalisation and text cleaning addressed the variation in how responses had been recorded across questionnaire versions and clinical teams. Mapping logic assigned consistent question identifiers and clean question text to each response, making aggregation across questionnaire versions reliable. A cleaning pass standardised free-text responses before classification was applied, and responses that could not be mapped to a category were flagged explicitly rather than silently dropped, so coverage could be monitored and improved over time.</p>
     </section>
 
     <section class="case-section" id="output-model">
       <h2>Output Model</h2>
       <p>The engineering process produced two analytical tables:</p>
       <ul class="output-list">
-        <li>Episodes, with one row per completed questionnaire episode, generated episode key, sequence, questionnaire set, branch, start and end timestamps, duration, donor and re-opened flags</li>
-        <li>Responses, with one row per cleaned and classified response linked to the episode key, consistent question identifier, clean question text, clean response text and assigned response category</li>
+        <li>An Episodes table, with one row per completed questionnaire episode, generated episode key, episode sequence within the call, questionnaire set, branch, start and end timestamps, duration, and donor and re-opened flags</li>
+        <li>A Responses table, with one row per cleaned and classified response linked to the episode key, consistent question identifier, clean question text, clean response text and assigned response category</li>
       </ul>
-      <p>Downstream Power BI reporting was built against these tables rather than the raw source, centralising cleaning and classification logic in the transformation layer.</p>
-      <div class="case-action">
-        <a class="case-action-note" href="questionnaire-responses-sql.html">View SQL script</a>
-      </div>
+      <p>Downstream Power BI reporting was built against these two tables rather than the raw source. Clinical quality reporting, outcome analysis and pathway monitoring could all operate against a stable, consistent structure without reproducing the cleaning and classification logic independently in each report.</p>
+      <p>An anonymised example of the SQL script is available <a class="text-link" href="questionnaire-responses-sql.html">here</a>.</p>
     </section>
 
     <section class="case-section" id="outcome">
       <h2>Outcome</h2>
-      <p>The transformation layer made structured questionnaire reporting possible for the first time. Clinical teams could analyse completed assessment episodes, track questionnaire activity within a call and aggregate responses to the same clinical question across different questionnaire versions.</p>
-      <p>The branch correction and re-open detection work uncovered source data behaviours that had not been documented and were actively distorting analysis attempted against the raw tables. By surfacing these as explicit flags, the reporting layer remained auditable.</p>
+      <p>The transformation layer made structured questionnaire reporting possible for the first time. Where previously the raw data could only be queried at the individual response level, clinical teams could now analyse completed assessment episodes, track questionnaire activity within a call, and aggregate responses to the same clinical question across different questionnaire versions without the results being contaminated by version differences or re-opened sessions.</p>
+      <p>The branch correction and re-open detection work uncovered source data behaviours that had not been documented and were actively distorting any analysis that had been attempted against the raw tables. By surfacing these as explicit flags in the output model rather than silently filtering them, the reporting layer remained auditable, and the underlying issues were visible to anyone investigating unusual figures.</p>
+      <p>The Episodes and Responses tables became the shared analytical foundation for clinical quality, outcome and pathway reporting, with all cleaning and classification logic centralised in the transformation layer rather than replicated across individual reports.</p>
     </section>
   </article>
     </div>
@@ -151,5 +171,39 @@
 <footer>
   These examples are based on real work, with images amended to remove identifying logos, labels, descriptions and sensitive details. Report and dashboard figures are placeholders and do not represent actual values. Any resemblance to specific organisations, people, systems or operational events is unintentional; the examples are shown to demonstrate design, usability and analytical structure.
 </footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
 </body>
 </html>
