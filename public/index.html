@@ -179,13 +179,6 @@
     align-items: start;
   }
 
-  .portfolio-separator {
-    grid-column: 1 / -1;
-    height: 1px;
-    margin: 64px 0;
-    background: #4d4d4d;
-  }
-
   .project-card {
     border: 1px solid var(--rule);
     background: var(--white);
@@ -582,6 +575,7 @@ const featuredProjectIndex = projects.findIndex((project) => project.url === "te
 if (featuredProjectIndex > 0) {
   projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
 }
+const visibleProjects = projects.filter((project) => project.url);
 
 function detailBlock(label, text) {
   return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;
@@ -613,7 +607,7 @@ function closeProject() {
   if (lastTrigger) lastTrigger.focus();
 }
 
-projects.forEach((project, index) => {
+visibleProjects.forEach((project) => {
   const article = document.createElement("article");
   article.className = "project-card";
   const thumbMedia = project.images
@@ -660,13 +654,6 @@ projects.forEach((project, index) => {
     carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
   });
   grid.appendChild(article);
-
-  if (index === 2) {
-    const separator = document.createElement("div");
-    separator.className = "portfolio-separator";
-    separator.setAttribute("role", "presentation");
-    grid.appendChild(separator);
-  }
 });
 
 modal.addEventListener("click", (event) => {
