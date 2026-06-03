@@ -190,6 +190,11 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
+  .project-card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
   .project-card:hover,
   .project-card:focus-within {
     transform: translateY(-2px);
@@ -278,7 +283,7 @@
   .thumb-carousel-button.next { right: 8px; }
 
   .card-body {
-    padding: 18px 18px 20px;
+    padding: 22px 22px 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -304,22 +309,23 @@
   .details-link {
     align-self: flex-start;
     margin-top: auto;
-    border: 1px solid var(--accent);
+    border: 0;
     background: transparent;
     color: var(--accent);
-    border-radius: 4px;
-    padding: 7px 10px;
+    border-radius: 0;
+    padding: 0;
     font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .details-button:hover,
-  .details-link:hover { background: rgba(15,31,61,0.06); }
+  .details-link:hover { color: #1B4D8E; }
 
   .modal {
     position: fixed;
@@ -493,26 +499,23 @@
 </div>
 
 <footer>
-  Organisational names and labels have been changed for presentation in these examples. Figures shown do not represent actual values.
+  These examples are based on real work, with images amended to remove identifying logos, labels, descriptions and sensitive details. Report and dashboard figures are placeholders and do not represent actual values. Any resemblance to specific organisations, people, systems or operational events is unintentional; the examples are shown to demonstrate design, usability and analytical structure.
 </footer>
 
 <script>
 const projects = [
   {
     title: "Cisco Telephony",
-    image: "screenshots/telephony-data-flow.png",
     url: "cisco-telephony-analytics-engineering.html",
     summary: "Reconstructed calls, agent calls, sessions and activities from native Cisco event data so Power BI and SSRS could report from a trusted operational layer."
   },
   {
     title: "Questionnaire Responses",
-    image: "images-anon/aqm-anon.png",
     url: "questionnaire-analytics-engineering.html",
     summary: "Structured raw CAD questionnaire responses into episode and response tables for clinical quality, outcome and pathway reporting."
   },
   {
     title: "Clinical Queue Activity",
-    image: "screenshots/queue-data-flow.png",
     url: "clinical-queue-activity-monitoring-engineering.html",
     summary: "Built a validated clinical queue episode model from CAD audit tables, including queue placements, waiting times and actions taken while cases were waiting."
   }
@@ -557,30 +560,18 @@ function closeProject() {
 }
 
 projects.forEach((project, index) => {
-  const article = document.createElement("article");
-  article.className = "project-card";
-  const thumbMedia = project.images
-    ? `<div class="thumb-carousel" data-thumb-carousel>
-        <a class="thumb-image-link" href="${project.url}" aria-label="Open case study for ${project.title}">
-          ${project.images.map((image, imageIndex) => `<img class="${imageIndex === 0 ? "is-active" : ""}" src="${image}" alt="">`).join("")}
-        </a>
-        <button class="thumb-carousel-button prev" type="button" aria-label="Previous screenshot" data-thumb-prev>&lsaquo;</button>
-        <button class="thumb-carousel-button next" type="button" aria-label="Next screenshot" data-thumb-next>&rsaquo;</button>
-      </div>`
-    : `<img src="${project.image}" alt="${project.title}">`;
+  const article = document.createElement(project.url ? "a" : "article");
+  article.className = project.url ? "project-card project-card-link" : "project-card";
+  if (project.url) {
+    article.href = project.url;
+    article.setAttribute("aria-label", `Read more about ${project.title}`);
+  }
   article.innerHTML = `
-    ${project.url && project.images ? thumbMedia : project.url ? `
-    <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
-      ${thumbMedia}
-    </a>` : `
-    <button class="thumb-button" type="button" aria-label="Open details for ${project.title}">
-      ${thumbMedia}
-    </button>`}
     <div class="card-body">
       <h2 class="project-title">${project.title}</h2>
       <p class="summary">${project.summary}</p>
       ${project.url
-        ? `<a class="details-link" href="${project.url}">Read case study</a>`
+        ? `<span class="details-link">Read more</span>`
         : `<button class="details-button" type="button">View detail</button>`}
     </div>
   `;
@@ -589,19 +580,6 @@ projects.forEach((project, index) => {
       button.addEventListener("click", () => openProject(project, button));
     });
   }
-  article.querySelectorAll("[data-thumb-carousel]").forEach((carousel) => {
-    const images = [...carousel.querySelectorAll("img")];
-    let activeImage = 0;
-    const showImage = (nextIndex) => {
-      activeImage = (nextIndex + images.length) % images.length;
-      images.forEach((image, imageIndex) => {
-        image.classList.toggle("is-active", imageIndex === activeImage);
-      });
-    };
-
-    carousel.querySelector("[data-thumb-prev]").addEventListener("click", () => showImage(activeImage - 1));
-    carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
-  });
   grid.appendChild(article);
 });
 
