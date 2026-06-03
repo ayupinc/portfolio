@@ -3,7 +3,7 @@
 ----------------------------------------------------------------------------------------------------------------------
  -- Title:	Audit Level Actions
  -- Desc:	Gathers actions from Audit and Assessment and Questionnaire tables to provide a full 
- -- 	    picture of activities related to the clinical queue and used in outcome or performance reporting. 
+ -- 	    picture of activities related to queue activity and used in outcome or performance reporting. 
  --			Associated with Audit Level Changes which defines legitimate level changes within a call. 
  --		  	** May be used in performance reporting ** Amend with caution **
  --			Prefer temp tables over outer and inner applys as the large volumes in the tables cause long execution times.
@@ -421,4 +421,3 @@ WHEN NOT MATCHED BY TARGET THEN
     );
  
  
-

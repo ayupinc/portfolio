@@ -1,3 +1,17 @@
+const anchorScrollOffset = 112;
+
+function scrollToSection(hash, updateHistory = true) {
+  const target = document.querySelector(hash);
+  if (!target) return;
+
+  const targetTop = target.getBoundingClientRect().top + window.pageYOffset - anchorScrollOffset;
+  window.scrollTo({ top: targetTop, behavior: "smooth" });
+
+  if (updateHistory) {
+    history.pushState(null, "", hash);
+  }
+}
+
 const siteNavSections = [
   {
     title: "Power BI Reports",
@@ -78,13 +92,13 @@ const siteNavSections = [
       },
       {
         id: "clinical-queue-activity-monitoring-engineering",
-        title: "Clinical Queue Activity",
+        title: "Queue Activity",
         href: "clinical-queue-activity-monitoring-engineering.html",
-        sublistLabel: "Clinical queue page contents",
+        sublistLabel: "Queue activity page contents",
         links: [
           ["Context", "#context"],
+          ["What I did", "#what-i-did"],
           ["Data engineering process", "#data-engineering-process"],
-          ["Validation", "#validation"],
           ["Output model", "#output-model"],
           ["Outcome", "#outcome"]
         ]
@@ -103,6 +117,10 @@ function createSublist(item) {
     const link = document.createElement("a");
     link.href = href;
     link.textContent = label;
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      scrollToSection(href);
+    });
     entry.appendChild(link);
     sublist.appendChild(entry);
   });
@@ -153,6 +171,12 @@ function renderSiteNav(container) {
 }
 
 document.querySelectorAll("[data-site-nav]").forEach(renderSiteNav);
+
+if (window.location.hash) {
+  window.addEventListener("load", () => {
+    scrollToSection(window.location.hash, false);
+  });
+}
 
 function formatReturnText(text) {
   return text.startsWith("\u2190") ? text : `\u2190 ${text}`;
