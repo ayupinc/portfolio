@@ -304,22 +304,30 @@
   .details-link {
     align-self: flex-start;
     margin-top: auto;
-    border: 1px solid var(--accent);
+    border: 0;
     background: transparent;
     color: var(--accent);
-    border-radius: 4px;
-    padding: 7px 10px;
+    border-radius: 0;
+    padding: 0;
     font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .details-button:hover,
-  .details-link:hover { background: rgba(15,31,61,0.06); }
+  .details-link:hover { color: #1B4D8E; }
+
+  .details-link::after {
+    content: " \2197";
+    display: inline-block;
+    margin-left: 5px;
+    text-decoration: none;
+  }
 
   .modal {
     position: fixed;
@@ -640,7 +648,7 @@ visibleProjects.forEach((project) => {
       <h2 class="project-title">${project.title}</h2>
       <p class="summary">${project.summary}</p>
       ${project.url
-        ? `<a class="details-link" href="${project.url}">Read case study</a>`
+        ? `<a class="details-link" href="${project.url}">View case study</a>`
         : `<button class="details-button" type="button">View detail</button>`}
     </div>
   `;

@@ -327,6 +327,13 @@
   .details-button:hover,
   .details-link:hover { color: #1B4D8E; }
 
+  .details-link::after {
+    content: " \2197";
+    display: inline-block;
+    margin-left: 5px;
+    text-decoration: none;
+  }
+
   .modal {
     position: fixed;
     inset: 0;
@@ -563,14 +570,14 @@ projects.forEach((project, index) => {
   article.className = project.url ? "project-card project-card-link" : "project-card";
   if (project.url) {
     article.href = project.url;
-    article.setAttribute("aria-label", `Read more about ${project.title}`);
+    article.setAttribute("aria-label", `View case study for ${project.title}`);
   }
   article.innerHTML = `
     <div class="card-body">
       <h2 class="project-title">${project.title}</h2>
       <p class="summary">${project.summary}</p>
       ${project.url
-        ? `<span class="details-link">Read more</span>`
+        ? `<span class="details-link">View case study</span>`
         : `<button class="details-button" type="button">View detail</button>`}
     </div>
   `;
