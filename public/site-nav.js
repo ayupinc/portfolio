@@ -57,6 +57,22 @@ const siteNavSections = [
           ["Report design", "#report-design"],
           ["Outcome", "#outcome"]
         ]
+      },
+      {
+        id: "questionnaire-workflow-reporting-governance",
+        title: "Questionnaire Workflow",
+        href: "questionnaire-workflow-reporting-governance.html",
+        sublistLabel: "Questionnaire workflow page contents",
+        links: [
+          ["What I did", "#what-i-did"],
+          ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
+          ["Data model", "#data-model"],
+          ["Governance", "#reporting-administration-and-governance"],
+          ["Report design", "#report-design"],
+          ["Outcome", "#outcome"],
+          ["Additional screenshot", "#additional-screenshots"]
+        ]
       }
     ]
   },
