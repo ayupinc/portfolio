@@ -73,6 +73,20 @@ const siteNavSections = [
           ["Power BI design", "#power-bi-design"],
           ["Outcome", "#outcome"]
         ]
+      },
+      {
+        id: "resource-availability-utilisation-reporting",
+        title: "Resource Utilisation",
+        href: "resource-availability-utilisation-reporting.html",
+        sublistLabel: "Resource utilisation page contents",
+        links: [
+          ["What I did", "#what-i-did"],
+          ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
+          ["Data model", "#data-model"],
+          ["Report design", "#report-design"],
+          ["Outcome", "#outcome"]
+        ]
       }
     ]
   },
