@@ -33,16 +33,19 @@ const siteNavSections = [
         ]
       },
       {
-        id: "real-time-queue-monitoring",
-        title: "Real-Time Queue Monitoring",
-        href: "real-time-queue-monitoring.html",
-        sublistLabel: "Wallboard page contents",
+        id: "questionnaire-workflow-reporting-governance",
+        title: "Questionnaire Workflow",
+        href: "questionnaire-workflow-reporting-governance.html",
+        sublistLabel: "Questionnaire workflow page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
           ["Data model", "#data-model"],
-          ["Power BI design", "#power-bi-design"],
-          ["Outcome", "#outcome"]
+          ["Governance", "#reporting-administration-and-governance"],
+          ["Report design", "#report-design"],
+          ["Outcome", "#outcome"],
+          ["Additional screenshot", "#additional-screenshots"]
         ]
       },
       {
@@ -59,19 +62,16 @@ const siteNavSections = [
         ]
       },
       {
-        id: "questionnaire-workflow-reporting-governance",
-        title: "Questionnaire Workflow",
-        href: "questionnaire-workflow-reporting-governance.html",
-        sublistLabel: "Questionnaire workflow page contents",
+        id: "real-time-queue-monitoring",
+        title: "Real-Time Queue Monitoring",
+        href: "real-time-queue-monitoring.html",
+        sublistLabel: "Wallboard page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
-          ["Key challenges", "#key-reporting-challenges"],
           ["Data model", "#data-model"],
-          ["Governance", "#reporting-administration-and-governance"],
-          ["Report design", "#report-design"],
-          ["Outcome", "#outcome"],
-          ["Additional screenshot", "#additional-screenshots"]
+          ["Power BI design", "#power-bi-design"],
+          ["Outcome", "#outcome"]
         ]
       }
     ]
