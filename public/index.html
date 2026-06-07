@@ -520,14 +520,6 @@ const projects = [
     summary: "Near-live wallboard supporting team leaders managing multiple queues continuously throughout the day."
   },
   {
-    title: "Key Performance Indicator",
-    image: "images-anon/perf-metric-anon.png",
-    summary: "Outcome-based KPI reporting showing volumes and percentages, with additional detail.",
-    requirement: "Report a significant internal and external KPI with high accuracy across volumes and percentage of all cases. Add the outcome category and the clinician team resolving the case. Audience: Operations senior leadership team, Clinical Contact Centre leadership and staff, metric is reported up to board and external stakeholder level.",
-    solution: "New Power BI Report showing the percentage and volume over time with headline metrics and group / outcome detail. Report uses bookmark functionality for percentage / volume transition and a floating information window. DAX measures include extensive CALCULATE, SUM and DIVIDE for calculating the metrics.",
-    engineering: "Redesigned KPI measurement to use case outcomes via a new reference table, replacing keyword-based calculation methodology, leading to more accurate metric. Socialised the calculation of the metric to stakeholders and data teams, and created a new SQL View of all cases with outcomes, for reference and downstream reporting."
-  },
-  {
     title: "Specific Resource Availability and Utilisation",
     image: "screenshots/utilisation-1.png",
     url: "resource-availability-utilisation-reporting.html",
@@ -572,6 +564,12 @@ const projects = [
     requirement: "Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.",
     solution: "Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering and show relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management.",
     engineering: "Vendor servers synchronised multiple times daily to the organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records."
+  },
+  {
+    title: "Operational KPI Design and Performance Reporting",
+    image: "screenshots/kpi.png",
+    url: "operational-kpi-design-performance-reporting.html",
+    summary: "Outcome-based KPI reporting showing percentage performance, volume context and operational detail."
   }
 ];
 

@@ -87,6 +87,20 @@ const siteNavSections = [
           ["Report design", "#report-design"],
           ["Outcome", "#outcome"]
         ]
+      },
+      {
+        id: "operational-kpi-design-performance-reporting",
+        title: "Operational KPI",
+        href: "operational-kpi-design-performance-reporting.html",
+        sublistLabel: "Operational KPI page contents",
+        links: [
+          ["What I did", "#what-i-did"],
+          ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
+          ["Data model", "#data-model"],
+          ["Report design", "#report-design"],
+          ["Outcome", "#outcome"]
+        ]
       }
     ]
   },
