@@ -410,47 +410,87 @@
           <section class="what-i-did" id="what-i-did">
             <h2>What I Did</h2>
             <ul class="output-list">
-              <li>Redesigned the KPI measurement approach using case outcomes and a new reference structure</li>
-              <li>Built the Power BI semantic model for outcome-based volume and percentage reporting</li>
-              <li>Developed DAX measures for KPI achievement, case volumes, proportional reporting and filter-context handling</li>
-              <li>Designed report pages showing headline performance, trend movement and outcome detail</li>
-              <li>Created supporting definitions and calculation notes so stakeholders could understand the measure consistently</li>
+              <li>Developed the reporting methodology required to calculate the KPI from operational business rules</li>
+              <li>Designed the Power BI semantic model supporting operational performance reporting</li>
+              <li>Developed Power Query transformations to support KPI calculation and analysis</li>
+              <li>Created DAX measures covering average, median, percentile and distribution-based performance measures</li>
+              <li>Designed reporting views supporting organisational, team and workflow-level analysis</li>
+              <li>Produced KPI definitions, caveats, governance documentation and user guidance</li>
+              <li>Validated KPI outputs against operational workflow behaviour and audit records</li>
             </ul>
           </section>
 
           <section class="case-section" id="context">
             <h2>Context</h2>
-            <p>The organisation needed a reliable way to report a significant internal and external KPI across both the percentage achieved and the underlying case volumes. The metric was visible to operational leadership, clinical contact centre teams, board-level reporting and external stakeholders, so accuracy and a clear definition were essential.</p>
-            <p>The previous calculation relied on keyword-based logic that was vulnerable to wording variation and changes in operational recording. The project required a more stable outcome-based measurement approach, a clear reporting structure and a Power BI report that could show performance over time while still allowing users to understand which case outcomes contributed to the figure.</p>
+            <p>I developed this reporting solution to provide a consistent and operationally meaningful measure of how long cases waited before assessment activity began.</p>
+            <p>At first glance, the KPI appeared straightforward. However, cases could move between operational queues, change priority, be reassigned between assessment levels and, in some circumstances, leave and later return to the workflow. As a result, there was no single timestamp within the source systems that accurately represented the waiting period being measured.</p>
+            <p>Although the underlying audit records contained the required events, the challenge was determining which events represented the true start and end of the waiting period and ensuring the resulting metric reflected operational reality rather than system behaviour.</p>
+            <p>My objective was to create a governed KPI definition, semantic model and reporting solution that would allow performance to be monitored consistently while remaining transparent about process limitations and operational edge cases.</p>
           </section>
 
           <section class="case-section" id="key-reporting-challenges">
             <h2>Key Reporting Challenges</h2>
             <ul class="output-list">
-              <li>Replacing keyword-based logic with a more accurate outcome-based KPI definition</li>
-              <li>Showing both KPI percentage and absolute case volume without confusing the two views</li>
-              <li>Making group and outcome detail visible for operational review and challenge</li>
-              <li>Supporting senior reporting while still allowing detailed investigation of contributing cases</li>
-              <li>Documenting the calculation clearly enough for stakeholders and data teams to apply it consistently</li>
+              <li>Defining a KPI where no single source-system timestamp existed</li>
+              <li>Identifying the correct start and end events from multiple workflow actions</li>
+              <li>Accounting for cases leaving and re-entering operational queues</li>
+              <li>Managing process changes that affected historical comparability</li>
+              <li>Supporting performance reporting without oversimplifying workflow behaviour</li>
+              <li>Ensuring KPI calculations remained consistent across all reporting outputs</li>
             </ul>
           </section>
 
           <section class="case-section" id="data-model">
             <h2>Data Model</h2>
-            <p>The data model used case-level outcome information supported by a new reference table that defined which outcomes contributed to the KPI. This replaced the earlier approach of searching for keywords in recorded values and made the measure more resilient to operational language changes.</p>
-            <p>A SQL view brought together the relevant case, team and outcome fields so the Power BI model could report consistently across headline performance, outcome breakdown and operational group detail. DAX measures used filter-aware totals, division handling and context management so the same definitions could be used across cards, trends, tables and bookmarked views.</p>
+            <p>The reporting model was designed around workflow audit events rather than summary records.</p>
+            <p>A key challenge was that cases could experience multiple workflow transitions before assessment activity began. Simply using the first queue entry or first workflow assignment often produced misleading results because cases could move between queues, be reassigned or return to the workflow after a period elsewhere in the process.</p>
+            <p>To address this, I developed a reporting model that identified the most relevant workflow assignment immediately preceding the assessment activity and used this as the KPI start point.</p>
+            <p>The KPI end point was derived from the first valid assessment initiation event, using a hierarchy of operational actions to ensure cases were consistently captured even where different assessment methods were used.</p>
+            <p>This approach created a reporting framework that reflected how the workflow actually operated rather than relying on assumptions about the source data.</p>
+            <p>The semantic model supported analysis by workflow level, priority, date, operational group and other dimensions while maintaining a single governed KPI definition throughout the reporting solution.</p>
+          </section>
+
+          <section class="case-section" id="kpi-design-and-operational-interpretation">
+            <h2>KPI Design and Operational Interpretation</h2>
+            <p>The most significant aspect of this project was not the dashboard itself but the design of the KPI.</p>
+            <p>Several potential interpretations of the waiting period existed within the operational workflow. Different choices for the start or end point could significantly alter reported performance and create inconsistencies between teams.</p>
+            <p>I therefore developed a formal KPI definition supported by documented business rules, operational caveats and technical calculation logic.</p>
+            <p>Particular consideration was given to:</p>
+            <ul class="output-list">
+              <li>Cases moving between workflow levels</li>
+              <li>Cases leaving and re-entering the workflow</li>
+              <li>Differing assessment initiation methods</li>
+              <li>Missing workflow events</li>
+              <li>Historical process changes affecting comparability</li>
+              <li>Prevention of artificially inflated waiting times</li>
+            </ul>
+            <p>The final KPI definition used the most recent workflow assignment immediately prior to assessment activity as the duration start point and the first valid assessment initiation event as the duration end point. This ensured the reported duration maintained a direct relationship with the assessment activity being measured.</p>
+            <p>By documenting both the methodology and the known limitations, I ensured that performance discussions focused on operational behaviour rather than disagreements about the calculation itself.</p>
           </section>
 
           <section class="case-section" id="report-design">
             <h2>Report Design</h2>
-            <p>The report was designed around a simple performance narrative: current KPI position, movement over time, volume context and the operational detail behind the result. Users could switch between percentage and volume views using bookmarks, helping senior leaders review performance without losing sight of the volume of cases behind the metric.</p>
-            <p>Outcome and group-level detail provided the operational context needed to understand changes in the headline figure. A floating information window and supporting notes explained the metric and helped users interpret the calculation correctly.</p>
+            <p>I designed the report to support both operational monitoring and performance analysis. Pages focused on:</p>
+            <ul class="output-list">
+              <li>KPI trends</li>
+              <li>Waiting time distributions</li>
+              <li>Workflow-level performance</li>
+              <li>Priority-based analysis</li>
+              <li>Volume and demand context</li>
+              <li>Performance segmentation</li>
+              <li>Investigation of operational variation</li>
+            </ul>
+            <p>Interactive filtering and drill-through functionality enabled users to move between organisation-level performance indicators and the underlying operational activity driving KPI movement.</p>
+            <p>My design objective was to avoid relying solely on headline averages. The report therefore included measures and visualisations that allowed users to understand the distribution of waiting times and identify operational behaviours that would otherwise be hidden within aggregated figures.</p>
+            <p>This provided a more accurate representation of performance and supported more informed operational decision making.</p>
           </section>
 
           <section class="case-section" id="outcome">
             <h2>Outcome</h2>
-            <p>The redesigned KPI approach produced a more accurate and defensible performance measure. Moving from keyword matching to outcome-based reference logic reduced ambiguity and made the metric easier to explain, validate and maintain.</p>
-            <p>The Power BI report gave senior and operational stakeholders a clear view of performance over time, the volume behind the percentage and the outcome categories driving the result. The same calculation logic could be reused for formal reporting and operational review without maintaining separate manual extracts.</p>
+            <p>The completed solution established a governed and transparent operational KPI capable of supporting performance reporting across multiple teams and workflows.</p>
+            <p>Operational leaders were able to monitor waiting times, identify emerging performance pressures and understand how workflow changes affected service delivery.</p>
+            <p>By combining KPI governance, semantic modelling and operational reporting, I created a reporting framework that remained aligned to operational reality while providing a consistent basis for performance measurement.</p>
+            <p>The KPI definition, reporting approach and supporting governance documentation were subsequently used as a reference point for other operational performance measures where workflow events required similar interpretation and control.</p>
           </section>
         </div>
       </article>

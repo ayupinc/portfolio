@@ -98,6 +98,7 @@ const siteNavSections = [
           ["Context", "#context"],
           ["Key challenges", "#key-reporting-challenges"],
           ["Data model", "#data-model"],
+          ["KPI design", "#kpi-design-and-operational-interpretation"],
           ["Report design", "#report-design"],
           ["Outcome", "#outcome"]
         ]
