@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telephony & Agent Activity | Stephen Clinton</title>
+<title>Telephony Demand &amp; Agent Activity | Stephen Clinton</title>
 <style>
   :root {
     --navy: #0F1F3D;
@@ -557,7 +557,7 @@
       </div>
 
       <header class="case-header">
-        <h1>Telephony & Agent Activity</h1>
+        <h1>Telephony Demand &amp; Agent Activity</h1>
       </header>
 
       <section class="hero-image" aria-label="Calls to Service report screenshot">
@@ -570,49 +570,82 @@
       <section class="what-i-did" id="what-i-did">
         <h2>What I Did</h2>
         <ul class="output-list">
-          <li>Created the reporting tables in the analytics engineering layer (see <a class="text-link" href="cisco-telephony-analytics-engineering.html?from=telephony-demand-agent-activity">link</a>)</li>
-          <li>Designed the Power BI semantic model</li>
-          <li>Developed DAX measures for KPI, duration, percentile and filter-context reporting</li>
-          <li>Built 5 Power BI reports with 42 pages of telephony and agent activity</li>
-          <li>Designed report layouts and provided user guidance for an operational audience</li>
-          <li>Optimised report performance across several large datasets</li>
+          <li>Designed the Power BI semantic model supporting demand, telephony and agent activity reporting</li>
+          <li>Built Power Query transformations to standardise reporting categories, activity groupings and operational classifications</li>
+          <li>Developed DAX measures covering demand, service performance, utilisation, activity analysis and percentile reporting</li>
+          <li>Created five Power BI reports comprising more than forty reporting pages</li>
+          <li>Designed drill-through and investigation workflows supporting operational review and individual activity analysis</li>
+          <li>Produced KPI definitions, user guidance and reporting documentation</li>
+          <li>Optimised report performance across several large datasets and reporting workloads</li>
         </ul>
       </section>
 
       <section class="case-section" id="context">
         <h2>Context</h2>
-        <p>A high-volume contact centre handling incoming calls and long duration outbound calls across several teams. Around 2 million calls per year in and 500,000 out. Third-party telephony reporting tables provided per-call reporting but became unreliable after a switchboard upgrade and were not able to be updated. Other interval-based reports lacked the required depth for the required per-call and per-agent reporting.</p>
-        <p>Technologies used were T-SQL Server for the underlying data layer and native tables with Power BI for the semantic model, DAX measures and report canvas, along with SQL Server Reporting Services for some agent activity presentations. The work required a full reconstruction of call and agent activity from the native Cisco tables which is detailed in a separate page <a class="text-link" href="cisco-telephony-analytics-engineering.html?from=telephony-demand-agent-activity">here</a>.</p>
+        <p>I developed this reporting solution to provide operational visibility of demand, workforce utilisation and agent activity across a high-volume contact centre environment handling approximately 2 million inbound calls and 500,000 outbound calls annually.</p>
+        <p>Existing reporting solutions provided either high-level interval statistics or call-level outputs that became unreliable following changes to the telephony environment. Neither approach provided a consistent view of demand, individual call activity and workforce utilisation within a single reporting framework.</p>
+        <p>Although I had already developed the underlying analytical model, covered separately within the <a class="text-link" href="cisco-telephony-analytics-engineering.html?from=telephony-demand-agent-activity">Analytics Engineering section</a>, the reporting challenge was different. My objective was to create a Power BI reporting platform capable of supporting operational management, workforce planning, performance analysis and individual activity review from a common semantic model.</p>
+      </section>
+
+      <section class="case-section" id="key-reporting-challenges">
+        <h2>Key Reporting Challenges</h2>
+        <ul class="output-list">
+          <li>Combining demand, call activity and workforce utilisation within a single reporting model</li>
+          <li>Supporting both organisation-level reporting and individual activity investigation</li>
+          <li>Converting telephony events into operational concepts meaningful to users</li>
+          <li>Defining utilisation measures from multiple overlapping activity states</li>
+          <li>Managing large volumes of call and activity data without compromising report performance</li>
+          <li>Providing consistent KPI definitions across multiple reports and user groups</li>
+        </ul>
       </section>
 
       <section class="case-section" id="data-model">
         <h2>Data Model</h2>
-        <p>Source data came from four reporting tables constructed from the above-mentioned analytics engineering work which contained call data for calls and for agents and session and activity data for agents. These provided one row per call, one row per call per agent, one row per session, and one row per activity period respectively and formed the basis of the star schema for the Power BI model. Additional tables included lookups for various call types and agent details. Relationships were built around the calls, the agents and their sessions.</p>
-        <p>The model supported both high-level summary reporting and granular drill-through to individual call and agent activity records without requiring separate models for each use case. Calculated columns handled activity classification and session completeness flags.</p>
-        <p>DAX measures supported operational KPI calculations, duration and average calculations, percentage and percentile reporting, and filter-context management for cross-filtering between call and session views.</p>
+        <p>The reporting model was built around four primary fact tables representing calls, agent call activity, agent sessions and agent activity periods.</p>
+        <p>A key objective was enabling users to move seamlessly between organisational demand, individual calls, agent sessions and detailed activity records without requiring separate reporting models.</p>
+        <p>I designed the semantic model around operational concepts rather than source-system structures. Calls, sessions and activities were linked through shared dimensions and supporting lookup tables, creating a reporting framework capable of supporting both summary analysis and detailed investigation.</p>
+        <p>Power Query transformations were used extensively to standardise queue structures, classify call types, create reporting hierarchies and generate operationally meaningful groupings from source-system attributes. Time-band analysis, queue categorisation and activity classifications were implemented within the reporting layer to improve usability and consistency.</p>
+        <p>The resulting semantic model supported demand analysis, utilisation reporting, KPI monitoring and session-level investigation from a single reporting framework.</p>
+      </section>
+
+      <section class="case-section" id="kpi-design-and-operational-interpretation">
+        <h2>KPI Design and Operational Interpretation</h2>
+        <p>One of the more significant reporting challenges was defining workforce utilisation in a way that reflected operational reality.</p>
+        <p>Although the telephony platform recorded large volumes of activity information, many of the native metrics were difficult for operational users to interpret consistently. Different activity states overlapped, some metrics were recorded differently depending on context and several measures required additional interpretation before they could support operational reporting.</p>
+        <p>To address this, I developed a reporting framework based around a hierarchy of operational activity concepts including session time, assignment time, contact time, active time, waiting time and not-ready time. These concepts provided users with a clearer understanding of how logged-in time was being utilised and allowed performance discussions to focus on operational behaviour rather than telephony terminology.</p>
+        <p>Additional measures supported percentile analysis, duration analysis, service performance monitoring and investigation of activity patterns across teams and reporting periods.</p>
+        <p>By documenting both the calculations and their operational interpretation, I established a consistent reporting language across multiple reports and user groups.</p>
       </section>
 
       <section class="case-section" id="report-design">
         <h2>Report Design</h2>
-        <p>Three main themes were reported: demand and workforce utilisation, key performance indicators and agent activity, with specific layouts prioritising clarity for an operational audience. Pages included:</p>
+        <p>I designed the reporting platform around three primary themes:</p>
         <ul class="output-list">
-          <li>Demand analysis by incoming queue, team and time period to support day to day operations and for workforce planning</li>
+          <li>Demand and workload analysis</li>
+          <li>Service performance monitoring</li>
+          <li>Agent activity and utilisation</li>
+        </ul>
+        <p>Pages focused on:</p>
+        <ul class="output-list">
+          <li>Demand by queue, team and reporting period</li>
           <li>Answer and abandonment performance</li>
-          <li>Handling time analysis at call and agent level</li>
-          <li>Agent session activity including busy, idle and away time</li>
+          <li>Handling time analysis</li>
+          <li>Workforce utilisation</li>
+          <li>Agent activity patterns</li>
+          <li>Session-level investigation</li>
+          <li>Operational KPI monitoring</li>
         </ul>
-        <p>Additional pages provided:</p>
-        <ul class="output-list">
-          <li>Drill through from various charts to show individual call and session details, used for individual performance or investigations</li>
-          <li>Help pages which explained all metrics presented, especially within the agent performance reporting for clarity on what is being shown. Navigation help pages also improved usage efficiency.</li>
-          <li>Version control pages supported users with changes made and ensuring the most up to date copy</li>
-        </ul>
+        <p>Interactive filtering, drill-through and contextual navigation enabled users to move from high-level demand reporting to individual calls, sessions and activity journals.</p>
+        <p>My design objective was to support both routine operational monitoring and detailed investigation without requiring users to leave the reporting environment.</p>
+        <p>Additional guidance pages, KPI definitions and navigation support were incorporated to improve report usability and ensure consistent interpretation of metrics across different user groups.</p>
       </section>
 
       <section class="case-section" id="outcome-and-usage">
         <h2>Outcome and Usage</h2>
-        <p>Demand reports are used daily in all areas of operations, KPI reports are used regularly to complete reports and agent activity information is used in all agents' one-to-one sessions and to provide anonymous usage to the organisation.</p>
-        <p>The reconstruction of individual agent activity reports removed reliance on externally generated outputs, avoiding approximately £60k in additional third-party reporting expansion costs. The reporting structures were built for reuse, providing a stable foundation for future development without external dependencies.</p>
+        <p>The completed solution established a unified reporting platform for demand, service performance and workforce activity.</p>
+        <p>Operational teams were able to analyse demand patterns, monitor service performance, investigate individual activity and understand workforce utilisation using a common set of governed metrics and definitions.</p>
+        <p>The reporting framework removed reliance on externally generated reporting outputs and provided a sustainable platform for future reporting development.</p>
+        <p>By combining semantic modelling, KPI governance and operational reporting design, I created a reporting environment capable of supporting both day-to-day operational management and detailed activity investigation across millions of annual telephony interactions.</p>
       </section>
     </div>
   </article>

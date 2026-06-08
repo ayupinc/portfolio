@@ -20,13 +20,15 @@ const siteNavSections = [
     items: [
       {
         id: "telephony-demand-agent-activity",
-        title: "Telephony & Agent Activity",
+        title: "Telephony Demand & Agent Activity",
         href: "telephony-demand-agent-activity.html",
         sublistLabel: "Telephony page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
           ["Data model", "#data-model"],
+          ["KPI design", "#kpi-design-and-operational-interpretation"],
           ["Report design", "#report-design"],
           ["Outcome and usage", "#outcome-and-usage"],
           ["Additional screenshots", "#additional-screenshots"]

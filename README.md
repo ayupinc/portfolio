@@ -1,25 +1,21 @@
-# Stephen Clinton — Power BI Portfolio
+# Stephen Clinton - Power BI Portfolio
 
-A portfolio site built with React + Vite, deployed via GitHub and Netlify.
+A static portfolio site deployed from the `public/` directory.
 
 ---
 
 ## Adding Screenshots
 
-1. Export your Power BI screenshot as a JPEG (80% quality, ~1920px wide)
-2. Drop the file into the `public/images/` folder in this project
-3. Open `src/App.jsx` in VS Code
-4. Find the dashboard entry — use **Cmd + F** and search for the dashboard title
-5. Change `image: null` to `image: "your-filename.jpg"` — for example:
+1. Export your Power BI screenshot as a JPEG or PNG.
+2. Drop the file into the `public/screenshots/` folder in this project.
+3. Update the relevant `image`, `images` or `<img src="">` reference in the matching HTML file.
 
 ```
-image: "csd-wallboard.jpg"
+image: "screenshots/example-report.png"
 ```
 
 Suggested filenames:
-- csd-wallboard.jpg
-- ems-clinical-flow.jpg
-- screening-flow.jpg
+- example-report.png
 
 ---
 
@@ -61,11 +57,7 @@ Any file you update in GitHub automatically triggers a new Netlify deployment.
 
   portfolio/
   public/
-    images/        <-- Drop screenshot files here
-  src/
-    App.jsx        <-- All content: text, images, colours
-    main.jsx
-    index.css
-  index.html
-  vite.config.js
-  package.json
+    index.html
+    analytics-engineering.html
+    screenshots/   <-- Portfolio screenshot files
+    assets/        <-- Shared brand assets

@@ -31,8 +31,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  body.modal-open { overflow: hidden; }
-
   a { color: inherit; }
 
   .topbar {
@@ -197,7 +195,6 @@
     border-color: rgba(15,31,61,0.35);
   }
 
-  .thumb-button,
   .thumb-link {
     padding: 0;
     border: 0;
@@ -214,7 +211,6 @@
     height: auto;
   }
 
-  .thumb-button img,
   .thumb-link img {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -300,7 +296,6 @@
     line-height: 1.45;
   }
 
-  .details-button,
   .details-link {
     align-self: flex-start;
     margin-top: auto;
@@ -319,7 +314,6 @@
     text-underline-offset: 3px;
   }
 
-  .details-button:hover,
   .details-link:hover { color: #1B4D8E; }
 
   .details-link::after {
@@ -327,100 +321,6 @@
     display: inline-block;
     margin-left: 5px;
     text-decoration: none;
-  }
-
-  .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 28px;
-  }
-
-  .modal[aria-hidden="false"] { display: flex; }
-
-  .modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(10,18,33,0.72);
-  }
-
-  .modal-panel {
-    position: relative;
-    z-index: 1;
-    width: min(1040px, 100%);
-    max-height: min(88vh, 920px);
-    overflow: auto;
-    background: var(--white);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-  }
-
-  .modal-close {
-    position: sticky;
-    top: 0;
-    float: right;
-    z-index: 2;
-    width: 42px;
-    height: 42px;
-    border: 0;
-    border-left: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    background: white;
-    color: var(--navy);
-    font-size: 28px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .modal-image {
-    width: 100%;
-    display: block;
-    background: #F0F2F5;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .modal-content {
-    padding: 28px 34px 34px;
-  }
-
-  .modal-title {
-    margin: 0 48px 22px 0;
-    color: var(--navy);
-    font-size: 30px;
-    line-height: 1.18;
-    font-weight: 500;
-  }
-
-  .detail-block {
-    padding-top: 18px;
-    margin-top: 18px;
-    border-top: 1px solid var(--rule);
-  }
-
-  .detail-block:first-of-type {
-    padding-top: 0;
-    margin-top: 0;
-    border-top: 0;
-  }
-
-  .detail-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--navy);
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .detail-text {
-    margin: 0;
-    color: var(--body);
-    font-size: 14px;
-    line-height: 1.7;
   }
 
   footer {
@@ -447,14 +347,10 @@
     .hero { padding: 38px 24px 34px; }
     main { padding: 28px 20px 64px; }
     .portfolio-grid { grid-template-columns: 1fr; }
-    .thumb-button,
     .thumb-link,
     .project-card > .thumb-carousel {
       border-bottom: 1px solid var(--rule);
     }
-    .modal { padding: 14px; }
-    .modal-content { padding: 22px; }
-    .modal-title { font-size: 24px; }
   }
 </style>
 </head>
@@ -486,18 +382,6 @@
   <p class="intro">These examples represent real reports and dashboards I have created for clients with all the identifying elements removed and figures changed from actual activity. They are here to showcase design style and structure, attention to detail and the range and use of visuals. Clicking through to the detail will explore the audience and purpose, the data model and manipulation and DAX measures.</p>
   <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
 </main>
-
-<div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-panel" role="document">
-    <button class="modal-close" type="button" data-close aria-label="Close details">&times;</button>
-    <img class="modal-image" id="modalImage" src="" alt="">
-    <div class="modal-content">
-      <h2 class="modal-title" id="modalTitle"></h2>
-      <div id="modalDetails"></div>
-    </div>
-  </div>
-</div>
 
 <footer>
   These examples are based on real work, with images amended to remove identifying logos, labels, descriptions and sensitive details. Report and dashboard figures are placeholders and do not represent actual values. Any resemblance to specific organisations, people, systems or operational events is unintentional; the examples are shown to demonstrate design, usability and analytical structure.
@@ -531,21 +415,10 @@ const projects = [
     title: "Specific Resource Availability and Utilisation",
     image: "screenshots/utilisation-1.png",
     url: "resource-availability-utilisation-reporting.html",
-    summary: "Availability, activity and utilisation reporting for a specialist operational staff group.",
-    requirement: "A new report for an existing staff group showing availability, activity and utilisation filterable by region and responder type. Audience: Group management team, operations leadership and performance management groups.",
-    solution: "Power BI report presenting headline metrics, time and event-based charts and tables and feature utilisation percentage. Highly filterable for areas, types and episode length, using field parameters and an applied-filter display. Report also contains detail pages for review of individual responses and a separate help, information and version page.",
-    engineering: "Required new raw data capture of availability from the response management system as this team reports in a non-standard way. Worked with vendor to clarify feed and wrote procedure to capture and populate table for downstream reporting with extensive data quality testing. Captured event times and calculated availability durations using temporal modelling."
+    summary: "Availability, activity and utilisation reporting for a specialist operational staff group."
   },
   {
-    title: "Remote Assessments Summary",
-    image: "images-anon/aqm-anon.png",
-    summary: "Questionnaire response reporting for remote patient assessments and clinician feedback.",
-    requirement: "Provide visibility of clinician decision-making in remote patient assessments using responses from questionnaire-style patient assessments built into the patient management system. Show aggregated response counts and relationships between responses, and detailed responses by Clinician for feedback. Audience: Clinicians, team leaders, operational leadership.",
-    solution: "Multi-page Power BI report showing assessment volumes, assessment durations and outcomes with correlations between responses for all activity. Additional pages for each assessment type, incident level detail and help, information and version detail. Created Power Query transitions to pivot the data into episode level responses.",
-    engineering: "Designed and built a new episode-based model of questionnaire responses defining the start and end of each episode to enable volumetric analysis and sequencing. Data required significant cleaning including multiple response handling, question and response text cleaning and branch logic to show separate pathways within the same questionnaire."
-  },
-  {
-    title: "Telephony & Agent Activity",
+    title: "Telephony Demand & Agent Activity",
     image: "screenshots/calls-to-service.png",
     images: [
       "screenshots/calls-to-service.png",
@@ -555,23 +428,7 @@ const projects = [
       "screenshots/agent-session-journal.png"
     ],
     url: "telephony-demand-agent-activity.html",
-    summary: "Power BI reporting for telephony demand, answer and abandonment performance, handling time, workforce utilisation and agent session activity."
-  },
-  {
-    title: "Operations Summary",
-    image: "images-anon/operations-anon.png",
-    summary: "Consolidated operational reporting across call handling, assessment activity and headline KPIs.",
-    requirement: "Provide visibility of the call handling and clinical assessment activity from the patient management system. Include case volumes, activity frequency and durations as well as headline metrics, patient demographics, performance for internal and external indicators, and case outcome information.",
-    solution: "Multi-page consolidated operational dashboard with high-level KPI tracking and detailed drill-down analysis. DAX measures for time-based KPIs and aggregation across operational dimensions. Filter page with indicators on each page to show filtering impact. A 168 hour weekly matrix is used for demand analysis and staffing predictions.",
-    engineering: "Most of the base data came from a minimum data set provided by data engineering, with additional CTEs for other more complex data from native and warehouse tables, requiring familiarity with operational processes and patient management system data. CTEs handled ranked window functions where multiple entries existed and CASE statements to categorise aspects of the data."
-  },
-  {
-    title: "Electronic Patient Care Record",
-    image: "images-anon/epcr-anon.png",
-    summary: "Clinical observation, intervention, questionnaire and outcome reporting from patient care records.",
-    requirement: "Summarise all clinical observations in patient care records captured by the front-line clinical responders and show relationships between records. Includes volume analysis, patient demographics, questionnaire and outcome analysis. Audience: Clinical leadership, response team supervisors, clinical audit teams.",
-    solution: "Large multi-page Power BI report to show all ePCR information including common placement of report-wide filters with metrics to ease filtering and show relationships between patient findings and interventions. Additional specialist reports for Maternity calls and Medicines Management.",
-    engineering: "Vendor servers synchronised multiple times daily to the organisation data warehouse. Supplemental tables queried for additional information including interaction logic to present relationships between medications administered. Incremental loads into Power BI Service given the high volume of records."
+    summary: "Power BI reporting for demand, service performance, workforce utilisation and agent activity investigation."
   },
   {
     title: "Operational KPI Design and Performance Reporting",
@@ -582,49 +439,13 @@ const projects = [
 ];
 
 const grid = document.querySelector("#portfolioGrid");
-const modal = document.querySelector("#projectModal");
-const modalTitle = document.querySelector("#modalTitle");
-const modalImage = document.querySelector("#modalImage");
-const modalDetails = document.querySelector("#modalDetails");
-let lastTrigger = null;
 
 const featuredProjectIndex = projects.findIndex((project) => project.url === "telephony-demand-agent-activity.html");
 if (featuredProjectIndex > 0) {
   projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
 }
-const visibleProjects = projects.filter((project) => project.url);
 
-function detailBlock(label, text) {
-  return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;
-}
-
-function openProject(project, trigger) {
-  lastTrigger = trigger;
-  modalTitle.textContent = project.title;
-  modalImage.src = project.image;
-  modalImage.alt = project.title;
-  modalDetails.innerHTML = [
-    ...(project.sections
-      ? project.sections.map((section) => detailBlock(section.label, section.text))
-      : [
-        detailBlock("Requirement", project.requirement),
-        detailBlock("Power BI Solution", project.solution),
-        detailBlock("Data Modelling / Engineering", project.engineering),
-        project.extra ? detailBlock(project.extraLabel || "More Detail", project.extra) : ""
-      ])
-  ].join("");
-  modal.setAttribute("aria-hidden", "false");
-  document.body.classList.add("modal-open");
-  modal.querySelector(".modal-close").focus();
-}
-
-function closeProject() {
-  modal.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("modal-open");
-  if (lastTrigger) lastTrigger.focus();
-}
-
-visibleProjects.forEach((project) => {
+projects.forEach((project) => {
   const article = document.createElement("article");
   article.className = "project-card";
   const thumbMedia = project.images
@@ -637,26 +458,16 @@ visibleProjects.forEach((project) => {
       </div>`
     : `<img src="${project.image}" alt="${project.title}">`;
   article.innerHTML = `
-    ${project.url && project.images ? thumbMedia : project.url ? `
+    ${project.images ? thumbMedia : `
     <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
       ${thumbMedia}
-    </a>` : `
-    <button class="thumb-button" type="button" aria-label="Open details for ${project.title}">
-      ${thumbMedia}
-    </button>`}
+    </a>`}
     <div class="card-body">
       <h2 class="project-title">${project.title}</h2>
       <p class="summary">${project.summary}</p>
-      ${project.url
-        ? `<a class="details-link" href="${project.url}">View case study</a>`
-        : `<button class="details-button" type="button">View detail</button>`}
+      <a class="details-link" href="${project.url}">View case study</a>
     </div>
   `;
-  if (!project.url) {
-    article.querySelectorAll("button").forEach((button) => {
-      button.addEventListener("click", () => openProject(project, button));
-    });
-  }
   article.querySelectorAll("[data-thumb-carousel]").forEach((carousel) => {
     const images = [...carousel.querySelectorAll("img")];
     let activeImage = 0;
@@ -671,14 +482,6 @@ visibleProjects.forEach((project) => {
     carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
   });
   grid.appendChild(article);
-});
-
-modal.addEventListener("click", (event) => {
-  if (event.target.hasAttribute("data-close")) closeProject();
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") closeProject();
 });
 </script>
 </body>
