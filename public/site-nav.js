@@ -52,13 +52,16 @@ const siteNavSections = [
       },
       {
         id: "call-flow-analysis",
-        title: "Case Flow Analysis",
+        title: "Work Flow and Outcome Analysis",
         href: "call-flow-analysis.html",
-        sublistLabel: "Case Flow page contents",
+        sublistLabel: "Work flow and outcome page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
+          ["Key challenges", "#key-reporting-challenges"],
           ["Data model", "#data-model"],
+          ["Workflow modelling", "#workflow-modelling"],
+          ["Analytical design", "#analytical-design-and-interpretation"],
           ["Report design", "#report-design"],
           ["Outcome", "#outcome"]
         ]

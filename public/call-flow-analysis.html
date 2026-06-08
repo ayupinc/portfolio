@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case Flow Analysis | Stephen Clinton</title>
+<title>Work Flow and Outcome Analysis | Stephen Clinton</title>
 <style>
   :root {
     --navy: #0F1F3D;
@@ -557,11 +557,11 @@
       </div>
 
       <header class="case-header">
-        <h1>Case Flow Analysis</h1>
+        <h1>Work Flow and Outcome Analysis</h1>
       </header>
 
-      <section class="hero-image" aria-label="Case Flow Analysis report screenshot">
-        <img src="screenshots/case-flow.png" alt="Case Flow Analysis report screenshot" data-lightbox>
+      <section class="hero-image" aria-label="Work flow and outcome analysis report screenshot">
+        <img src="screenshots/case-flow.png" alt="Work flow and outcome analysis report screenshot" data-lightbox>
         <p class="screenshot-note">Example data shown for portfolio presentation only; figures do not represent actual values from any organisation.</p>
       </section>
 
@@ -570,37 +570,92 @@
       <section class="what-i-did" id="what-i-did">
         <h2>What I Did</h2>
         <ul class="output-list">
-          <li>Created the T-SQL procedures and reporting tables in the analytics engineering layer, described <a class="text-link" href="clinical-queue-activity-monitoring-engineering.html?from=call-flow-analysis">here</a></li>
-          <li>Designed the Power BI semantic model for simplicity of reporting</li>
-          <li>Designed and built a Power BI report which allowed easy understanding of a complex relationship between data points for operational teams</li>
-          <li>Built several DAX measures for volumes, percentages and chart labels</li>
-          <li>Provided user guidance, operational definitions and calculation logic</li>
+          <li>Designed the Power BI semantic model supporting work flow and outcome analysis</li>
+          <li>Developed Power Query transformations and supporting reporting structures for pathway reporting</li>
+          <li>Created DAX measures covering flow volumes, proportions, pathway distributions and outcome analysis</li>
+          <li>Designed visualisations focused on comparison and relationship analysis rather than traditional KPI reporting</li>
+          <li>Built drill-through functionality supporting detailed investigation of individual workflow journeys</li>
+          <li>Produced operational definitions, user guidance and reporting documentation</li>
         </ul>
       </section>
 
       <section class="case-section" id="context">
         <h2>Context</h2>
-        <p>A contact centre triaging hundreds of complex cases per day comparing the initial case information with the treatment the case received across multiple teams and the ultimate outcome. The organisation wanted a better understanding of which cases flowed to which teams and whether the initial classification impacted the choice of teams or the outcome.</p>
-        <p>The project required an extensive reconstruction of queue flows from low-level case management system audit events including multiple complex scenarios, the details of which are described <a class="text-link" href="clinical-queue-activity-monitoring-engineering.html?from=call-flow-analysis">here</a>.</p>
-        <p>Technologies used were T-SQL procedures creating and updating new reporting tables, Power BI for the semantic model, DAX measures and reporting canvas.</p>
+        <p>I developed this reporting solution to analyse how cases moved through a multi-stage operational workflow and how those journeys influenced eventual outcomes.</p>
+        <p>Operational teams could identify the starting classification of a case and could independently review its final outcome but understanding the relationship between the two required extensive manual investigation. Cases could move between multiple teams, workflow levels and review processes before reaching a conclusion, making it difficult to identify common pathways and understand how cases progressed through the wider process.</p>
+        <p>Although the underlying workflow reconstruction was developed within the <a class="text-link" href="clinical-queue-activity-monitoring-engineering.html?from=call-flow-analysis">Analytics Engineering layer</a>, the reporting challenge was different. My objective was to create a Power BI reporting solution that allowed users to understand relationships between starting conditions, workflow decisions and eventual outcomes without requiring detailed knowledge of the underlying process.</p>
+      </section>
+
+      <section class="case-section" id="key-reporting-challenges">
+        <h2>Key Reporting Challenges</h2>
+        <ul class="output-list">
+          <li>Reporting relationships between workflow stages rather than individual events</li>
+          <li>Comparing starting classifications with eventual outcomes</li>
+          <li>Supporting analysis across multiple workflow pathways</li>
+          <li>Presenting complex workflow behaviour in a format understandable to non-technical users</li>
+          <li>Providing both high-level pathway analysis and detailed case investigation</li>
+          <li>Maintaining a consistent analytical framework across multiple reporting perspectives</li>
+        </ul>
       </section>
 
       <section class="case-section" id="data-model">
         <h2>Data Model</h2>
-        <p>Source data came from the two new reporting tables created at the analytics engineering layer. One table contained details of each time a case entered a queue, its status and classification at the time and other associated metadata. The second table provided all activities and outcomes that occurred within the case and the queue the case was in at the time.</p>
-        <p>A SQL view provided this data consolidated into one row per case capturing the relevant information on initial classification, team reviewing and outcome classification. This allowed the Power BI model to display comparisons between starting and ending details.</p>
+        <p>The reporting model was built around workflow transitions and outcome relationships.</p>
+        <p>A key challenge was that users wanted to compare different stages of a case journey that were often separated by multiple workflow actions and operational decisions.</p>
+        <p>To support this, I designed a semantic model that allowed the initial classification, workflow activity and final outcome to be analysed together without exposing the complexity of the underlying event structure.</p>
+        <p>Supporting dimensions provided consistent filtering across classifications, workflow stages, outcomes and reporting periods while maintaining a relatively simple user experience.</p>
+        <p>The resulting model enabled users to analyse relationships between different parts of the workflow rather than viewing individual events in isolation.</p>
+      </section>
+
+      <section class="case-section" id="workflow-modelling">
+        <h2>Workflow Modelling</h2>
+        <p>Before developing the reporting solution, I created a workflow model to understand how cases moved between queues, review stages and outcome pathways.</p>
+        <p>Although operational users understood individual parts of the process, there was no single representation showing how the complete workflow behaved. Multiple routes, reviews, queue transfers and outcome pathways could occur before a case reached its final outcome.</p>
+        <p>The workflow model became a shared reference for reporting, analytics and development teams, providing a common understanding of how operational events translated into reporting structures and outcome analysis.</p>
+        <p>This modelling exercise informed both the semantic model design and the reporting relationships presented within the dashboard.</p>
+        <figure class="data-flow-figure">
+          <img src="screenshots/case-flow-queue.png" alt="Workflow model showing transitions between operational stages, review points and outcome pathways" data-lightbox>
+        </figure>
+        <p class="screenshot-note">Workflow model created during the analytical design phase to understand transitions between operational stages, review points and outcome pathways.</p>
+      </section>
+
+      <section class="case-section" id="analytical-design-and-interpretation">
+        <h2>Analytical Design and Interpretation</h2>
+        <p>The primary reporting challenge was making complex workflow behaviour understandable.</p>
+        <p>Cases rarely followed a single linear path. Multiple transitions, reviews, reassessments and workflow changes could occur before an outcome was reached.</p>
+        <p>Rather than presenting users with detailed event histories, I designed reporting structures that focused on the relationships between key stages within the process.</p>
+        <p>This allowed users to answer questions such as:</p>
+        <ul class="output-list">
+          <li>Which outcomes were most associated with particular starting classifications?</li>
+          <li>Which workflow pathways were most common?</li>
+          <li>Where did cases transition between teams or workflow levels?</li>
+          <li>How did pathway selection influence eventual outcomes?</li>
+        </ul>
+        <p>The reporting approach shifted analysis away from individual case review and towards understanding workflow behaviour across large populations of cases.</p>
       </section>
 
       <section class="case-section" id="report-design">
         <h2>Report Design</h2>
-        <p>The relatively simple semantic model was supported with lookup reference tables and relationships to aid user understanding. Reports were designed and built with operational teams in mind and used a format that enabled a correlation between two data points to be easily visualised. The stacked bar chart format with curated colouring and clear labelling enabled an easy-to-understand visual of case volumes in each comparative type. Separate pages were created to isolate each relationship for clarity.</p>
-        <p>DAX measures created included incident volume calculations, proportional flow percentages, filter-independent totals, formatted chart labels and distinct outcome levels. Drill-through pages enabled a deeper understanding of the cases involved and allowed the participants reviewing the relationships to dig deeper into the cases for further information. Additional helper pages clarified the approach and the relationships, the metrics and the classifications, along with navigation support and version control.</p>
+        <p>I designed the report around comparison and pathway analysis. Pages focused on:</p>
+        <ul class="output-list">
+          <li>Classification-to-outcome relationships</li>
+          <li>Workflow pathway analysis</li>
+          <li>Outcome distributions</li>
+          <li>Workflow transition patterns</li>
+          <li>Comparative flow analysis</li>
+          <li>Detailed case investigation</li>
+        </ul>
+        <p>Visual layouts prioritised understanding relationships between data points rather than simply presenting counts and percentages.</p>
+        <p>Interactive filtering and drill-through functionality enabled users to move from organisation-level patterns to individual case journeys where additional investigation was required.</p>
+        <p>Supporting guidance pages explained workflow concepts, reporting relationships and calculation logic to ensure consistent interpretation.</p>
       </section>
 
       <section class="case-section" id="outcome">
         <h2>Outcome</h2>
-        <p>The report enabled the leadership team to move away from spreadsheet and data-dump analysis of cases in all-day sessions, to a visual analysis of key case movements and outcomes that allowed a confirmatory review of the affected cases to confirm the findings.</p>
-        <p>This saved hours of time and allowed more frequent reviews of case flow, ultimately improving performance.</p>
+        <p>The completed solution transformed a labour-intensive review process into a structured analytical framework.</p>
+        <p>Users were able to analyse how cases moved through the workflow, identify common pathways and understand the relationship between starting classifications and eventual outcomes without relying on spreadsheet-based review exercises.</p>
+        <p>By combining pathway analysis, semantic modelling and visual reporting, I created a reporting platform that enabled operational teams to investigate workflow behaviour at scale while still retaining the ability to review individual cases where necessary.</p>
+        <p>The supporting workflow diagrams and reporting framework became reference material for reporting, analytics and development teams, providing a shared understanding of how cases moved through the operational process and how those movements were represented analytically.</p>
       </section>
     </div>
   </article>
