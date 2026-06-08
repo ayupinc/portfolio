@@ -68,14 +68,16 @@ const siteNavSections = [
       },
       {
         id: "real-time-queue-monitoring",
-        title: "Real-Time Queue Monitoring",
+        title: "Real-Time Clinical Queue Monitoring",
         href: "real-time-queue-monitoring.html",
-        sublistLabel: "Wallboard page contents",
+        sublistLabel: "Real-time queue wallboard page contents",
         links: [
           ["What I did", "#what-i-did"],
           ["Context", "#context"],
-          ["Data model", "#data-model"],
-          ["Power BI design", "#power-bi-design"],
+          ["Key challenges", "#key-reporting-challenges"],
+          ["Queue state", "#queue-state-reconstruction"],
+          ["Model and measures", "#semantic-model-and-measures"],
+          ["Wallboard design", "#wallboard-design"],
           ["Outcome", "#outcome"]
         ]
       },

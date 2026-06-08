@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real-Time Queue Monitoring | Stephen Clinton</title>
+<title>Real-Time Clinical Queue Monitoring and Operational Wallboard | Stephen Clinton</title>
 <style>
   :root {
     --navy: #0F1F3D;
@@ -457,14 +457,14 @@
   </div>
 
   <header class="case-header">
-    <h1>Real-Time Queue Monitoring</h1>
+    <h1>Real-Time Clinical Queue Monitoring and Operational Wallboard</h1>
     <p class="case-subtitle">Near-live queue visibility for outbound call-back work, designed for continuous operational use by team leaders.</p>
   </header>
 
-  <section class="media-carousel" aria-label="Real-time queue monitoring wallboard screenshot">
+  <section class="media-carousel" aria-label="Real-time clinical queue monitoring wallboard screenshot">
     <div class="carousel-frame">
       <figure class="carousel-slide is-active">
-        <img src="screenshots/queue-wallboard.png" alt="Real-time queue monitoring wallboard screenshot" data-lightbox>
+        <img src="screenshots/queue-wallboard.png" alt="Real-time clinical queue monitoring wallboard screenshot" data-lightbox>
       </figure>
     </div>
   </section>
@@ -474,35 +474,60 @@
       <section class="what-i-did" id="what-i-did">
         <h2>What I Did</h2>
         <ul class="output-list">
-          <li>Built status reconstruction logic from multiple audit events to show each case's state</li>
-          <li>Created the real-time queries into the case management system to gather the data</li>
-          <li>Developed DAX measures for queue volume, active workload and elapsed time</li>
-          <li>Designed and built a wallboard layout optimised for continuous display</li>
+          <li>Built status reconstruction logic from multiple audit events to show each case's current operational state</li>
+          <li>Created near-live queries into the case management system to gather queue and workload data</li>
+          <li>Designed a lightweight DirectQuery semantic model for continuous operational reporting</li>
+          <li>Developed DAX measures for queue volume, active workload, elapsed time and longest-waiting case reporting</li>
+          <li>Designed and built a wallboard layout optimised for continuous display by operational teams</li>
           <li>Implemented bookmark navigation between queue views and drill-through to case-level detail</li>
+          <li>Produced metric definitions and support information for operational governance</li>
         </ul>
       </section>
 
       <section class="case-section" id="context">
         <h2>Context</h2>
-        <p>A high-volume section of a contact centre performing outbound calls to follow up on earlier inbound conversations. Cases waited in a backlog and were called when an agent was available. Calls had several types which reflected a priority and three or four teams with specific skills performed the call back.</p>
-        <p>Technologies were T-SQL for the warehouse and native tables and Power BI Direct Query for the semantic model, DAX measures and reporting canvas.</p>
+        <p>I developed this wallboard for a high-volume section of a contact centre performing outbound calls to follow up on earlier inbound conversations. Cases waited in a backlog and were called when an agent was available, with different call types reflecting priority and several teams holding different operational skills.</p>
+        <p>The operational challenge was live visibility. Team leaders needed to understand how many cases were waiting, which priorities were building, which work was already active and where the longest waits were occurring without relying on delayed extracts or manual checks.</p>
+        <p>Technologies were T-SQL for the warehouse and native source tables, with Power BI DirectQuery for the semantic model, DAX measures and reporting canvas.</p>
       </section>
 
-      <section class="case-section" id="data-model">
-        <h2>Data Model</h2>
-        <p>Case details were held in the case management system tables, but the queue state had to be inferred from a series of audit events showing movement between queues, entering or exiting the queue or starting or ending a call-back. It could not be read from a single status, and reconstruction logic was written to enable a single status to be observed by the wallboard.</p>
-        <p>The semantic model was intentionally kept lightweight. A single operational fact table, populated by a near-live SQL extraction process, carried all queue, status, elapsed-time and clinician fields. Small lookup dimensions handled priority labels and queue classifications. Direct Query was used throughout to ensure the wallboard reflected current operational state rather than a cached snapshot. Despite the complexity of the operational logic, the extraction query consistently executed in under one second.</p>
+      <section class="case-section" id="key-reporting-challenges">
+        <h2>Key Reporting Challenges</h2>
+        <ul class="output-list">
+          <li>Reconstructing a live queue state from audit events rather than a single current-status field</li>
+          <li>Showing waiting demand and active workload clearly enough for continuous operational monitoring</li>
+          <li>Keeping the semantic model lightweight enough for DirectQuery performance</li>
+          <li>Calculating elapsed waiting and active durations in a way that updated with current time</li>
+          <li>Supporting both wallboard visibility and drill-through investigation from the same report</li>
+          <li>Separating priority, queue and team views without creating multiple disconnected reports</li>
+        </ul>
       </section>
 
-      <section class="case-section" id="power-bi-design">
-        <h2>Power BI Design</h2>
-        <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The dashboard provided live waiting volumes, active agent workload, longest waiting case by priority, longest active assessment duration and active agent counts by role.</p>
-        <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types, and metric definitions and support/version information for governance.</p>
+      <section class="case-section" id="queue-state-reconstruction">
+        <h2>Queue State Reconstruction</h2>
+        <p>Case details were held in the case management system tables, but the queue state had to be inferred from a series of audit events showing movement between queues, entering or exiting the queue and starting or ending a call-back. It could not be read from a single status field.</p>
+        <p>I wrote reconstruction logic that interpreted those events into a single observable state for each case so the wallboard could report live waiting demand, active work and priority position consistently. This followed the same principle as the wider queue activity model: isolated audit records were transformed into operational states that users could understand and act on.</p>
+        <p>The logic also needed to handle cases moving between queues, cases returning after earlier activity and records where the operational meaning depended on the sequence of surrounding events. Preserving that interpretation in the data layer kept the Power BI report focused on presentation and operational decision support rather than repeating complex event logic inside visuals.</p>
+      </section>
+
+      <section class="case-section" id="semantic-model-and-measures">
+        <h2>Semantic Model and Measures</h2>
+        <p>The semantic model was intentionally kept lightweight. A single operational fact table, populated by a near-live SQL extraction process, carried queue, status, elapsed-time and clinician fields. Small lookup dimensions handled priority labels and queue classifications.</p>
+        <p>DirectQuery was used throughout so the wallboard reflected current operational state rather than a cached snapshot. Despite the complexity of the operational logic, the extraction query consistently executed in under one second.</p>
+        <p>DAX measures were focused on operational state rather than historical analysis. They covered live queue volumes, active workload, active clinician counts, longest waiting case by priority and elapsed duration measures for both waiting and active work. These measures allowed the same model to support headline wallboard tiles, priority breakdowns and drill-through investigation without separate calculations for each page.</p>
+      </section>
+
+      <section class="case-section" id="wallboard-design">
+        <h2>Wallboard Design</h2>
+        <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The first design priority was at-a-glance readability for team leaders monitoring demand continuously during operational shifts.</p>
+        <p>The dashboard provided live waiting volumes, active workload, longest waiting case by priority, longest active assessment duration and active agent counts by role. Visual hierarchy was kept deliberately simple so queue pressure, waiting time and active work could be understood quickly from a distance.</p>
+        <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types and metric definitions with support/version information for governance. This allowed the same report to work both as a shared operational display and as an investigation route when a team leader needed to understand the cases behind a metric.</p>
       </section>
 
       <section class="case-section" id="outcome">
         <h2>Outcome</h2>
         <p>The wallboard was deployed for continuous 24/7 operational use across all teams and became the primary operational view of live queue demand across the organisation.</p>
+        <p>It gave operational leaders a shared view of current workload, active activity and waiting pressure, replacing manual checks with a continuously available source of queue information. By combining event reconstruction, DirectQuery modelling and wallboard-focused design, the report supported immediate operational decision making while retaining drill-through detail for case-level review.</p>
       </section>
     </div>
   </article>
