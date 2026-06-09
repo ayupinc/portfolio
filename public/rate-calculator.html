@@ -386,10 +386,72 @@
     gap: 12px;
   }
 
+  .assumption-sections {
+    display: grid;
+    gap: 16px;
+  }
+
+  .assumption-tablist {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+
+  .assumption-tab {
+    border: 1px solid var(--rule);
+    border-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    background: var(--paper);
+    color: var(--muted);
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .assumption-tab[aria-selected="true"] {
+    background: white;
+    color: var(--navy);
+  }
+
+  .assumption-card {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--paper);
+    overflow: visible;
+  }
+
+  .assumption-card[hidden] {
+    display: none;
+  }
+
+  .assumption-card h3 {
+    margin: 0;
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .assumption-card .assumption-table {
+    margin-top: 0;
+    background: white;
+  }
+
   .assumption-table input,
   .assumption-table select {
     min-width: 0;
   }
+
+  .assumption-table col:nth-child(1) { width: 48%; }
+  .assumption-table col:nth-child(2) { width: 38%; }
+  .assumption-table col:nth-child(3) { width: 14%; }
 
   .assumption-table label {
     color: var(--ink);
@@ -403,7 +465,7 @@
     padding: 18px 20px 20px;
   }
 
-  .metric-grid.has-tax-rate {
+  .metric-grid.has-extra-metric {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
@@ -561,15 +623,89 @@
 
   .assumption-table th,
   .assumption-table td {
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .assumption-table td:first-child {
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .assumption-table td:nth-child(2) {
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.25;
   }
 
   .assumption-table input,
   .assumption-table select {
-    height: 32px;
-    min-height: 32px;
-    padding: 5px 8px;
+    height: 38px;
+    min-height: 38px;
+    padding: 7px 9px;
+    font-size: 16px;
+  }
+
+  .assumption-table th:nth-child(3),
+  .assumption-table td:nth-child(3) {
+    text-align: center;
+  }
+
+  .assumption-table .note {
+    position: relative;
+    overflow: visible;
+    color: transparent;
+    font-size: 0;
+    cursor: help;
+    vertical-align: middle;
+  }
+
+  .assumption-table .note::before {
+    content: "i";
+    display: inline-grid;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #B8C4D4;
+    border-radius: 50%;
+    place-items: center;
+    background: #F4F7FA;
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .assumption-table .note::after {
+    content: attr(data-note);
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 12px);
+    z-index: 30;
+    width: min(380px, 42vw);
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: white;
+    box-shadow: 0 12px 30px rgba(15,31,61,0.14);
+    color: var(--body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0;
+    pointer-events: none;
+    text-align: left;
+    transform: translateY(-50%) translateX(4px);
+    transition: opacity 140ms ease, transform 140ms ease;
+    white-space: normal;
+  }
+
+  .assumption-table .note:hover::after,
+  .assumption-table .note:focus-visible::after,
+  .assumption-table .note[data-open="true"]::after {
+    opacity: 1;
+    transform: translateY(-50%);
   }
 
   .section-row td {
@@ -665,6 +801,26 @@
     .breakdown {
       overflow-x: auto;
     }
+    .assumption-table col:nth-child(1) { width: 46%; }
+    .assumption-table col:nth-child(2) { width: 40%; }
+    .assumption-table col:nth-child(3) { width: 14%; }
+    .assumption-table td:first-child,
+    .assumption-table td:nth-child(2),
+    .assumption-table input,
+    .assumption-table select {
+      font-size: 15px;
+    }
+    .assumption-table .note::after {
+      top: calc(100% + 8px);
+      right: 0;
+      width: min(320px, calc(100vw - 56px));
+      transform: translateY(0) translateX(0);
+    }
+    .assumption-table .note:hover::after,
+    .assumption-table .note:focus-visible::after,
+    .assumption-table .note[data-open="true"]::after {
+      transform: translateY(0) translateX(0);
+    }
   }
 </style>
 </head>
@@ -735,34 +891,52 @@
       <details class="panel rollup">
           <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation. <span id="lAssumptionSummary"></span></span></summary>
           <div class="rollup-body">
-            <table class="breakdown-table assumption-table">
-              <colgroup><col><col><col></colgroup>
-              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
-              <tbody>
-                <tr><td><label for="lDpw">Days per week</label></td><td><input id="lDpw" data-save="lDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
-                <tr><td><label for="lHpd">Hours per day</label></td><td><input id="lHpd" data-save="lHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
-                <tr><td>Hours per week</td><td><span id="lHoursWeekText"></span></td><td class="note" id="lHoursWeekNote"></td></tr>
-                <tr><td><label for="lLeave">Annual leave days</label></td><td><input id="lLeave" data-save="lLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays.</td></tr>
-                <tr><td><label for="lBh">Bank holidays</label></td><td><input id="lBh" data-save="lBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
-                <tr><td>Billable weeks per year</td><td><span id="lWeeksText"></span></td><td class="note" id="lWeeksNote"></td></tr>
-                <tr><td><label for="lSalary">Director salary</label></td><td><input id="lSalary" type="number" step="100"></td><td class="note" id="lSalaryNote"></td></tr>
-                <tr><td><label for="lCorpTax">Corporation tax %</label></td><td><input id="lCorpTax" type="number" step="0.1"></td><td class="note" id="lCorpTaxNote"></td></tr>
-                <tr><td><label for="lDivAllowance">Dividend allowance</label></td><td><input id="lDivAllowance" type="number" step="100"></td><td class="note" id="lDivAllowanceNote"></td></tr>
-                <tr><td><label for="lErNiRate">Employer NI %</label></td><td><input id="lErNiRate" type="number" step="0.1"></td><td class="note" id="lErNiRateNote"></td></tr>
-                <tr><td><label for="lErNiThreshold">Secondary threshold</label></td><td><input id="lErNiThreshold" type="number" step="100"></td><td class="note" id="lErNiThresholdNote"></td></tr>
-                <tr><td><label for="lPi">Professional indemnity insurance</label></td><td><input id="lPi" data-save="lPi" type="number" step="100" value="1200"></td><td class="note">Enter your yearly premium. Typical contractor cost — check your actual quote.</td></tr>
-                <tr><td><label for="lLife">Relevant Life insurance</label></td><td><input id="lLife" data-save="lLife" type="number" step="50" value="864"></td><td class="note">Company-paid life cover. Premiums paid from pre-tax profit.</td></tr>
-                <tr><td><label for="lCi">Critical illness / IP insurance</label></td><td><input id="lCi" data-save="lCi" type="number" step="50" value="600"></td><td class="note">Income protection if you cannot work. Contractor equivalent of employer sick pay.</td></tr>
-                <tr><td><label for="lAccountancy">Accountancy fees</label></td><td><input id="lAccountancy" data-save="lAccountancy" type="number" step="100" value="1800"></td><td class="note">Adjust to your actual accountant's fee.</td></tr>
-                <tr><td><label for="lOther">Other business expenses</label></td><td><input id="lOther" data-save="lOther" type="number" step="100" value="1000"></td><td class="note">Phone, software, home office, travel etc.</td></tr>
-                <tr><td><label for="lPension">Employer pension contribution</label></td><td><input id="lPension" data-save="lPension" type="number" step="100" value="6000"></td><td class="note">Company contribution paid directly into your pension before corporation tax. Adjust to your actual contribution.</td></tr>
-              </tbody>
-            </table>
+            <div class="assumption-sections">
+              <div class="assumption-tablist" role="tablist" aria-label="Ltd assumptions">
+                <button class="assumption-tab" type="button" role="tab" id="tab-ltd-working" aria-controls="panel-ltd-working" aria-selected="true">Working Week</button>
+                <button class="assumption-tab" type="button" role="tab" id="tab-ltd-expenses" aria-controls="panel-ltd-expenses" aria-selected="false">Ltd Company Expenses</button>
+              </div>
+              <section class="assumption-card" id="panel-ltd-working" role="tabpanel" aria-labelledby="tab-ltd-working">
+                <h3>Working Week</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="lDpw">Days per week</label></td><td><input id="lDpw" data-save="lDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                    <tr><td><label for="lHpd">Hours per day</label></td><td><input id="lHpd" data-save="lHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                    <tr><td>Hours per week</td><td><span id="lHoursWeekText"></span></td><td class="note" id="lHoursWeekNote"></td></tr>
+                    <tr><td><label for="lLeave">Annual leave days</label></td><td><input id="lLeave" data-save="lLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays.</td></tr>
+                    <tr><td><label for="lBh">Bank holidays</label></td><td><input id="lBh" data-save="lBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                    <tr><td>Billable weeks per year</td><td><span id="lWeeksText"></span></td><td class="note" id="lWeeksNote"></td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="assumption-card" id="panel-ltd-expenses" role="tabpanel" aria-labelledby="tab-ltd-expenses" hidden>
+                <h3>Ltd Company Expenses</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="lSalary">Director salary</label></td><td><input id="lSalary" type="number" step="100"></td><td class="note" id="lSalaryNote"></td></tr>
+                    <tr><td><label for="lCorpTax">Corporation tax %</label></td><td><input id="lCorpTax" type="number" step="0.1"></td><td class="note" id="lCorpTaxNote"></td></tr>
+                    <tr><td><label for="lDivAllowance">Dividend allowance</label></td><td><input id="lDivAllowance" type="number" step="100"></td><td class="note" id="lDivAllowanceNote"></td></tr>
+                    <tr><td><label for="lErNiRate">Employer NI %</label></td><td><input id="lErNiRate" type="number" step="0.1"></td><td class="note" id="lErNiRateNote"></td></tr>
+                    <tr><td><label for="lErNiThreshold">Secondary threshold</label></td><td><input id="lErNiThreshold" type="number" step="100"></td><td class="note" id="lErNiThresholdNote"></td></tr>
+                    <tr><td><label for="lPi">Professional indemnity insurance</label></td><td><input id="lPi" data-save="lPi" type="number" step="100" value="1200"></td><td class="note">Enter your yearly premium. Typical contractor cost — check your actual quote.</td></tr>
+                    <tr><td><label for="lLife">Relevant Life insurance</label></td><td><input id="lLife" data-save="lLife" type="number" step="50" value="864"></td><td class="note">Company-paid life cover. Premiums paid from pre-tax profit.</td></tr>
+                    <tr><td><label for="lCi">Critical illness / IP insurance</label></td><td><input id="lCi" data-save="lCi" type="number" step="50" value="600"></td><td class="note">Income protection if you cannot work. Contractor equivalent of employer sick pay.</td></tr>
+                    <tr><td><label for="lAccountancy">Accountancy fees</label></td><td><input id="lAccountancy" data-save="lAccountancy" type="number" step="100" value="1800"></td><td class="note">Adjust to your actual accountant's fee.</td></tr>
+                    <tr><td><label for="lOther">Other business expenses</label></td><td><input id="lOther" data-save="lOther" type="number" step="100" value="1000"></td><td class="note">Phone, software, home office, travel etc.</td></tr>
+                    <tr><td><label for="lPension">Employer pension contribution</label></td><td><input id="lPension" data-save="lPension" type="number" step="100" value="6000"></td><td class="note">Company contribution paid directly into your pension before corporation tax. Adjust to your actual contribution.</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
           </div>
       </details>
       <section class="panel" aria-live="polite">
         <div class="panel-header"><h3>Net Take-Home</h3><p id="lSummary"></p></div>
-        <div class="metric-grid has-tax-rate" id="lMetrics"></div>
+        <div class="metric-grid has-extra-metric" id="lMetrics"></div>
       </section>
       <details class="panel rollup">
           <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period. <span id="lBreakdownSummary"></span></span></summary>
@@ -810,31 +984,49 @@
       <details class="panel rollup">
           <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation. <span id="uAssumptionSummary"></span></span></summary>
           <div class="rollup-body">
-            <table class="breakdown-table assumption-table">
-              <colgroup><col><col><col></colgroup>
-              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
-              <tbody>
-                <tr><td><label for="uDpw">Days per week</label></td><td><input id="uDpw" data-save="uDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
-                <tr><td><label for="uHpd">Hours per day</label></td><td><input id="uHpd" data-save="uHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
-                <tr><td>Hours per week</td><td><span id="uHoursWeekText"></span></td><td class="note" id="uHoursWeekNote"></td></tr>
-                <tr><td><label for="uLeave">Annual leave days</label></td><td><input id="uLeave" data-save="uLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays. Holiday pay under umbrella does not add income — it is built into the assignment rate and redistributed by the umbrella.</td></tr>
-                <tr><td><label for="uBh">Bank holidays</label></td><td><input id="uBh" data-save="uBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
-                <tr><td>Billable weeks per year</td><td><span id="uWeeksText"></span></td><td class="note" id="uWeeksNote"></td></tr>
-                <tr><td><label for="uMargin">Umbrella margin</label></td><td><input id="uMargin" data-save="uMargin" type="number" step="50" value="1300"></td><td class="note">Annual umbrella fee charged 52 weeks/year regardless of billable weeks. Typical £15-£30/week. Default is £25 x 52 weeks.</td></tr>
-                <tr><td><label for="uLevy">Apprenticeship Levy</label></td><td><input id="uLevy" data-save="uLevy" type="number" step="0.1" value="0.5"></td><td class="note">0.5% of your gross PAYE salary, passed through by most umbrellas. Set to 0 if your umbrella does not charge this.</td></tr>
-                <tr><td><label for="uErNiRate">Employer NI %</label></td><td><input id="uErNiRate" type="number" step="0.1"></td><td class="note" id="uErNiRateNote"></td></tr>
-                <tr><td><label for="uErNiThreshold">Secondary threshold</label></td><td><input id="uErNiThreshold" type="number" step="100"></td><td class="note" id="uErNiThresholdNote"></td></tr>
-                <tr><td><label for="uPensionType">Pension scheme</label></td><td><select id="uPensionType" data-save="uPensionType"><option>Net pay arrangement</option><option>Relief at source</option><option>Salary sacrifice</option></select></td><td class="note" id="uPensionTypeNote"></td></tr>
-                <tr><td><label for="uEePension">Employee contribution</label></td><td><input id="uEePension" data-save="uEePension" type="number" step="0.5" value="5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings (£6,240-£50,270).</td></tr>
-                <tr><td><label for="uErPension">Employer contribution</label></td><td><input id="uErPension" data-save="uErPension" type="number" step="0.5" value="3"></td><td class="note">Statutory minimum is 3%. Deducted from your assignment rate in Step 1 — this is not new money from the client, it reduces your gross PAYE salary.</td></tr>
-                <tr id="uNiPassbackRow"><td><label for="uNiPassback">Employer passes NI saving to pension?</label></td><td><input id="uNiPassback" data-save="uNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
-              </tbody>
-            </table>
+            <div class="assumption-sections">
+              <div class="assumption-tablist" role="tablist" aria-label="Umbrella assumptions">
+                <button class="assumption-tab" type="button" role="tab" id="tab-umbrella-working" aria-controls="panel-umbrella-working" aria-selected="true">Working Week</button>
+                <button class="assumption-tab" type="button" role="tab" id="tab-umbrella-details" aria-controls="panel-umbrella-details" aria-selected="false">Umbrella Details</button>
+              </div>
+              <section class="assumption-card" id="panel-umbrella-working" role="tabpanel" aria-labelledby="tab-umbrella-working">
+                <h3>Working Week</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="uDpw">Days per week</label></td><td><input id="uDpw" data-save="uDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                    <tr><td><label for="uHpd">Hours per day</label></td><td><input id="uHpd" data-save="uHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate hourly equivalent rate only.</td></tr>
+                    <tr><td>Hours per week</td><td><span id="uHoursWeekText"></span></td><td class="note" id="uHoursWeekNote"></td></tr>
+                    <tr><td><label for="uLeave">Annual leave days</label></td><td><input id="uLeave" data-save="uLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays. Holiday pay under umbrella does not add income — it is built into the assignment rate and redistributed by the umbrella.</td></tr>
+                    <tr><td><label for="uBh">Bank holidays</label></td><td><input id="uBh" data-save="uBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                    <tr><td>Billable weeks per year</td><td><span id="uWeeksText"></span></td><td class="note" id="uWeeksNote"></td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="assumption-card" id="panel-umbrella-details" role="tabpanel" aria-labelledby="tab-umbrella-details" hidden>
+                <h3>Umbrella Details</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="uMargin">Umbrella margin</label></td><td><input id="uMargin" data-save="uMargin" type="number" step="50" value="1300"></td><td class="note">Annual umbrella fee charged 52 weeks/year regardless of billable weeks. Typical £15-£30/week. Default is £25 x 52 weeks.</td></tr>
+                    <tr><td><label for="uLevy">Apprenticeship Levy</label></td><td><input id="uLevy" data-save="uLevy" type="number" step="0.1" value="0.5"></td><td class="note">0.5% of your gross PAYE salary, passed through by most umbrellas. Set to 0 if your umbrella does not charge this.</td></tr>
+                    <tr><td><label for="uErNiRate">Employer NI %</label></td><td><input id="uErNiRate" type="number" step="0.1"></td><td class="note" id="uErNiRateNote"></td></tr>
+                    <tr><td><label for="uErNiThreshold">Secondary threshold</label></td><td><input id="uErNiThreshold" type="number" step="100"></td><td class="note" id="uErNiThresholdNote"></td></tr>
+                    <tr><td><label for="uPensionType">Pension scheme</label></td><td><select id="uPensionType" data-save="uPensionType"><option>Net pay arrangement</option><option>Relief at source</option><option>Salary sacrifice</option></select></td><td class="note" id="uPensionTypeNote"></td></tr>
+                    <tr><td><label for="uEePension">Employee contribution</label></td><td><input id="uEePension" data-save="uEePension" type="number" step="0.5" value="5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings (£6,240-£50,270).</td></tr>
+                    <tr><td><label for="uErPension">Employer contribution</label></td><td><input id="uErPension" data-save="uErPension" type="number" step="0.5" value="3"></td><td class="note">Statutory minimum is 3%. Deducted from your assignment rate in Step 1 — this is not new money from the client, it reduces your gross PAYE salary.</td></tr>
+                    <tr id="uNiPassbackRow"><td><label for="uNiPassback">Employer passes NI saving to pension?</label></td><td><input id="uNiPassback" data-save="uNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
           </div>
       </details>
       <section class="panel" aria-live="polite">
         <div class="panel-header"><h3>Net Take-Home</h3><p id="uSummary"></p></div>
-        <div class="metric-grid has-tax-rate" id="uMetrics"></div>
+        <div class="metric-grid has-extra-metric" id="uMetrics"></div>
       </section>
       <details class="panel rollup">
           <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period. <span id="uBreakdownSummary"></span></span></summary>
@@ -881,29 +1073,47 @@
       <details class="panel rollup">
           <summary><span class="rollup-title">Assumptions</span><span class="rollup-subtitle">Inputs used for this calculation. <span id="sAssumptionSummary"></span></span></summary>
           <div class="rollup-body">
-            <table class="breakdown-table assumption-table">
-              <colgroup><col><col><col></colgroup>
-              <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
-              <tbody>
-                <tr><td><label for="sDpw">Days per week</label></td><td><input id="sDpw" data-save="sDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
-                <tr><td><label for="sHpd">Hours per day</label></td><td><input id="sHpd" data-save="sHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate the hourly equivalent rate only.</td></tr>
-                <tr><td>Hours per week</td><td><span id="sHoursWeekText"></span></td><td class="note" id="sHoursWeekNote"></td></tr>
-                <tr><td><label for="sLeave">Annual leave days</label></td><td><input id="sLeave" data-save="sLeave" type="number" step="1" value="19"></td><td class="note">Paid holiday days per year, excluding bank holidays. UK statutory minimum is 20 days.</td></tr>
-                <tr><td><label for="sBh">Bank holidays</label></td><td><input id="sBh" data-save="sBh" type="number" step="1" value="11"></td><td class="note">Public bank holidays per year. England & Wales has 8 statutory days plus 3 additional common holidays.</td></tr>
-                <tr><td>Worked weeks per year</td><td><span id="sWeeksText"></span></td><td class="note" id="sWeeksNote"></td></tr>
-                <tr><td><label for="sSalarySacrifice">Salary sacrifice</label></td><td><input id="sSalarySacrifice" data-save="sSalarySacrifice" type="number" step="100" value="0"></td><td class="note">Annual pre-tax salary sacrifice deducted before pension is calculated.</td></tr>
-                <tr><td><label for="sErNiRate">Employer NI %</label></td><td><input id="sErNiRate" type="number" step="0.1"></td><td class="note" id="sErNiRateNote"></td></tr>
-                <tr><td><label for="sErNiThreshold">Secondary threshold</label></td><td><input id="sErNiThreshold" type="number" step="100"></td><td class="note" id="sErNiThresholdNote"></td></tr>
-                <tr><td><label for="sPensionType">Pension scheme</label></td><td><select id="sPensionType" data-save="sPensionType"><option>Relief at source</option><option>Net pay arrangement</option><option>Salary sacrifice</option></select></td><td class="note" id="sPensionTypeNote"></td></tr>
-                <tr><td><label for="sEePension">Employee contribution</label></td><td><input id="sEePension" data-save="sEePension" type="number" step="0.5" value="13.5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings. NHS default is 13.5%.</td></tr>
-                <tr id="sNiPassbackRow"><td><label for="sNiPassback">Employer passes NI saving to pension?</label></td><td><input id="sNiPassback" data-save="sNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
-              </tbody>
-            </table>
+            <div class="assumption-sections">
+              <div class="assumption-tablist" role="tablist" aria-label="Salaried assumptions">
+                <button class="assumption-tab" type="button" role="tab" id="tab-salaried-working" aria-controls="panel-salaried-working" aria-selected="true">Working Week</button>
+                <button class="assumption-tab" type="button" role="tab" id="tab-salaried-deductions" aria-controls="panel-salaried-deductions" aria-selected="false">Deductions</button>
+              </div>
+              <section class="assumption-card" id="panel-salaried-working" role="tabpanel" aria-labelledby="tab-salaried-working">
+                <h3>Working Week</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="sDpw">Days per week</label></td><td><input id="sDpw" data-save="sDpw" type="number" step="0.5" value="5"></td><td class="note">Number of days you work per week.</td></tr>
+                    <tr><td><label for="sHpd">Hours per day</label></td><td><input id="sHpd" data-save="sHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used to calculate the hourly equivalent rate only.</td></tr>
+                    <tr><td>Hours per week</td><td><span id="sHoursWeekText"></span></td><td class="note" id="sHoursWeekNote"></td></tr>
+                    <tr><td><label for="sLeave">Annual leave days</label></td><td><input id="sLeave" data-save="sLeave" type="number" step="1" value="19"></td><td class="note">Paid holiday days per year, excluding bank holidays. UK statutory minimum is 20 days.</td></tr>
+                    <tr><td><label for="sBh">Bank holidays</label></td><td><input id="sBh" data-save="sBh" type="number" step="1" value="11"></td><td class="note">Public bank holidays per year. England & Wales has 8 statutory days plus 3 additional common holidays.</td></tr>
+                    <tr><td>Worked weeks per year</td><td><span id="sWeeksText"></span></td><td class="note" id="sWeeksNote"></td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="assumption-card" id="panel-salaried-deductions" role="tabpanel" aria-labelledby="tab-salaried-deductions" hidden>
+                <h3>Deductions (including Salary Sacrifice)</h3>
+                <table class="breakdown-table assumption-table">
+                  <colgroup><col><col><col></colgroup>
+                  <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+                  <tbody>
+                    <tr><td><label for="sSalarySacrifice">Salary sacrifice</label></td><td><input id="sSalarySacrifice" data-save="sSalarySacrifice" type="number" step="100" value="0"></td><td class="note">Annual pre-tax salary sacrifice deducted before pension is calculated.</td></tr>
+                    <tr><td><label for="sErNiRate">Employer NI %</label></td><td><input id="sErNiRate" type="number" step="0.1"></td><td class="note" id="sErNiRateNote"></td></tr>
+                    <tr><td><label for="sErNiThreshold">Secondary threshold</label></td><td><input id="sErNiThreshold" type="number" step="100"></td><td class="note" id="sErNiThresholdNote"></td></tr>
+                    <tr><td><label for="sPensionType">Pension scheme</label></td><td><select id="sPensionType" data-save="sPensionType"><option>Relief at source</option><option>Net pay arrangement</option><option>Salary sacrifice</option></select></td><td class="note" id="sPensionTypeNote"></td></tr>
+                    <tr><td><label for="sEePension">Employee contribution</label></td><td><input id="sEePension" data-save="sEePension" type="number" step="0.5" value="13.5"></td><td class="note">Your personal pension contribution as a percentage of qualifying earnings. NHS default is 13.5%.</td></tr>
+                    <tr id="sNiPassbackRow"><td><label for="sNiPassback">Employer passes NI saving to pension?</label></td><td><input id="sNiPassback" data-save="sNiPassback" type="checkbox"></td><td class="note">If yes, the employer NI saving from salary sacrifice is added to your pension pot.</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
           </div>
       </details>
       <section class="panel" aria-live="polite">
         <div class="panel-header"><h3>Net Take-Home</h3><p id="sSummary"></p></div>
-        <div class="metric-grid has-tax-rate" id="sMetrics"></div>
+        <div class="metric-grid has-extra-metric" id="sMetrics"></div>
       </section>
       <details class="panel rollup">
           <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Detailed calculation for the selected display period. <span id="sBreakdownSummary"></span></span></summary>
@@ -1067,9 +1277,9 @@ function renderMetrics(target, primaryLabel, annual, monthly, daily, hourly) {
   ].map(([label, val]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${val}</span></div>`).join("");
 }
 
-function renderNetMetrics(target, result) {
+function renderNetMetrics(target, result, pensionAnnual) {
   renderMetrics(target, "Net take-home", result.annualNet, result.monthlyNet, result.dailyNet, result.hourlyNet);
-  target.insertAdjacentHTML("beforeend", `<div class="metric"><span class="metric-label">Effective tax rate</span><span class="metric-value">${(result.effectiveTaxRate * 100).toFixed(1)}%</span></div>`);
+  target.insertAdjacentHTML("beforeend", `<div class="metric"><span class="metric-label">Yearly pension</span><span class="metric-value">${currency(pensionAnnual, 0)}</span></div>`);
 }
 
 function renderLineChart(target, points, xFormatter, bands = [], xTickStep = null) {
@@ -1183,6 +1393,16 @@ function updateAssumptionNotes(ty) {
   $("sNiPassbackRow").hidden = $("sPensionType").value !== "Salary sacrifice";
 }
 
+function syncAssumptionNoteTooltips() {
+  document.querySelectorAll(".assumption-table .note").forEach((note) => {
+    const text = note.textContent.trim();
+    note.dataset.note = text;
+    note.setAttribute("tabindex", "0");
+    note.setAttribute("role", "button");
+    note.setAttribute("aria-label", text ? `Show note: ${text}` : "Show note");
+  });
+}
+
 function readPersisted() {
   document.querySelectorAll("[data-save]").forEach((el) => {
     const saved = localStorage.getItem(`rateCalc.${el.id}`);
@@ -1226,7 +1446,7 @@ function calculateAll() {
   $("lGrossSummary").textContent = `${taxYear}, contract value before company and personal deductions.`;
   renderMetrics($("lGrossMetrics"), "Gross contract", ltd.annualGross, ltd.annualGross / 12, lDayRate, lDayRate / value("lHpd"));
   $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate.`;
-  renderNetMetrics($("lMetrics"), ltd);
+  renderNetMetrics($("lMetrics"), ltd, ltd.employerPensionAnnual);
   $("lBreakdownSummary").textContent = `Pension summary: employer pension ${currency(ltd.employerPensionAnnual, 0)}/year.`;
   renderTable($("lBreakdown"), [
     { section: "Step 1 — Company-level deductions" },
@@ -1267,7 +1487,7 @@ function calculateAll() {
   $("uGrossSummary").textContent = `${taxYear}, assignment income before umbrella deductions and PAYE.`;
   renderMetrics($("uGrossMetrics"), "Gross contract", umbrella.annualGross, umbrella.annualGross / 12, uDayRate, uDayRate / value("uHpd"));
   $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate.`;
-  renderNetMetrics($("uMetrics"), umbrella);
+  renderNetMetrics($("uMetrics"), umbrella, umbrella.employerPension + umbrella.employeePensionPretax + umbrella.employeePensionPosttax);
   $("uBreakdownSummary").textContent = `Pension summary: employee plus employer pension ${currency(umbrella.totalPensionPot + umbrella.employerPension, 0)}/year.`;
   renderTable($("uBreakdown"), [
     { section: "Step 1 — Umbrella deductions (from assignment rate)" },
@@ -1307,7 +1527,7 @@ function calculateAll() {
     ["Hourly", currency(salaried.pensionableSalary / salaried.hoursPerYear, 2)]
   ].map(([label, val]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${val}</span></div>`).join("");
   $("sSummary").textContent = `${taxYear}, ${currency(value("sSalary"), 0)} salary.`;
-  renderNetMetrics($("sMetrics"), salaried);
+  renderNetMetrics($("sMetrics"), salaried, salaried.employeePensionPretax + salaried.employeePensionPosttax);
   $("sBreakdownSummary").textContent = `Pension summary: employee pension ${currency(salaried.employeePensionPretax + salaried.employeePensionPosttax, 0)}/year.`;
   renderTable($("sBreakdown"), [
     { label: "Gross annual salary", value: salaried.annualSalary, note: "Contracted salary before salary sacrifice and deductions", total: true },
@@ -1321,6 +1541,7 @@ function calculateAll() {
     { label: "Less: Employee pension (post-tax)", value: -salaried.employeePensionPosttax, note: $("sPensionType").value === "Relief at source" ? "Relief at source only — HMRC tops up at 20%" : "Not applicable for this scheme type", deduction: true },
     { label: "= Net take-home", value: salaried.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true }
   ], sDisplayPeriod);
+  syncAssumptionNoteTooltips();
 }
 
 function init() {
@@ -1338,6 +1559,37 @@ function init() {
     persist(event);
     if (event.target.id === "taxYear") setTaxDefaults(TAX_YEARS[$("taxYear").value]);
     calculateAll();
+  });
+  document.addEventListener("click", (event) => {
+    const note = event.target.closest(".assumption-table .note");
+    document.querySelectorAll(".assumption-table .note[data-open='true']").forEach((openNote) => {
+      if (openNote !== note) openNote.removeAttribute("data-open");
+    });
+    if (!note) return;
+    note.dataset.open = note.dataset.open === "true" ? "false" : "true";
+  });
+  document.addEventListener("keydown", (event) => {
+    const note = event.target.closest(".assumption-table .note");
+    if (!note) return;
+    if (event.key === "Escape") {
+      note.removeAttribute("data-open");
+      return;
+    }
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    note.dataset.open = note.dataset.open === "true" ? "false" : "true";
+  });
+  document.querySelectorAll(".assumption-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const tablist = tab.closest(".assumption-tablist");
+      const sections = tab.closest(".assumption-sections");
+      tablist.querySelectorAll(".assumption-tab").forEach((item) => {
+        item.setAttribute("aria-selected", String(item === tab));
+      });
+      sections.querySelectorAll(".assumption-card").forEach((panel) => {
+        panel.hidden = panel.id !== tab.getAttribute("aria-controls");
+      });
+    });
   });
   document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => {
