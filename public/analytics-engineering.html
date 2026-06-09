@@ -172,6 +172,10 @@
     text-align: center;
   }
 
+  .intro + .intro {
+    margin-top: -12px;
+  }
+
   .portfolio-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -488,7 +492,8 @@
 </header>
 
 <main>
-  <p class="intro">Anonymised examples of real pipeline work in T-SQL Server used in the creation of procedures and reusable datasets for consumption by the reports. Topics include a full rewrite of the Cisco telephony dataset with extensive call logic interpretation, construction of timelines in patient management data to show case progress and determine KPI progress and transformation of questionnaire data into usable datasets.</p>
+  <p class="intro">These examples show the data engineering layer behind reporting: SQL models, stored procedures and reusable datasets built from messy operational systems. They show how event logs, audit trails, questionnaire responses and telephony records can become stable reporting tables that Power BI, SSRS and analysts can trust.</p>
+  <p class="intro">The emphasis is on interpretation as much as transformation: reconstructing timelines, defining episodes, applying business rules, and documenting logic so that complex operational activity becomes explainable and repeatable. The work is based on real client projects, with identifying details removed and values changed; examples do not identify organisations, expose operational details or represent actual activity volumes.</p>
   <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
 </main>
 
@@ -505,7 +510,7 @@
 </div>
 
 <footer>
-  These examples are based on real work, with images amended to remove identifying logos, labels, descriptions and sensitive details. Report and dashboard figures are placeholders and do not represent actual values. Any resemblance to specific organisations, people, systems or operational events is unintentional; the examples are shown to demonstrate design, usability and analytical structure.
+  Stephen Clinton · Power BI and analytics engineering portfolio
 </footer>
 
 <script>
