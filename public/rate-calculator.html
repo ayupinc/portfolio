@@ -55,7 +55,7 @@
     min-height: 66px;
     padding: 0 32px;
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     gap: 24px;
   }
@@ -65,7 +65,6 @@
     align-items: center;
     gap: 11px;
     color: var(--navy);
-    text-decoration: none;
     font-weight: 600;
   }
 
@@ -75,30 +74,9 @@
     object-fit: contain;
   }
 
-  .portfolio-nav {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 22px;
-    color: var(--navy);
-    font-size: 15px;
-    font-weight: 600;
-    text-align: center;
-  }
-
-  .portfolio-nav a {
-    color: var(--navy);
-    text-decoration: none;
-  }
-
-  .portfolio-nav a:hover,
-  .portfolio-nav a[aria-current="page"] {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
   .social-link {
     display: flex;
+    justify-self: end;
     justify-content: flex-end;
     color: var(--navy);
     font-size: 15px;
@@ -781,11 +759,8 @@
       justify-items: center;
       padding: 12px 20px;
     }
-    .portfolio-nav {
-      flex-wrap: wrap;
-      gap: 14px;
-    }
     .social-link {
+      justify-self: center;
       justify-content: center;
     }
     .hero,
@@ -828,14 +803,10 @@
 <body>
 <div class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+    <div class="brand" aria-label="Stephen Clinton">
       <img class="brand-mark" src="assets/maple-leaf.png" alt="">
       <span>Stephen Clinton</span>
-    </a>
-    <nav class="portfolio-nav" aria-label="Portfolio sections">
-      <a href="index.html">Power BI</a>
-      <a href="analytics-engineering.html">Analytics Engineering</a>
-    </nav>
+    </div>
     <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
   </div>
 </div>
@@ -908,6 +879,7 @@
                     <tr><td>Hours per week</td><td><span id="lHoursWeekText"></span></td><td class="note" id="lHoursWeekNote"></td></tr>
                     <tr><td><label for="lLeave">Annual leave days</label></td><td><input id="lLeave" data-save="lLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays.</td></tr>
                     <tr><td><label for="lBh">Bank holidays</label></td><td><input id="lBh" data-save="lBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                    <tr><td><label for="lIdleMonths">Months idle</label></td><td><input id="lIdleMonths" data-save="lIdleMonths" type="number" min="0" max="12" step="1" value="0"></td><td class="note">Express the number of months per year you expect to be between contracts.</td></tr>
                     <tr><td>Billable weeks per year</td><td><span id="lWeeksText"></span></td><td class="note" id="lWeeksNote"></td></tr>
                   </tbody>
                 </table>
@@ -1001,6 +973,7 @@
                     <tr><td>Hours per week</td><td><span id="uHoursWeekText"></span></td><td class="note" id="uHoursWeekNote"></td></tr>
                     <tr><td><label for="uLeave">Annual leave days</label></td><td><input id="uLeave" data-save="uLeave" type="number" step="1" value="19"></td><td class="note">Unpaid holidays per year, excluding bank holidays. Holiday pay under umbrella does not add income — it is built into the assignment rate and redistributed by the umbrella.</td></tr>
                     <tr><td><label for="uBh">Bank holidays</label></td><td><input id="uBh" data-save="uBh" type="number" step="1" value="11"></td><td class="note">Unpaid bank holidays per year.</td></tr>
+                    <tr><td><label for="uIdleMonths">Months idle</label></td><td><input id="uIdleMonths" data-save="uIdleMonths" type="number" min="0" max="12" step="1" value="0"></td><td class="note">Express the number of months per year you expect to be between contracts.</td></tr>
                     <tr><td>Billable weeks per year</td><td><span id="uWeeksText"></span></td><td class="note" id="uWeeksNote"></td></tr>
                   </tbody>
                 </table>
@@ -1141,7 +1114,7 @@
 </main>
 
 <footer>
-  Rate calculator duplicated from the Python version as a static JavaScript page for portfolio hosting.
+  Stephen Clinton · Power BI and analytics engineering portfolio
 </footer>
 
 <script>
@@ -1183,6 +1156,23 @@ function workingWeeks(daysPerWeek, leaveDays, bankHolidays) {
   return daysPerWeek > 0 ? Math.round((52 - ((leaveDays + bankHolidays) / daysPerWeek)) * 10) / 10 : 0;
 }
 
+function utilisationFactor(monthsIdle) {
+  return Math.max(0, Math.min(12, 12 - monthsIdle)) / 12;
+}
+
+function scaleAnnualResult(result, factor) {
+  const scaled = { ...result };
+  const derivedKeys = new Set(["dayRate", "monthlyNet", "dailyNet", "hourlyNet", "effectiveTaxRate"]);
+  Object.keys(scaled).forEach((key) => {
+    if (derivedKeys.has(key) || typeof scaled[key] !== "number") return;
+    scaled[key] *= factor;
+  });
+  scaled.monthlyNet = scaled.annualNet / 12;
+  scaled.dailyNet = scaled.daysPerYear > 0 ? scaled.annualNet / scaled.daysPerYear : 0;
+  scaled.hourlyNet = scaled.hoursPerYear > 0 ? scaled.annualNet / scaled.hoursPerYear : 0;
+  return scaled;
+}
+
 function dayRateFrom(period, input, daysPerWeek, weeksPerYear) {
   if (period === "Per Week") return input / daysPerWeek;
   if (period === "Per Month") return input / (weeksPerYear * daysPerWeek / 12);
@@ -1196,7 +1186,9 @@ function calculateLtd(dayRate, a) {
   const annualGross = dayRate * daysPerYear;
   const employerNiOnSalary = Math.max(0, a.director_salary - a.employer_ni_secondary_threshold) * a.employer_ni_rate;
   const employerPensionAnnual = a.employer_pension_per_month * 12;
-  const taxableProfit = annualGross - a.director_salary - employerNiOnSalary - employerPensionAnnual - a.professional_indemnity_per_year - (a.relevant_life_insurance_per_month * 12) - (a.critical_illness_per_month * 12) - a.accountancy_per_year - a.other_expenses_per_year;
+  const relevantLifeInsuranceAnnual = a.relevant_life_insurance_per_month * 12;
+  const criticalIllnessAnnual = a.critical_illness_per_month * 12;
+  const taxableProfit = annualGross - a.director_salary - employerNiOnSalary - employerPensionAnnual - a.professional_indemnity_per_year - relevantLifeInsuranceAnnual - criticalIllnessAnnual - a.accountancy_per_year - a.other_expenses_per_year;
   const corporationTax = taxableProfit * a.corporation_tax_rate;
   const distributableProfit = taxableProfit - corporationTax;
   const taxableSalary = Math.max(0, a.director_salary - a.personal_allowance);
@@ -1210,14 +1202,14 @@ function calculateLtd(dayRate, a) {
   const dividendsHigher = Math.max(0, taxableDividends - basicRateSpace - a.dividend_allowance);
   const dividendTax = dividendsBasic * a.dividend_basic_rate + dividendsHigher * a.dividend_higher_rate;
   const annualNet = a.director_salary - incomeTaxOnSalary - employeeNiOnSalary + distributableProfit - dividendTax;
-  return { dayRate, daysPerYear, hoursPerYear, annualGross, employerNiOnSalary, employerPensionAnnual, taxableProfit, corporationTax, distributableProfit, incomeTaxOnSalary, employeeNiOnSalary, dividendsBasic, dividendsHigher, dividendTax, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: 1 - (annualNet / annualGross) };
+  return { dayRate, daysPerYear, hoursPerYear, annualGross, directorSalary: a.director_salary, employerNiOnSalary, employerPensionAnnual, professionalIndemnityAnnual: a.professional_indemnity_per_year, relevantLifeInsuranceAnnual, criticalIllnessAnnual, accountancyAnnual: a.accountancy_per_year, otherExpensesAnnual: a.other_expenses_per_year, taxableProfit, corporationTax, distributableProfit, incomeTaxOnSalary, employeeNiOnSalary, dividendsBasic, dividendsHigher, dividendTax, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: 1 - (annualNet / annualGross) };
 }
 
 function calculateUmbrella(dayRate, a) {
   const daysPerYear = a.days_per_week * a.weeks_per_year;
   const hoursPerYear = daysPerYear * a.hours_per_day;
   const annualGross = dayRate * daysPerYear;
-  const umbrellaMarginAnnual = a.umbrella_margin_per_week * a.weeks_per_year;
+  const umbrellaMarginAnnual = a.umbrella_margin_per_year ?? a.umbrella_margin_per_week * a.weeks_per_year;
   const afterMargin = annualGross - umbrellaMarginAnnual;
   const qeFixed = Math.max(0, a.qualifying_earnings_upper - a.qualifying_earnings_lower);
   const employerPensionFixed = qeFixed * a.employer_pension_rate;
@@ -1434,39 +1426,43 @@ function calculateAll() {
   $("uRateLabel").textContent = rateLabels[$("uRatePeriod").value];
 
   const lWeeks = workingWeeks(value("lDpw"), value("lLeave"), value("lBh"));
+  const lUtilisationFactor = utilisationFactor(value("lIdleMonths"));
+  const lEffectiveWeeks = lWeeks * lUtilisationFactor;
+  const lEngagedWeeks = 52 * lUtilisationFactor;
+  const lProratedHolidayWeeks = (52 - lWeeks) * lUtilisationFactor;
   const lHoursWeek = value("lDpw") * value("lHpd");
   $("lHoursWeekText").textContent = lHoursWeek.toFixed(1);
   $("lHoursWeekNote").textContent = `${value("lDpw")} days/week x ${value("lHpd")} hours/day`;
-  $("lWeeksText").textContent = lWeeks.toFixed(1);
-  $("lWeeksNote").textContent = `52 - (${value("lLeave").toFixed(0)} + ${value("lBh").toFixed(0)}) days / ${value("lDpw").toFixed(0)} days/week`;
-  $("lAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(lHoursWeek, lWeeks, "billable weeks")}, ${currency(value("lSalary"), 0)} director salary, PI ${currency(value("lPi"), 0)}, relevant life ${currency(value("lLife"), 0)}, critical illness/IP ${currency(value("lCi"), 0)}, accountancy ${currency(value("lAccountancy"), 0)}, other expenses ${currency(value("lOther"), 0)}, employer pension ${currency(value("lPension"), 0)}.`;
+  $("lWeeksText").textContent = lEffectiveWeeks.toFixed(1);
+  $("lWeeksNote").textContent = `${lEngagedWeeks.toFixed(1)} engaged weeks - ${lProratedHolidayWeeks.toFixed(1)} prorated leave/bank holiday weeks`;
+  $("lAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(lHoursWeek, lEffectiveWeeks, "effective billable weeks")}, ${value("lIdleMonths").toFixed(0)} idle months, ${currency(value("lSalary"), 0)} director salary, PI ${currency(value("lPi"), 0)}, relevant life ${currency(value("lLife"), 0)}, critical illness/IP ${currency(value("lCi"), 0)}, accountancy ${currency(value("lAccountancy"), 0)}, other expenses ${currency(value("lOther"), 0)}, employer pension ${currency(value("lPension"), 0)}.`;
   const lDayRate = dayRateFrom($("lRatePeriod").value, value("lRateInput"), value("lDpw"), lWeeks);
   const ltdAssumptions = { days_per_week: value("lDpw"), weeks_per_year: lWeeks, hours_per_day: value("lHpd"), director_salary: value("lSalary"), employer_ni_secondary_threshold: value("lErNiThreshold"), employer_ni_rate: pct("lErNiRate"), corporation_tax_rate: pct("lCorpTax"), dividend_allowance: value("lDivAllowance"), dividend_basic_rate: ty.dividend_basic_rate, dividend_higher_rate: ty.dividend_higher_rate, basic_rate_band_upper: ty.basic_rate_ceiling, higher_rate_band_upper: ty.higher_rate_ceiling, personal_allowance: ty.personal_allowance, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_standard: ty.ni_rate_standard, ni_rate_above_uel: ty.ni_rate_above_uel, professional_indemnity_per_year: value("lPi"), employer_pension_per_month: value("lPension") / 12, relevant_life_insurance_per_month: value("lLife") / 12, critical_illness_per_month: value("lCi") / 12, accountancy_per_year: value("lAccountancy"), other_expenses_per_year: value("lOther") };
-  const ltd = calculateLtd(lDayRate, ltdAssumptions);
-  renderLineChart($("lChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: calculateLtd(rate, ltdAssumptions).monthlyNet })), (rate) => `£${rate}`);
+  const ltd = scaleAnnualResult(calculateLtd(lDayRate, ltdAssumptions), lUtilisationFactor);
+  renderLineChart($("lChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: scaleAnnualResult(calculateLtd(rate, ltdAssumptions), lUtilisationFactor).monthlyNet })), (rate) => `£${rate}`);
   $("lGrossSummary").textContent = `${taxYear}, contract value before company and personal deductions.`;
   renderMetrics($("lGrossMetrics"), "Gross contract", ltd.annualGross, ltd.annualGross / 12, lDayRate, lDayRate / value("lHpd"));
-  $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate.`;
+  $("lSummary").textContent = `${taxYear}, ${currency(lDayRate, 2)} day rate, ${(lUtilisationFactor * 100).toFixed(0)}% utilisation.`;
   renderNetMetrics($("lMetrics"), ltd, ltd.employerPensionAnnual);
   $("lBreakdownSummary").textContent = `Pension summary: employer pension ${currency(ltd.employerPensionAnnual, 0)}/year.`;
   renderTable($("lBreakdown"), [
     { section: "Step 1 — Company-level deductions" },
-    { label: "Gross contract income", value: ltd.annualGross, note: `${value("lDpw")} days x ${lWeeks} weeks x ${currency(lDayRate, 2)}/day`, total: true },
-    { label: "Less: Director salary", value: -value("lSalary"), note: "Set at personal allowance — no income tax, minimal employer NI", deduction: true },
+    { label: "Gross contract income", value: ltd.annualGross, note: `${value("lDpw")} days x ${lWeeks} weeks x ${currency(lDayRate, 2)}/day x ${(lUtilisationFactor * 100).toFixed(0)}% utilisation`, total: true },
+    { label: "Less: Director salary", value: -ltd.directorSalary, note: "Set at personal allowance in the annual model, then scaled for utilisation", deduction: true },
     { label: "Less: Employer NI on salary", value: -ltd.employerNiOnSalary, note: `(${currency(value("lSalary"), 0)} - ${currency(value("lErNiThreshold"), 0)}) x ${(pct("lErNiRate") * 100).toFixed(1)}%`, deduction: true },
-    { label: "Less: Professional indemnity insurance", value: -value("lPi"), note: "From assumptions", deduction: true },
-    { label: "Less: Relevant Life insurance", value: -value("lLife"), note: "From assumptions", deduction: true },
-    { label: "Less: Critical illness / IP insurance", value: -value("lCi"), note: "From assumptions", deduction: true },
-    { label: "Less: Accountancy fees", value: -value("lAccountancy"), note: "From assumptions", deduction: true },
-    { label: "Less: Other business expenses", value: -value("lOther"), note: "From assumptions", deduction: true },
+    { label: "Less: Professional indemnity insurance", value: -ltd.professionalIndemnityAnnual, note: "From assumptions, scaled for utilisation", deduction: true },
+    { label: "Less: Relevant Life insurance", value: -ltd.relevantLifeInsuranceAnnual, note: "From assumptions, scaled for utilisation", deduction: true },
+    { label: "Less: Critical illness / IP insurance", value: -ltd.criticalIllnessAnnual, note: "From assumptions, scaled for utilisation", deduction: true },
+    { label: "Less: Accountancy fees", value: -ltd.accountancyAnnual, note: "From assumptions, scaled for utilisation", deduction: true },
+    { label: "Less: Other business expenses", value: -ltd.otherExpensesAnnual, note: "From assumptions, scaled for utilisation", deduction: true },
     { label: "Less: Employer pension", value: -ltd.employerPensionAnnual, note: "From assumptions — deducted before corporation tax", deduction: true },
     { label: "= Taxable profit", value: ltd.taxableProfit, note: "Gross income minus all allowable deductions", total: true },
     { label: "Less: Corporation tax", value: -ltd.corporationTax, note: `${currency(ltd.taxableProfit, 0)} x ${(pct("lCorpTax") * 100).toFixed(0)}%`, deduction: true },
     { label: "= Distributable profit", value: ltd.distributableProfit, note: "Available to draw as dividends", total: true },
     { section: "Step 2 — Personal income" },
-    { label: "Director salary received", value: value("lSalary"), note: "Paid via payroll — within personal allowance" },
+    { label: "Director salary received", value: ltd.directorSalary, note: "Paid via payroll in the annual model, then scaled for utilisation" },
     { label: "Dividends drawn", value: ltd.distributableProfit, note: "Full distributable profit drawn as dividends" },
-    { label: "Total personal income", value: value("lSalary") + ltd.distributableProfit, note: "Salary + dividends", total: true },
+    { label: "Total personal income", value: ltd.directorSalary + ltd.distributableProfit, note: "Salary + dividends", total: true },
     { section: "Step 3 — Personal tax" },
     { label: "Less: Income tax on salary", value: -ltd.incomeTaxOnSalary, note: ltd.incomeTaxOnSalary === 0 ? "Salary at personal allowance — no income tax due." : `(${currency(value("lSalary"), 0)} - ${currency(ty.personal_allowance, 0)}) x ${(ty.income_tax_basic * 100).toFixed(0)}%`, deduction: true },
     { label: "Less: Employee NI on salary", value: -ltd.employeeNiOnSalary, note: ltd.employeeNiOnSalary === 0 ? `Salary at or below NI primary threshold ${currency(ty.ni_primary_threshold, 0)} — no employee NI due.` : `(${currency(value("lSalary"), 0)} - ${currency(ty.ni_primary_threshold, 0)}) x ${(ty.ni_rate_standard * 100).toFixed(0)}%`, deduction: true },
@@ -1475,29 +1471,33 @@ function calculateAll() {
   ], lDisplayPeriod);
 
   const uWeeks = workingWeeks(value("uDpw"), value("uLeave"), value("uBh"));
+  const uUtilisationFactor = utilisationFactor(value("uIdleMonths"));
+  const uEffectiveWeeks = uWeeks * uUtilisationFactor;
+  const uEngagedWeeks = 52 * uUtilisationFactor;
+  const uProratedHolidayWeeks = (52 - uWeeks) * uUtilisationFactor;
   const uHoursWeek = value("uDpw") * value("uHpd");
   $("uHoursWeekText").textContent = uHoursWeek.toFixed(1);
   $("uHoursWeekNote").textContent = `${value("uDpw")} days/week x ${value("uHpd")} hours/day`;
-  $("uWeeksText").textContent = uWeeks.toFixed(1);
-  $("uWeeksNote").textContent = `52 - (${value("uLeave").toFixed(0)} + ${value("uBh").toFixed(0)}) days / ${value("uDpw").toFixed(0)} days/week`;
-  $("uAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(uHoursWeek, uWeeks, "billable weeks")}, ${currency(value("uMargin") / 52, 0)}/week umbrella margin, ${(pct("uLevy") * 100).toFixed(1)}% apprenticeship levy, ${$("uPensionType").value.toLowerCase()} pension at ${(pct("uEePension") * 100).toFixed(1)}% employee and ${(pct("uErPension") * 100).toFixed(1)}% employer.`;
+  $("uWeeksText").textContent = uEffectiveWeeks.toFixed(1);
+  $("uWeeksNote").textContent = `${uEngagedWeeks.toFixed(1)} engaged weeks - ${uProratedHolidayWeeks.toFixed(1)} prorated leave/bank holiday weeks`;
+  $("uAssumptionSummary").textContent = `Key settings: ${hoursWeeksSummary(uHoursWeek, uEffectiveWeeks, "effective billable weeks")}, ${value("uIdleMonths").toFixed(0)} idle months, ${currency(value("uMargin") / 52, 0)}/week umbrella margin, ${(pct("uLevy") * 100).toFixed(1)}% apprenticeship levy, ${$("uPensionType").value.toLowerCase()} pension at ${(pct("uEePension") * 100).toFixed(1)}% employee and ${(pct("uErPension") * 100).toFixed(1)}% employer.`;
   const uDayRate = dayRateFrom($("uRatePeriod").value, value("uRateInput"), value("uDpw"), uWeeks);
-  const umbrellaAssumptions = { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked };
-  const umbrella = calculateUmbrella(uDayRate, umbrellaAssumptions);
-  renderLineChart($("uChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: calculateUmbrella(rate, umbrellaAssumptions).monthlyNet })), (rate) => `£${rate}`);
+  const umbrellaAssumptions = { days_per_week: value("uDpw"), weeks_per_year: uWeeks, hours_per_day: value("uHpd"), personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, umbrella_margin_per_week: value("uMargin") / 52, umbrella_margin_per_year: value("uMargin"), employer_ni_secondary_threshold: value("uErNiThreshold"), employer_ni_rate: pct("uErNiRate"), apprenticeship_levy_rate: pct("uLevy"), pension_scheme_type: $("uPensionType").value, qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, employer_pension_rate: pct("uErPension"), employee_pension_rate: pct("uEePension"), employer_passes_ni_saving_to_pension: $("uPensionType").value === "Salary sacrifice" && $("uNiPassback").checked };
+  const umbrella = scaleAnnualResult(calculateUmbrella(uDayRate, umbrellaAssumptions), uUtilisationFactor);
+  renderLineChart($("uChart"), [250, 300, 350, 400, 450, 500, 550].map((rate) => ({ x: rate, y: scaleAnnualResult(calculateUmbrella(rate, umbrellaAssumptions), uUtilisationFactor).monthlyNet })), (rate) => `£${rate}`);
   $("uGrossSummary").textContent = `${taxYear}, assignment income before umbrella deductions and PAYE.`;
   renderMetrics($("uGrossMetrics"), "Gross contract", umbrella.annualGross, umbrella.annualGross / 12, uDayRate, uDayRate / value("uHpd"));
-  $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate.`;
+  $("uSummary").textContent = `${taxYear}, ${currency(uDayRate, 2)} day rate, ${(uUtilisationFactor * 100).toFixed(0)}% utilisation.`;
   renderNetMetrics($("uMetrics"), umbrella, umbrella.employerPension + umbrella.employeePensionPretax + umbrella.employeePensionPosttax);
   $("uBreakdownSummary").textContent = `Pension summary: employee plus employer pension ${currency(umbrella.totalPensionPot + umbrella.employerPension, 0)}/year.`;
   renderTable($("uBreakdown"), [
     { section: "Step 1 — Umbrella deductions (from assignment rate)" },
-    { label: "Gross contract income", value: umbrella.annualGross, note: `${value("uDpw")} days x ${uWeeks} weeks x ${currency(uDayRate, 2)}/day`, total: true },
-    { label: "Less: Umbrella margin", value: -umbrella.umbrellaMarginAnnual, note: `${currency(value("uMargin") / 52, 2)}/week x 52 weeks (charged year-round, not just billable weeks)`, deduction: true },
+    { label: "Gross contract income", value: umbrella.annualGross, note: `${value("uDpw")} days x ${uWeeks} weeks x ${currency(uDayRate, 2)}/day x ${(uUtilisationFactor * 100).toFixed(0)}% utilisation`, total: true },
+    { label: "Less: Umbrella margin", value: -umbrella.umbrellaMarginAnnual, note: `${currency(value("uMargin"), 0)} annual margin x ${(uUtilisationFactor * 100).toFixed(0)}% utilisation`, deduction: true },
     { label: "Less: Employer pension contribution", value: -umbrella.employerPension, note: `${pct("uErPension").toLocaleString("en-GB", { style: "percent", minimumFractionDigits: 1 })} of qualifying earnings (${currency(umbrella.qualifyingBase, 0)})`, deduction: true },
     { label: "Less: Employer NI", value: -umbrella.employerNi, note: `(Gross PAYE - ${currency(value("uErNiThreshold"), 0)}) x ${(pct("uErNiRate") * 100).toFixed(1)}%. Gross PAYE is unknown until NI and levy are deducted, so the equation is solved simultaneously: assignment rate minus margin equals Gross PAYE plus NI plus levy, all expressed as a function of Gross PAYE.`, deduction: true },
     { label: "Less: Apprenticeship Levy", value: -umbrella.levy, note: `Gross PAYE x ${(pct("uLevy") * 100).toFixed(1)}%`, deduction: true },
-    { label: "= Gross PAYE salary", value: umbrella.grossPaye, note: `${currency(umbrella.grossPaye / umbrella.daysPerYear, 2)}/day · ${currency(umbrella.grossPaye / 52, 2)}/wk · ${currency(umbrella.grossPaye / 12, 2)}/mo`, total: true },
+    { label: "= Gross PAYE salary", value: umbrella.grossPaye, note: `${currency(umbrella.daysPerYear > 0 ? umbrella.grossPaye / umbrella.daysPerYear : 0, 2)}/day · ${currency(umbrella.grossPaye / 52, 2)}/wk · ${currency(umbrella.grossPaye / 12, 2)}/mo`, total: true },
     { section: "Step 2 — Pre-tax deductions" },
     { label: "Gross PAYE salary", value: umbrella.grossPaye, note: "Starting point for employee deductions" },
     { label: "Less: Employee pension (pre-tax)", value: -umbrella.employeePensionPretax, note: `${(pct("uEePension") * 100).toFixed(1)}% of qualifying earnings — deducted before tax`, deduction: true },
