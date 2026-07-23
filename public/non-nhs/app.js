@@ -115,13 +115,14 @@ function calculatePrivateEmployment(annualSalary, a) {
   return {
     annualSalary, bonus, bonusSacrifice, cashBonus, allowanceExchange, carAllowanceEntitlement,
     carAllowance, allowanceSacrifice, carSacrifice, totalCarForegone, postCarSalary,
-    privateUsePayment, carBenefit, fuelBenefit, taxableBenefits, pensionBase,
+    normalCarBenefitBeforePayment, privateUsePayment, carBenefit, fuelBenefit, taxableBenefits, pensionBase,
     employeePensionGross, employeePensionPretax, employeePensionPosttax, hmrcTopup,
     employerPension, employerNiSaving, totalPension, cashPayBeforePension, grossTaxable,
     niablePay, taperedAllowance, ...tax, packageValue, daysPerYear, hoursPerYear, annualNet,
     monthlyNet: annualNet / 12,
     dailyNet: daysPerYear ? annualNet / daysPerYear : 0,
-    hourlyNet: hoursPerYear ? annualNet / hoursPerYear : 0
+    hourlyNet: hoursPerYear ? annualNet / hoursPerYear : 0,
+    effectiveTaxRate: cashPayBeforePension ? 1 - annualNet / cashPayBeforePension : 0
   };
 }
 
@@ -219,10 +220,6 @@ function calculate() {
   const result = calculatePrivateEmployment(value("pSalary"), assumptions());
   $("pWeeksText").textContent = weeks.toFixed(1);
   $("monthlyNet").textContent = currency(result.monthlyNet);
-  $("annualNet").textContent = currency(result.annualNet);
-  $("weeklyNet").textContent = currency(result.annualNet / 52);
-  $("hourlyNet").textContent = currency(result.hourlyNet, 2);
-  $("packageValue").textContent = currency(result.packageValue);
   $("pensionValue").textContent = currency(result.totalPension);
   renderBreakdown(result);
   return result;
