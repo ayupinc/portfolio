@@ -533,6 +533,46 @@
     font: 700 12px var(--font-sans);
   }
 
+  .chart-drop-line {
+    stroke: #B8C7DD;
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+
+  .chart-drop-label {
+    fill: var(--muted);
+    font: 600 10px var(--font-sans);
+  }
+
+  .chart-minimum-line {
+    stroke: var(--red);
+    stroke-width: 2;
+    stroke-dasharray: 7 5;
+  }
+
+  .chart-minimum-line.is-absolute {
+    stroke: var(--red);
+  }
+
+  .chart-minimum-label {
+    fill: var(--red);
+    font: 600 11px var(--font-sans);
+  }
+
+  .chart-salary-band {
+    fill: #E8EEF7;
+    opacity: 0.72;
+  }
+
+  .chart-salary-band.is-alt {
+    fill: #F5EBDD;
+  }
+
+  .chart-salary-band-label {
+    fill: var(--navy);
+    font: 700 10px var(--font-sans);
+  }
+
   .chart-band {
     fill: #E8EEF7;
     stroke: #B8C7DD;
@@ -830,6 +870,7 @@
     <button class="tab" id="tab-ltd" type="button" role="tab" aria-controls="ltd" aria-selected="true">Ltd Co</button>
     <button class="tab" id="tab-umbrella" type="button" role="tab" aria-controls="umbrella" aria-selected="false">Umbrella</button>
     <button class="tab" id="tab-salaried" type="button" role="tab" aria-controls="salaried" aria-selected="false">Salaried</button>
+    <button class="tab" id="tab-private" type="button" role="tab" aria-controls="private" aria-selected="false">Non-NHS</button>
   </div>
 
   <section class="calculator is-active" id="ltd" role="tabpanel" aria-labelledby="tab-ltd">
@@ -1110,6 +1151,78 @@
     </div>
   </section>
 
+  <section class="calculator" id="private" role="tabpanel" aria-labelledby="tab-private">
+    <div class="workbench">
+      <div class="calculator-heading">
+        <h2>Private Employer Calculator</h2>
+        <p>PAYE salary with bonus, defined-contribution pension and flexible car benefits.</p>
+      </div>
+      <div class="top-grid">
+        <aside class="panel rate-card">
+          <div class="panel-header"><h3>Package</h3><p>Enter annual cash pay</p></div>
+          <div class="controls rate-controls is-paired">
+            <div class="field"><label for="pSalary">Annual salary</label><input id="pSalary" data-save="pSalary" type="number" min="10000" max="500000" step="500" value="98500"></div>
+            <div class="field"><label for="pBonus">Year-end bonus</label><input id="pBonus" data-save="pBonus" type="number" min="0" max="500000" step="500" value="10000"></div>
+          </div>
+        </aside>
+        <section class="panel" aria-live="polite"><div class="panel-header"><h3>Before Tax &amp; Deductions</h3><p id="pGrossSummary"></p></div><div class="metric-grid" id="pGrossMetrics"></div></section>
+      </div>
+      <details class="panel rollup" open>
+        <summary><span class="rollup-title">Package Options</span><span class="rollup-subtitle">Configure working time, pension, bonus and car. <span id="pAssumptionSummary"></span></span></summary>
+        <div class="rollup-body"><div class="assumption-sections">
+          <div class="assumption-tablist" role="tablist" aria-label="Private employer assumptions">
+            <button class="assumption-tab" type="button" role="tab" id="tab-private-working" aria-controls="panel-private-working" aria-selected="true">Working Week</button>
+            <button class="assumption-tab" type="button" role="tab" id="tab-private-pension" aria-controls="panel-private-pension" aria-selected="false">Pension &amp; Bonus</button>
+            <button class="assumption-tab" type="button" role="tab" id="tab-private-car" aria-controls="panel-private-car" aria-selected="false">Car</button>
+          </div>
+          <section class="assumption-card" id="panel-private-working" role="tabpanel" aria-labelledby="tab-private-working">
+            <h3>Working Week</h3>
+            <table class="breakdown-table assumption-table"><colgroup><col><col><col></colgroup><thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead><tbody>
+              <tr><td><label for="pDpw">Days per week</label></td><td><input id="pDpw" data-save="pDpw" type="number" step="0.5" value="5"></td><td class="note">Used for daily equivalents.</td></tr>
+              <tr><td><label for="pHpd">Hours per day</label></td><td><input id="pHpd" data-save="pHpd" type="number" step="0.5" value="7.5"></td><td class="note">Used for hourly equivalents.</td></tr>
+              <tr><td><label for="pLeave">Annual leave days</label></td><td><input id="pLeave" data-save="pLeave" type="number" step="1" value="25"></td><td class="note">Paid annual leave, excluding bank holidays.</td></tr>
+              <tr><td><label for="pBh">Bank holidays</label></td><td><input id="pBh" data-save="pBh" type="number" step="1" value="8"></td><td class="note">Paid public holidays.</td></tr>
+              <tr><td>Worked weeks per year</td><td><span id="pWeeksText"></span></td><td class="note" id="pWeeksNote"></td></tr>
+            </tbody></table>
+          </section>
+          <section class="assumption-card" id="panel-private-pension" role="tabpanel" aria-labelledby="tab-private-pension" hidden>
+            <h3>Defined-Contribution Pension &amp; Bonus</h3>
+            <table class="breakdown-table assumption-table"><colgroup><col><col><col></colgroup><thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead><tbody>
+              <tr><td><label for="pBonusSacrifice">Bonus sacrificed to pension</label></td><td><input id="pBonusSacrifice" data-save="pBonusSacrifice" type="number" min="0" step="500" value="0"></td><td class="note">Reduces the cash bonus and becomes an employer pension contribution.</td></tr>
+              <tr><td><label for="pPensionMethod">Contribution method</label></td><td><select id="pPensionMethod" data-save="pPensionMethod"><option>Salary sacrifice</option><option>Net pay arrangement</option><option>Relief at source</option></select></td><td class="note">Salary sacrifice saves employee NI; net pay saves Income Tax; relief at source is paid from net pay with basic-rate relief added.</td></tr>
+              <tr><td><label for="pPensionBasis">Contribution basis</label></td><td><select id="pPensionBasis" data-save="pPensionBasis"><option>Basic salary</option><option>Total pensionable earnings</option><option>Qualifying earnings</option><option>Reference salary</option></select></td><td class="note">Reference salary preserves pre-sacrifice basic salary. Qualifying earnings uses the statutory £6,240–£50,270 band.</td></tr>
+              <tr><td><label for="pEePension">Employee contribution %</label></td><td><input id="pEePension" data-save="pEePension" type="number" min="0" step="0.5" value="5"></td><td class="note">Percentage applied to the selected pension basis.</td></tr>
+              <tr><td><label for="pErPension">Employer contribution %</label></td><td><input id="pErPension" data-save="pErPension" type="number" min="0" step="0.5" value="5"></td><td class="note">Employer-funded contribution paid in addition to cash salary.</td></tr>
+              <tr><td><label for="pBonusPensionable">Bonus is pensionable?</label></td><td><input id="pBonusPensionable" data-save="pBonusPensionable" type="checkbox" checked></td><td class="note">Included for total pensionable earnings or qualifying earnings.</td></tr>
+              <tr><td><label for="pAllowancePensionable">Car allowance is pensionable?</label></td><td><input id="pAllowancePensionable" data-save="pAllowancePensionable" type="checkbox"></td><td class="note">Included when a cash allowance is selected and the pension basis permits it.</td></tr>
+              <tr id="pNiPassbackRow"><td><label for="pNiPassback">Employer passes NI saving to pension?</label></td><td><input id="pNiPassback" data-save="pNiPassback" type="checkbox"></td><td class="note">Adds employer NI saved on pension salary sacrifice to the pension pot.</td></tr>
+            </tbody></table>
+          </section>
+          <section class="assumption-card" id="panel-private-car" role="tabpanel" aria-labelledby="tab-private-car" hidden>
+            <h3>Car Arrangement</h3>
+            <table class="breakdown-table assumption-table"><colgroup><col><col><col></colgroup><thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead><tbody>
+              <tr><td><label for="pCarType">Car option</label></td><td><select id="pCarType" data-save="pCarType"><option>No employer car</option><option>Cash car allowance</option><option>Company car</option><option>Salary sacrifice car</option><option>Car allowance exchanged for salary-sacrifice car</option></select></td><td class="note">Choose the arrangement offered by the employer. The allowance-exchange option models giving up a contractual cash allowance, plus any extra salary, for the car.</td></tr>
+              <tr class="p-car-allowance"><td><label for="pCarAllowance">Annual cash allowance</label></td><td><input id="pCarAllowance" data-save="pCarAllowance" type="number" min="0" step="250" value="6000"></td><td class="note">Taxed through PAYE like salary and subject to employee NI.</td></tr>
+              <tr class="p-car-benefit"><td><label for="pCarListPrice">Taxable list price</label></td><td><input id="pCarListPrice" data-save="pCarListPrice" type="number" min="0" step="500" value="45000"></td><td class="note">P11D/list price including taxable accessories, not the lease cost.</td></tr>
+              <tr class="p-car-benefit"><td><label for="pCarBikRate">Benefit-in-Kind rate %</label></td><td><input id="pCarBikRate" data-save="pCarBikRate" type="number" min="0" max="37" step="1" value="4"></td><td class="note">For 2026/27 a fully electric car is 4%; otherwise enter the applicable CO₂ percentage.</td></tr>
+              <tr class="p-car-benefit"><td><label for="pPrivateUsePayment">Employee private-use payment</label></td><td><input id="pPrivateUsePayment" data-save="pPrivateUsePayment" type="number" min="0" step="100" value="0"></td><td class="note">Annual required contribution specifically for private use.</td></tr>
+              <tr class="p-car-benefit"><td><label for="pFuelBenefit">Taxable private fuel benefit</label></td><td><input id="pFuelBenefit" data-save="pFuelBenefit" type="number" min="0" step="100" value="0"></td><td class="note">Enter the annual taxable fuel benefit, not actual fuel spend. Leave zero if none.</td></tr>
+              <tr class="p-car-direct-sacrifice"><td><label for="pCarSacrifice">Annual salary sacrificed</label></td><td><input id="pCarSacrifice" data-save="pCarSacrifice" type="number" min="0" step="250" value="6000"></td><td class="note">Gross contractual basic salary given up for the car.</td></tr>
+              <tr class="p-car-allowance-exchange"><td><label for="pExtraCarSacrifice">Extra annual salary sacrificed</label></td><td><input id="pExtraCarSacrifice" data-save="pExtraCarSacrifice" type="number" min="0" step="250" value="0"></td><td class="note">Additional basic salary given up on top of the full cash car allowance. Leave zero if the allowance funds the car completely.</td></tr>
+              <tr class="p-car-sacrifice"><td><label for="pLowEmissionCar">CO₂ is 75g/km or less?</label></td><td><input id="pLowEmissionCar" data-save="pLowEmissionCar" type="checkbox" checked></td><td class="note">If not, taxable value is generally the greater of salary or allowance foregone and normal car benefit.</td></tr>
+            </tbody></table>
+          </section>
+        </div></div>
+      </details>
+      <section class="panel" aria-live="polite"><div class="panel-header"><h3>Net Take-Home</h3><p id="pSummary"></p></div><div class="metric-grid has-extra-metric" id="pMetrics"></div></section>
+      <details class="panel rollup">
+        <summary><span class="rollup-title">Full Breakdown</span><span class="rollup-subtitle">Cash pay, benefits, tax and pension. <span id="pBreakdownSummary"></span></span></summary>
+        <div class="rollup-body breakdown"><div class="field breakdown-period"><label for="pDisplayPeriod">Display figures</label><select id="pDisplayPeriod" data-save="pDisplayPeriod"><option>Per Year</option><option>Per Month</option><option>Per Week</option></select></div><table class="breakdown-table" id="pBreakdown"></table></div>
+      </details>
+      <section class="panel chart-panel"><div class="panel-header"><h3>Monthly Take-Home by Salary</h3><p>Uses the current non-NHS package options, with 2026/27 NHS Agenda for Change salary bands for comparison.</p></div><div class="chart" id="pChart" aria-label="Monthly take-home by private-sector salary chart with NHS pay bands"></div></section>
+    </div>
+  </section>
+
   <p class="footer-note">Figures are indicative only. Tax rates are drawn from the original Python calculator constants. This is not financial advice.</p>
 </main>
 
@@ -1248,6 +1361,56 @@ function calculateSalaried(annualSalary, a) {
   return { annualSalary, salarySacrifice, pensionableSalary, niablePay, daysPerYear, hoursPerYear, employeePensionPretax, grossTaxable, ...tax, employeePensionPosttax, hmrcTopup, niSaving, annualNet, monthlyNet: annualNet / 12, dailyNet: annualNet / daysPerYear, hourlyNet: annualNet / hoursPerYear, effectiveTaxRate: annualSalary > 0 ? 1 - (annualNet / annualSalary) : 0 };
 }
 
+function calculatePrivateEmployment(annualSalary, a) {
+  const daysPerYear = a.days_per_week * a.weeks_per_year;
+  const hoursPerYear = daysPerYear * a.hours_per_day;
+  const bonus = Math.max(0, a.bonus);
+  const bonusSacrifice = Math.min(bonus, Math.max(0, a.bonus_sacrifice));
+  const cashBonus = bonus - bonusSacrifice;
+  const allowanceExchange = a.car_type === "Car allowance exchanged for salary-sacrifice car";
+  const carAllowanceEntitlement = ["Cash car allowance", "Car allowance exchanged for salary-sacrifice car"].includes(a.car_type) ? Math.max(0, a.car_allowance) : 0;
+  const carAllowance = a.car_type === "Cash car allowance" ? carAllowanceEntitlement : 0;
+  const allowanceSacrifice = allowanceExchange ? carAllowanceEntitlement : 0;
+  const salarySacrificeCar = ["Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(a.car_type);
+  const requestedSalarySacrifice = allowanceExchange ? a.extra_car_sacrifice : a.car_sacrifice;
+  const carSacrifice = salarySacrificeCar ? Math.min(annualSalary, Math.max(0, requestedSalarySacrifice)) : 0;
+  const totalCarForegone = allowanceSacrifice + carSacrifice;
+  const postCarSalary = Math.max(0, annualSalary - carSacrifice);
+  const normalCarBenefitBeforePayment = ["Company car", "Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(a.car_type) ? Math.max(0, a.car_list_price) * a.car_bik_rate : 0;
+  const privateUsePayment = ["Company car", "Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(a.car_type) ? Math.max(0, a.private_use_payment) : 0;
+  let carBenefit = 0;
+  if (a.car_type === "Company car") carBenefit = Math.max(0, normalCarBenefitBeforePayment - privateUsePayment);
+  if (salarySacrificeCar) {
+    carBenefit = a.low_emission_car ? Math.max(0, normalCarBenefitBeforePayment - privateUsePayment) : Math.max(normalCarBenefitBeforePayment, totalCarForegone);
+  }
+  const fuelBenefit = ["Company car", "Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(a.car_type) ? Math.max(0, a.fuel_benefit) : 0;
+  const taxableBenefits = carBenefit + fuelBenefit;
+  const pensionableBonus = a.bonus_pensionable ? cashBonus : 0;
+  const pensionableAllowance = a.allowance_pensionable ? carAllowance : 0;
+  let pensionBase = postCarSalary;
+  if (a.pension_basis === "Reference salary") pensionBase = annualSalary;
+  if (a.pension_basis === "Total pensionable earnings") pensionBase = postCarSalary + pensionableBonus + pensionableAllowance;
+  if (a.pension_basis === "Qualifying earnings") pensionBase = Math.max(0, Math.min(postCarSalary + pensionableBonus + pensionableAllowance, a.qualifying_earnings_upper) - a.qualifying_earnings_lower);
+  const employeePensionGross = Math.max(0, pensionBase * a.employee_pension_rate);
+  const employerPension = Math.max(0, pensionBase * a.employer_pension_rate);
+  const employeePensionPretax = ["Net pay arrangement", "Salary sacrifice"].includes(a.pension_method) ? employeePensionGross : 0;
+  const employeePensionPosttax = a.pension_method === "Relief at source" ? employeePensionGross * (1 - a.income_tax_basic) : 0;
+  const hmrcTopup = a.pension_method === "Relief at source" ? employeePensionGross * a.income_tax_basic : 0;
+  const cashPayBeforePension = postCarSalary + cashBonus + carAllowance;
+  const grossTaxable = cashPayBeforePension - employeePensionPretax + taxableBenefits;
+  const niablePay = a.pension_method === "Salary sacrifice" ? cashPayBeforePension - employeePensionPretax : cashPayBeforePension;
+  const reliefAtSourceAdjustment = a.pension_method === "Relief at source" ? employeePensionGross : 0;
+  const adjustedNetIncome = Math.max(0, grossTaxable - reliefAtSourceAdjustment);
+  const taperedAllowance = Math.max(0, a.personal_allowance - Math.max(0, adjustedNetIncome - 100000) / 2);
+  const taxAssumptions = { ...a, personal_allowance: taperedAllowance, basic_rate_ceiling: a.basic_rate_ceiling + reliefAtSourceAdjustment, higher_rate_ceiling: a.higher_rate_ceiling + reliefAtSourceAdjustment };
+  const tax = taxAndNi(grossTaxable, taxAssumptions, niablePay);
+  const employerNiSaving = a.pension_method === "Salary sacrifice" && a.employer_passes_ni_saving_to_pension ? (employeePensionPretax + bonusSacrifice) * a.employer_ni_rate : 0;
+  const totalPension = employeePensionGross + employerPension + bonusSacrifice + employerNiSaving;
+  const annualNet = cashPayBeforePension - employeePensionPretax - employeePensionPosttax - privateUsePayment - tax.totalIncomeTax - tax.totalEmployeeNi;
+  const packageValue = annualSalary + bonus + carAllowanceEntitlement + employerPension;
+  return { annualSalary, bonus, bonusSacrifice, cashBonus, allowanceExchange, carAllowanceEntitlement, carAllowance, allowanceSacrifice, carSacrifice, totalCarForegone, postCarSalary, normalCarBenefitBeforePayment, privateUsePayment, carBenefit, fuelBenefit, taxableBenefits, pensionBase, employeePensionGross, employeePensionPretax, employeePensionPosttax, hmrcTopup, employerPension, employerNiSaving, totalPension, cashPayBeforePension, grossTaxable, niablePay, taperedAllowance, ...tax, packageValue, daysPerYear, hoursPerYear, annualNet, monthlyNet: annualNet / 12, dailyNet: daysPerYear ? annualNet / daysPerYear : 0, hourlyNet: hoursPerYear ? annualNet / hoursPerYear : 0, effectiveTaxRate: cashPayBeforePension ? 1 - annualNet / cashPayBeforePension : 0 };
+}
+
 function taxAndNi(grossTaxable, a, niablePay = grossTaxable) {
   const taxableIncome = Math.max(0, grossTaxable - a.personal_allowance);
   const basicBand = Math.max(0, a.basic_rate_ceiling - a.personal_allowance);
@@ -1350,6 +1513,65 @@ function renderLineChart(target, points, xFormatter, bands = [], xTickStep = nul
     </svg>`;
 }
 
+function renderPrivateSalaryChart(target, points) {
+  const width = 900;
+  const height = 455;
+  const margin = { top: 42, right: 34, bottom: 96, left: 86 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const minSalary = 40000;
+  const maxSalary = 80000;
+  const minimumNets = [3000, 3500];
+  const minNet = Math.floor(Math.min(...minimumNets, ...points.map((point) => point.netMonthly)) / 250) * 250;
+  const maxNet = Math.ceil(Math.max(...minimumNets, ...points.map((point) => point.netMonthly)) / 250) * 250;
+  const xScale = (net) => margin.left + ((net - minNet) / (maxNet - minNet || 1)) * plotWidth;
+  const yScale = (salary) => margin.top + plotHeight - ((salary - minSalary) / (maxSalary - minSalary)) * plotHeight;
+  const salaryTicks = [];
+  for (let salary = minSalary; salary <= maxSalary; salary += 5000) salaryTicks.push(salary);
+  const linePoints = points.map((point) => `${xScale(point.netMonthly).toFixed(1)},${yScale(point.salary).toFixed(1)}`).join(" ");
+  const axisY = height - margin.bottom;
+  const salaryBandMarkup = NHS_AFC_BANDS_2026.map((band, index) => {
+    const bandStart = Math.max(minSalary, band.start);
+    const bandEnd = Math.min(maxSalary, band.end);
+    if (bandEnd <= bandStart) return "";
+    const bandTop = yScale(bandEnd);
+    const bandHeight = yScale(bandStart) - bandTop;
+    const label = bandHeight >= 16 ? `<text class="chart-salary-band-label" x="${width - margin.right - 8}" y="${bandTop + bandHeight / 2 + 4}" text-anchor="end">NHS ${band.label}</text>` : "";
+    return `<rect class="chart-salary-band ${index % 2 ? "is-alt" : ""}" x="${margin.left}" y="${bandTop}" width="${plotWidth}" height="${bandHeight}"><title>NHS ${band.label}: ${currency(band.start, 0)} to ${currency(band.end, 0)}</title></rect>${label}`;
+  }).join("");
+  const thresholdMarkup = minimumNets.map((threshold, thresholdIndex) => {
+    let intersectionSalary = null;
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const first = points[index];
+      const second = points[index + 1];
+      const crosses = (first.netMonthly <= threshold && second.netMonthly >= threshold) || (first.netMonthly >= threshold && second.netMonthly <= threshold);
+      if (!crosses) continue;
+      const ratio = second.netMonthly === first.netMonthly ? 0 : (threshold - first.netMonthly) / (second.netMonthly - first.netMonthly);
+      intersectionSalary = first.salary + (second.salary - first.salary) * ratio;
+      break;
+    }
+    if (intersectionSalary === null) return "";
+    const intersectionX = xScale(threshold);
+    const intersectionY = yScale(intersectionSalary);
+    const className = thresholdIndex === 0 ? "chart-minimum-line is-absolute" : "chart-minimum-line";
+    return `<line class="${className}" x1="${intersectionX}" y1="${axisY}" x2="${intersectionX}" y2="${intersectionY}"></line><line class="${className}" x1="${margin.left}" y1="${intersectionY}" x2="${intersectionX}" y2="${intersectionY}"></line><text class="chart-minimum-label" x="${margin.left - 12}" y="${intersectionY + 4}" text-anchor="end">${currency(intersectionSalary, 0)}</text><text class="chart-minimum-label" x="${intersectionX}" y="${axisY + 13}" text-anchor="end" transform="rotate(-45 ${intersectionX} ${axisY + 13})">${currency(threshold, 0)}</text>`;
+  }).join("");
+  target.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Gross salary by monthly net take-home chart">
+      ${salaryBandMarkup}
+      ${salaryTicks.map((salary) => `<line class="chart-grid" x1="${margin.left}" y1="${yScale(salary)}" x2="${width - margin.right}" y2="${yScale(salary)}"></line><text class="chart-label" x="${margin.left - 12}" y="${yScale(salary) + 4}" text-anchor="end">£${Math.round(salary / 1000)}k</text>`).join("")}
+      <line class="chart-axis" x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${axisY}"></line>
+      <line class="chart-axis" x1="${margin.left}" y1="${axisY}" x2="${width - margin.right}" y2="${axisY}"></line>
+      ${points.map((point) => `<line class="chart-drop-line" x1="${xScale(point.netMonthly)}" y1="${yScale(point.salary)}" x2="${xScale(point.netMonthly)}" y2="${axisY}"></line>`).join("")}
+      ${thresholdMarkup}
+      <polyline class="chart-line" points="${linePoints}"></polyline>
+      ${points.map((point) => `<circle class="chart-point" cx="${xScale(point.netMonthly)}" cy="${yScale(point.salary)}" r="4"><title>${currency(point.salary, 0)} gross salary: ${currency(point.netMonthly, 0)} monthly net take-home</title></circle>`).join("")}
+      ${points.map((point) => `<text class="chart-drop-label" x="${xScale(point.netMonthly)}" y="${axisY + 13}" text-anchor="end" transform="rotate(-45 ${xScale(point.netMonthly)} ${axisY + 13})">${currency(point.netMonthly, 0)}</text>`).join("")}
+      <text class="chart-value" x="${margin.left}" y="18">Gross annual salary</text>
+      <text class="chart-value" x="${margin.left + plotWidth / 2}" y="${height - 14}" text-anchor="middle">Monthly net take-home pay</text>
+    </svg>`;
+}
+
 function renderTable(table, rows, displayPeriod) {
   table.innerHTML = `<colgroup><col><col><col></colgroup><thead><tr><th>Description</th><th>Amount</th><th>Note</th></tr></thead><tbody>${rows.map((row) => {
     if (row.section) return `<tr class="section-row"><td colspan="3">${row.section}</td></tr>`;
@@ -1384,6 +1606,14 @@ function updateAssumptionNotes(ty) {
   $("sPensionTypeNote").textContent = pensionNote();
   $("uNiPassbackRow").hidden = $("uPensionType").value !== "Salary sacrifice";
   $("sNiPassbackRow").hidden = $("sPensionType").value !== "Salary sacrifice";
+  $("pNiPassbackRow").hidden = $("pPensionMethod").value !== "Salary sacrifice";
+  const carType = $("pCarType").value;
+  const allowanceExchange = carType === "Car allowance exchanged for salary-sacrifice car";
+  document.querySelectorAll(".p-car-allowance").forEach((row) => { row.hidden = !["Cash car allowance", "Car allowance exchanged for salary-sacrifice car"].includes(carType); });
+  document.querySelectorAll(".p-car-benefit").forEach((row) => { row.hidden = !["Company car", "Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(carType); });
+  document.querySelectorAll(".p-car-sacrifice").forEach((row) => { row.hidden = !["Salary sacrifice car", "Car allowance exchanged for salary-sacrifice car"].includes(carType); });
+  document.querySelectorAll(".p-car-direct-sacrifice").forEach((row) => { row.hidden = carType !== "Salary sacrifice car"; });
+  document.querySelectorAll(".p-car-allowance-exchange").forEach((row) => { row.hidden = !allowanceExchange; });
 }
 
 function syncAssumptionNoteTooltips() {
@@ -1421,6 +1651,7 @@ function calculateAll() {
   const lDisplayPeriod = $("lDisplayPeriod").value;
   const uDisplayPeriod = $("uDisplayPeriod").value;
   const sDisplayPeriod = $("sDisplayPeriod").value;
+  const pDisplayPeriod = $("pDisplayPeriod").value;
   updateAssumptionNotes(ty);
   $("lRateLabel").textContent = rateLabels[$("lRatePeriod").value];
   $("uRateLabel").textContent = rateLabels[$("uRatePeriod").value];
@@ -1542,6 +1773,61 @@ function calculateAll() {
     { label: "Less: Employee pension (post-tax)", value: -salaried.employeePensionPosttax, note: $("sPensionType").value === "Relief at source" ? "Relief at source only — HMRC tops up at 20%" : "Not applicable for this scheme type", deduction: true },
     { label: "= Net take-home", value: salaried.annualNet, note: "Gross taxable pay minus all taxes and deductions", total: true }
   ], sDisplayPeriod);
+
+  const pWeeks = workingWeeks(value("pDpw"), value("pLeave"), value("pBh"));
+  const pHoursWeek = value("pDpw") * value("pHpd");
+  $("pWeeksText").textContent = pWeeks.toFixed(1);
+  $("pWeeksNote").textContent = `52 - (${value("pLeave").toFixed(0)} + ${value("pBh").toFixed(0)}) days / ${value("pDpw").toFixed(1)} days/week`;
+  const privateAssumptions = {
+    days_per_week: value("pDpw"), weeks_per_year: pWeeks, hours_per_day: value("pHpd"), bonus: value("pBonus"), bonus_sacrifice: value("pBonusSacrifice"),
+    car_type: $("pCarType").value, car_allowance: value("pCarAllowance"), car_list_price: value("pCarListPrice"), car_bik_rate: pct("pCarBikRate"), private_use_payment: value("pPrivateUsePayment"), fuel_benefit: value("pFuelBenefit"), car_sacrifice: value("pCarSacrifice"), extra_car_sacrifice: value("pExtraCarSacrifice"), low_emission_car: $("pLowEmissionCar").checked,
+    pension_method: $("pPensionMethod").value, pension_basis: $("pPensionBasis").value, employee_pension_rate: pct("pEePension"), employer_pension_rate: pct("pErPension"), bonus_pensionable: $("pBonusPensionable").checked, allowance_pensionable: $("pAllowancePensionable").checked, employer_passes_ni_saving_to_pension: $("pNiPassback").checked,
+    qualifying_earnings_lower: 6240, qualifying_earnings_upper: 50270, personal_allowance: ty.personal_allowance, basic_rate_ceiling: ty.basic_rate_ceiling, higher_rate_ceiling: ty.higher_rate_ceiling, income_tax_basic: ty.income_tax_basic, income_tax_higher: ty.income_tax_higher, income_tax_additional: ty.income_tax_additional, ni_primary_threshold: ty.ni_primary_threshold, ni_rate_standard: ty.ni_rate_standard, ni_upper_earnings_limit: ty.ni_upper_earnings_limit, ni_rate_above_uel: ty.ni_rate_above_uel, employer_ni_rate: ty.employer_ni_rate
+  };
+  const privateEmployment = calculatePrivateEmployment(value("pSalary"), privateAssumptions);
+  $("pAssumptionSummary").textContent = `Key settings: ${pHoursWeek.toFixed(1)} hours/week, ${currency(value("pBonus"), 0)} bonus, ${$("pPensionMethod").value.toLowerCase()} pension on ${$("pPensionBasis").value.toLowerCase()}, ${$("pCarType").value.toLowerCase()}.`;
+  $("pGrossSummary").textContent = `${taxYear}, salary, bonus and cash allowance before sacrifice and deductions.`;
+  $("pGrossMetrics").innerHTML = [
+    ["Salary", currency(privateEmployment.annualSalary, 0)],
+    ["Bonus", currency(privateEmployment.bonus, 0)],
+    [privateEmployment.allowanceExchange ? "Allowance exchanged" : "Cash allowance", currency(privateEmployment.carAllowanceEntitlement, 0)],
+    ["Package value", currency(privateEmployment.packageValue, 0)],
+    ["Taxable car benefit", currency(privateEmployment.taxableBenefits, 0)]
+  ].map(([label, val]) => `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${val}</span></div>`).join("");
+  $("pSummary").textContent = `${taxYear}, ${currency(value("pSalary"), 0)} salary plus ${currency(value("pBonus"), 0)} bonus.`;
+  renderNetMetrics($("pMetrics"), privateEmployment, privateEmployment.totalPension);
+  $("pBreakdownSummary").textContent = `Total pension funding ${currency(privateEmployment.totalPension, 0)}/year; taxable car benefit ${currency(privateEmployment.taxableBenefits, 0)}/year.`;
+  renderTable($("pBreakdown"), [
+    { section: "Step 1 — Cash package and sacrifice" },
+    { label: "Contracted salary", value: privateEmployment.annualSalary, note: "Annual basic salary" },
+    { label: "Year-end bonus", value: privateEmployment.bonus, note: "Cash bonus before any pension sacrifice" },
+    { label: "Less: Bonus sacrificed to pension", value: -privateEmployment.bonusSacrifice, note: "Paid into pension as an employer contribution", deduction: true },
+    { label: "Car allowance entitlement", value: privateEmployment.carAllowanceEntitlement, note: privateEmployment.allowanceExchange ? "Selected option: allowance exchanged for a salary-sacrifice car; this is not paid as taxable cash" : privateEmployment.carAllowance ? "Paid as taxable cash and subject to employee NI" : "No car allowance selected" },
+    { label: "Less: Car allowance exchanged", value: -privateEmployment.allowanceSacrifice, note: privateEmployment.allowanceExchange ? "Full contractual car allowance given up for the car" : "Not applicable", deduction: true },
+    { label: privateEmployment.allowanceExchange ? "Less: Extra salary sacrificed for car" : "Less: Car salary sacrifice", value: -privateEmployment.carSacrifice, note: privateEmployment.carSacrifice ? privateEmployment.allowanceExchange ? "Additional basic salary given up above the car allowance" : "Contractual basic salary exchanged for a company car" : privateEmployment.allowanceExchange ? "The allowance funds the car without extra basic salary" : "No car salary sacrifice selected", deduction: true },
+    { label: "= Cash pay before pension", value: privateEmployment.cashPayBeforePension, note: "Salary after car sacrifice + cash bonus + allowance", total: true },
+    { section: "Step 2 — Pension" },
+    { label: "Pension calculation base", value: privateEmployment.pensionBase, note: $("pPensionBasis").value },
+    { label: "Employee pension (gross)", value: privateEmployment.employeePensionGross, note: `${(pct("pEePension") * 100).toFixed(1)}% via ${$("pPensionMethod").value.toLowerCase()}` },
+    { label: "Employer pension", value: privateEmployment.employerPension, note: `${(pct("pErPension") * 100).toFixed(1)}% of pension base` },
+    { label: "HMRC relief-at-source top-up", value: privateEmployment.hmrcTopup, note: privateEmployment.hmrcTopup ? "Basic-rate relief added by pension provider" : "Not applicable" },
+    { label: "Employer NI saving added", value: privateEmployment.employerNiSaving, note: privateEmployment.employerNiSaving ? "Employer NI saving passed into pension" : "No passback selected" },
+    { label: "= Total pension funding", value: privateEmployment.totalPension, note: "Employee gross + employer + bonus sacrifice + NI passback", total: true },
+    { section: "Step 3 — Taxable pay and benefits" },
+    { label: "Cash pay before pension", value: privateEmployment.cashPayBeforePension, note: "Starting cash pay" },
+    { label: "Less: Employee pension (pre-tax)", value: -privateEmployment.employeePensionPretax, note: ["Net pay arrangement", "Salary sacrifice"].includes($("pPensionMethod").value) ? "Deducted before Income Tax" : "Not applicable", deduction: true },
+    { label: "Add: Taxable car benefit", value: privateEmployment.carBenefit, note: "Benefit-in-Kind amount; taxable but not paid as cash" },
+    { label: "Add: Taxable private fuel benefit", value: privateEmployment.fuelBenefit, note: "Taxable but not paid as cash" },
+    { label: "= Gross taxable income", value: privateEmployment.grossTaxable, note: `Personal allowance used: ${currency(privateEmployment.taperedAllowance, 0)}`, total: true },
+    { label: "NI-able cash pay", value: privateEmployment.niablePay, note: "Benefits in kind excluded; salary-sacrifice pension reduces NI-able pay" },
+    { section: "Step 4 — Tax, NI and take-home" },
+    { label: "Less: Income Tax", value: -privateEmployment.totalIncomeTax, note: `Basic ${currency(privateEmployment.incomeTaxBasic, 0)} | Higher ${currency(privateEmployment.incomeTaxHigher, 0)} | Additional ${currency(privateEmployment.incomeTaxAdditional, 0)}`, deduction: true },
+    { label: "Less: Employee NI", value: -privateEmployment.totalEmployeeNi, note: `Main rate ${currency(privateEmployment.employeeNiStandard, 0)} | Above UEL ${currency(privateEmployment.employeeNiAbove, 0)}`, deduction: true },
+    { label: "Less: Employee pension from net pay", value: -privateEmployment.employeePensionPosttax, note: $("pPensionMethod").value === "Relief at source" ? "Net contribution after provider top-up" : "Not applicable", deduction: true },
+    { label: "Less: Private-use car payment", value: -privateEmployment.privateUsePayment, note: privateEmployment.privateUsePayment ? "Employee payment from net income" : "None", deduction: true },
+    { label: "= Net take-home", value: privateEmployment.annualNet, note: "Cash received after pension, Income Tax, NI and private-use payment", total: true }
+  ], pDisplayPeriod);
+  renderPrivateSalaryChart($("pChart"), Array.from({ length: 9 }, (_, index) => 40000 + index * 5000).map((salary) => ({ salary, netMonthly: calculatePrivateEmployment(salary, privateAssumptions).monthlyNet })));
   syncAssumptionNoteTooltips();
 }
 
