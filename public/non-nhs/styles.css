@@ -49,7 +49,7 @@ button, input, select { font: inherit; }
   letter-spacing: .13em;
 }
 
-h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 38px; font-weight: 500; line-height: 1; }
+h1 { margin: 0; font-size: 38px; font-weight: 650; line-height: 1; letter-spacing: -.025em; }
 
 .tax-year { display: grid; gap: 5px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .tax-year select { min-height: 38px; padding: 0 32px 0 12px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--navy); font-size: 14px; font-weight: 700; }
@@ -89,7 +89,7 @@ main { width: min(100%, 780px); margin: 0 auto; padding: 0 18px 48px; }
 
 .card { margin: 0 0 16px; padding: 22px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); box-shadow: var(--shadow); }
 .section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
-.section-heading h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 24px; font-weight: 500; }
+.section-heading h2 { margin: 0; font-size: 24px; font-weight: 650; letter-spacing: -.015em; }
 .section-heading > p { max-width: 220px; margin: 4px 0 0; color: var(--muted); font-size: 12px; text-align: right; }
 
 .field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -173,7 +173,7 @@ main { width: min(100%, 780px); margin: 0 auto; padding: 0 18px 48px; }
 .notice strong { color: var(--navy); font-size: 12px; }
 .notice p { margin: 3px 0 0; }
 footer { display: flex; justify-content: space-between; padding: 20px max(24px, env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); background: var(--navy); color: #aebcd0; font-size: 11px; }
-footer span:first-child { color: white; font-family: Georgia, serif; font-size: 14px; }
+footer span:first-child { color: white; font-size: 14px; font-weight: 650; }
 
 @media (max-width: 520px) {
   .app-header { align-items: center; padding-bottom: 31px; }
