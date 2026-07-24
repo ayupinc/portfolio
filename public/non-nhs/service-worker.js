@@ -1,4 +1,4 @@
-const CACHE = "take-home-v2";
+const CACHE = "take-home-v3";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "../assets/maple-leaf.png"];
 
 self.addEventListener("install", (event) => {

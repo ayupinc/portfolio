@@ -217,10 +217,38 @@ function syncConditionalFields() {
 function calculate() {
   syncConditionalFields();
   const weeks = workingWeeks(value("pDpw"), value("pLeave"), value("pBh"));
-  const result = calculatePrivateEmployment(value("pSalary"), assumptions());
+  const currentAssumptions = assumptions();
+  const result = calculatePrivateEmployment(value("pSalary"), currentAssumptions);
   $("pWeeksText").textContent = weeks.toFixed(1);
   $("monthlyNet").textContent = currency(result.monthlyNet);
+  $("pensionTitle").textContent = `${currentAssumptions.pension_method} pension`;
   $("pensionValue").textContent = currency(result.totalPension);
+
+  const carType = currentAssumptions.car_type;
+  const carTitles = {
+    "No employer car": "No employer car",
+    "Cash car allowance": "Cash car allowance",
+    "Company car": "Company car",
+    "Salary sacrifice car": "Salary sacrifice car",
+    "Car allowance exchanged for salary-sacrifice car": "Allowance-exchange car"
+  };
+  $("carTitle").textContent = carTitles[carType] || carType;
+  if (carType === "Cash car allowance") {
+    $("carValue").textContent = currency(result.carAllowanceEntitlement);
+    $("carDetail").textContent = "cash allowance per year";
+  } else if (carType === "No employer car") {
+    $("carValue").textContent = currency(0);
+    $("carDetail").textContent = "no car benefit selected";
+  } else {
+    const withoutCar = calculatePrivateEmployment(value("pSalary"), {
+      ...currentAssumptions,
+      car_type: "No employer car"
+    });
+    const monthlyCost = Math.max(0, withoutCar.monthlyNet - result.monthlyNet);
+    $("carValue").textContent = currency(monthlyCost);
+    $("carDetail").textContent = "estimated take-home cost per month";
+  }
+
   renderBreakdown(result);
   return result;
 }
