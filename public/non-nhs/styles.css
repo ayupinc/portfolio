@@ -70,7 +70,16 @@ main { width: min(100%, 780px); margin: 0 auto; padding: 0 18px 48px; }
 
 .hero-card::after { content: ""; position: absolute; width: 5px; left: 0; top: 0; bottom: 0; background: var(--teal); }
 .hero-label { margin: 0; color: var(--muted); font-size: 13px; font-weight: 650; }
-.hero-value { margin: 4px 0 22px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(43px, 12vw, 64px); line-height: 1.05; letter-spacing: -.035em; }
+.hero-value {
+  margin: 4px 0 22px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-size: clamp(43px, 12vw, 64px);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
 .hero-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); padding-top: 16px; }
 .hero-stats div { display: grid; gap: 2px; }
 .hero-stats div + div { padding-left: 20px; border-left: 1px solid var(--line); }
@@ -87,11 +96,33 @@ main { width: min(100%, 780px); margin: 0 auto; padding: 0 18px 48px; }
 .field { display: grid; gap: 7px; color: var(--muted); font-size: 12px; font-weight: 700; }
 .money-input { display: flex; align-items: center; min-height: 54px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--navy); }
 .money-input:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(8,126,112,.12); }
-.money-input b { font: 500 25px Georgia, serif; }
-.money-input input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--navy); font: 500 25px Georgia, serif; }
+.money-input b { font-size: 25px; font-weight: 600; line-height: 1; }
+.money-input input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--navy);
+  font-size: 25px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  line-height: 1;
+}
 .days-input { display: flex; align-items: center; min-height: 54px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--muted); }
 .days-input:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(8,126,112,.12); }
-.days-input input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--navy); font: 500 25px Georgia, serif; }
+.days-input input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--navy);
+  font-size: 25px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  line-height: 1;
+}
 .days-input b { font-size: 12px; }
 
 .segmented { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 4px 4px 0 0; background: #f3f5f8; }
