@@ -93,6 +93,21 @@ main { width: min(100%, 780px); margin: 0 auto; padding: 0 18px 48px; }
 .section-heading > p { max-width: 220px; margin: 4px 0 0; color: var(--muted); font-size: 12px; text-align: right; }
 
 .field-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.employment-mode { min-height: 58px; margin: -6px 0 18px; padding: 0 2px 13px; }
+.nhs-panel { margin: -3px 0 20px; padding: 15px; border: 1px solid #b8d8d2; border-radius: 6px; background: var(--mint); }
+.nhs-selectors { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 14px; }
+.nhs-selectors .stack-field { margin: 0; }
+.nhs-selectors p { margin: 0 0 13px; color: var(--muted); font-size: 10px; }
+.nhs-steps { margin: 14px 0 0; padding: 0; border: 0; }
+.nhs-steps legend { margin-bottom: 7px; color: var(--navy); font-size: 11px; font-weight: 800; }
+#nhsStepChoices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.nhs-step { display: grid; gap: 3px; min-height: 59px; padding: 8px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--muted); text-align: left; }
+.nhs-step span { font-size: 9px; line-height: 1.2; }
+.nhs-step strong { color: var(--navy); font-size: 14px; }
+.nhs-step.selected { border-color: var(--teal); box-shadow: inset 0 0 0 1px var(--teal); background: #f7fffd; }
+.nhs-hint { margin: 10px 0 0; color: var(--muted); font-size: 10px; }
+.nhs-only-note { color: var(--teal); font-size: 9px; font-weight: 700; }
+.field input:disabled, .row-field input:disabled, .toggle-row input:disabled, select:disabled { cursor: not-allowed; opacity: .55; }
 .field { display: grid; gap: 7px; color: var(--muted); font-size: 12px; font-weight: 700; }
 .money-input { display: flex; align-items: center; min-height: 54px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--navy); }
 .money-input:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(8,126,112,.12); }
@@ -182,6 +197,10 @@ footer span:first-child { color: white; font-size: 14px; font-weight: 650; }
   .card { padding: 19px 17px; border-radius: 8px; }
   .hero-card { border-radius: 8px; padding: 23px 19px 20px; }
   .field-grid { grid-template-columns: 1fr; }
+  .nhs-selectors { grid-template-columns: 1fr; }
+  .nhs-selectors p { margin: -6px 0 2px; }
+  #nhsStepChoices { grid-template-columns: 1fr; }
+  .nhs-step { grid-template-columns: minmax(0, 1fr) auto; align-items: center; min-height: 48px; }
   .section-heading > p { display: none; }
   .hero-stats strong { font-size: 13px; }
 }

@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Take Home">
-  <meta name="description" content="A private-sector salary, pension and car benefit take-home calculator.">
-  <title>Take Home — Non-NHS Pay Calculator</title>
+  <meta name="description" content="An NHS and non-NHS salary, pension and car benefit take-home calculator.">
+  <title>Take Home — NHS and Non-NHS Pay Calculator</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="../assets/maple-leaf.png">
   <link rel="stylesheet" href="styles.css">
@@ -17,7 +17,7 @@
 <body>
   <header class="app-header">
     <div>
-      <p class="eyebrow">NON-NHS PAY CALCULATOR</p>
+      <p class="eyebrow" id="appEyebrow">PAY CALCULATOR</p>
       <h1>Take Home</h1>
     </div>
     <label class="tax-year">
@@ -34,7 +34,7 @@
         <div>
           <span id="pensionTitle">Pension</span>
           <strong id="pensionValue">£0</strong>
-          <small>total funding per year</small>
+          <small id="pensionDetail">total funding per year</small>
         </div>
         <div>
           <span id="carTitle">No employer car</span>
@@ -49,13 +49,31 @@
         <div><p class="step">01</p><h2>Your package</h2></div>
         <p>Annual cash pay before deductions</p>
       </div>
+      <label class="employment-mode toggle-row">
+        <span><b>Inside the NHS</b><small>Use Agenda for Change pay and NHS pension settings</small></span>
+        <input id="pNhsMode" data-save type="checkbox">
+      </label>
+      <div class="nhs-panel" id="nhsPanel" hidden>
+        <div class="nhs-selectors">
+          <label class="stack-field">
+            <span>Agenda for Change band</span>
+            <select id="pNhsBand" data-save aria-describedby="nhsScaleNote"></select>
+          </label>
+          <p id="nhsScaleNote">England 2026/27 pay scale and pension tiers</p>
+        </div>
+        <fieldset class="nhs-steps">
+          <legend>Pay points in this band</legend>
+          <div id="nhsStepChoices"></div>
+        </fieldset>
+        <p class="nhs-hint">Choosing a band starts at its lowest pay point. Choose another point below, or edit salary directly.</p>
+      </div>
       <div class="field-grid">
         <label class="field">
           <span>Annual salary</span>
           <span class="money-input"><b>£</b><input id="pSalary" data-save inputmode="decimal" type="number" min="10000" max="500000" step="500" value="98500"></span>
         </label>
         <label class="field">
-          <span>Year-end bonus</span>
+          <span>Year-end bonus <small class="nhs-only-note" hidden>Not used in NHS mode</small></span>
           <span class="money-input"><b>£</b><input id="pBonus" data-save inputmode="decimal" type="number" min="0" max="500000" step="500" value="10000"></span>
         </label>
         <label class="field">
@@ -117,7 +135,7 @@
 
     <aside class="notice">
       <strong>Indicative estimate</strong>
-      <p>This is a planning tool, not financial advice. Tax treatment depends on your circumstances.</p>
+      <p id="estimateNotice">This is a planning tool, not financial advice. Tax treatment depends on your circumstances.</p>
     </aside>
   </main>
 

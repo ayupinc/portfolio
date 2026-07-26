@@ -1,7 +1,7 @@
 {
-  "name": "Take Home — Non-NHS Pay Calculator",
+  "name": "Take Home — NHS and Non-NHS Pay Calculator",
   "short_name": "Take Home",
-  "description": "Private-sector salary, pension and car benefit take-home calculator.",
+  "description": "NHS and non-NHS salary, pension and car benefit take-home calculator.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

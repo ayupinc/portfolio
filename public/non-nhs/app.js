@@ -5,6 +5,31 @@ const TAX_YEARS = {
   "2023/24": { label: "2023/24", personal_allowance: 12570, basic_rate_ceiling: 50270, higher_rate_ceiling: 125140, income_tax_basic: 0.20, income_tax_higher: 0.40, income_tax_additional: 0.45, ni_primary_threshold: 12570, ni_rate_standard: 0.12, ni_upper_earnings_limit: 50270, ni_rate_above_uel: 0.02, employer_ni_rate: 0.138 }
 };
 
+// Agenda for Change annual pay points in England, effective 1 April 2026.
+const NHS_PAY_BANDS_2026 = {
+  "1": [{ label: "Spot salary · closed to new entrants", salary: 25272 }],
+  "2": [{ label: "Entry and top · progression after 2 years", salary: 25272 }],
+  "3": [{ label: "Entry", salary: 25760 }, { label: "Top · after 2 years", salary: 27476 }],
+  "4": [{ label: "Entry", salary: 28392 }, { label: "Top · after 3 years", salary: 31157 }],
+  "5": [{ label: "Entry", salary: 32073 }, { label: "Intermediate · after 2 years", salary: 34592 }, { label: "Top · after 2 more years", salary: 39043 }],
+  "6": [{ label: "Entry", salary: 39959 }, { label: "Intermediate · after 2 years", salary: 42170 }, { label: "Top · after 3 more years", salary: 48117 }],
+  "7": [{ label: "Entry", salary: 49387 }, { label: "Intermediate · after 2 years", salary: 51932 }, { label: "Top · after 3 more years", salary: 56515 }],
+  "8a": [{ label: "Entry", salary: 57528 }, { label: "Intermediate · after 2 years", salary: 60417 }, { label: "Top · after 3 more years", salary: 64750 }],
+  "8b": [{ label: "Entry", salary: 66582 }, { label: "Intermediate · after 2 years", salary: 70896 }, { label: "Top · after 3 more years", salary: 77368 }],
+  "8c": [{ label: "Entry", salary: 79504 }, { label: "Intermediate · after 2 years", salary: 84346 }, { label: "Top · after 3 more years", salary: 91609 }],
+  "8d": [{ label: "Entry", salary: 94356 }, { label: "Intermediate · after 2 years", salary: 100140 }, { label: "Top · after 3 more years", salary: 108814 }],
+  "9": [{ label: "Entry", salary: 112782 }, { label: "Intermediate · after 2 years", salary: 119583 }, { label: "Top · after 3 more years", salary: 129783 }]
+};
+
+const NHS_EMPLOYEE_PENSION_TIERS_2026 = [
+  [13259, 5.2], [28854, 6.5], [35155, 8.3], [52778, 9.8], [67668, 10.7], [Infinity, 12.5]
+];
+const NHS_EMPLOYER_PENSION_RATE_2026 = 14.38;
+const NHS_PRESET_FIELDS = [
+  "pSalary", "pBonus", "pBonusSacrifice", "pBonusPensionable",
+  "pPensionMethod", "pPensionBasis", "pEePension", "pErPension"
+];
+
 const $ = (id) => document.getElementById(id);
 const value = (id) => Number($(id).value || 0);
 const pct = (id) => value(id) / 100;
@@ -26,6 +51,10 @@ function displayMoney(annual, period) {
 
 function workingWeeks(daysPerWeek, leaveDays, bankHolidays) {
   return daysPerWeek > 0 ? Math.round((52 - ((leaveDays + bankHolidays) / daysPerWeek)) * 10) / 10 : 0;
+}
+
+function nhsEmployeePensionRate(annualPensionablePay) {
+  return NHS_EMPLOYEE_PENSION_TIERS_2026.find(([ceiling]) => annualPensionablePay <= ceiling)[1];
 }
 
 function taxAndNi(grossTaxable, assumptions, niablePay = grossTaxable) {
@@ -214,15 +243,70 @@ function syncConditionalFields() {
   document.querySelectorAll(".car-allowance-exchange").forEach((el) => { el.hidden = !allowanceExchange; });
 }
 
+function renderNhsSteps(selectedSalary = value("pSalary")) {
+  const steps = NHS_PAY_BANDS_2026[$("pNhsBand").value] || [];
+  $("nhsStepChoices").innerHTML = steps.map((step) => {
+    const selected = step.salary === selectedSalary;
+    return `<button type="button" class="nhs-step${selected ? " selected" : ""}" data-nhs-salary="${step.salary}" aria-pressed="${selected}">
+      <span>${step.label}</span><strong>${currency(step.salary)}</strong>
+    </button>`;
+  }).join("");
+}
+
+function saveNonNhsSettings() {
+  NHS_PRESET_FIELDS.forEach((id) => {
+    const element = $(id);
+    const setting = element.type === "checkbox" ? String(element.checked) : element.value;
+    localStorage.setItem(`takeHome.nonNhs.${id}`, setting);
+  });
+}
+
+function restoreNonNhsSettings() {
+  NHS_PRESET_FIELDS.forEach((id) => {
+    const element = $(id);
+    const setting = localStorage.getItem(`takeHome.nonNhs.${id}`);
+    if (setting === null) return;
+    if (element.type === "checkbox") element.checked = setting === "true";
+    else element.value = setting;
+  });
+}
+
+function applyNhsSettings({ resetSalary = false } = {}) {
+  const enabled = $("pNhsMode").checked;
+  $("nhsPanel").hidden = !enabled;
+  document.querySelectorAll(".nhs-only-note").forEach((note) => { note.hidden = !enabled; });
+  $("appEyebrow").textContent = enabled ? "INSIDE NHS PAY CALCULATOR" : "NON-NHS PAY CALCULATOR";
+
+  ["pBonus", "pBonusSacrifice", "pBonusPensionable", "pPensionMethod", "pPensionBasis", "pEePension", "pErPension"]
+    .forEach((id) => { $(id).disabled = enabled; });
+
+  if (!enabled) return;
+  if (resetSalary) $("pSalary").value = NHS_PAY_BANDS_2026[$("pNhsBand").value][0].salary;
+  $("pBonus").value = 0;
+  $("pBonusSacrifice").value = 0;
+  $("pBonusPensionable").checked = false;
+  $("pPensionMethod").value = "Net pay arrangement";
+  $("pPensionBasis").value = "Basic salary";
+  $("pEePension").value = nhsEmployeePensionRate(value("pSalary"));
+  $("pErPension").value = NHS_EMPLOYER_PENSION_RATE_2026;
+  renderNhsSteps();
+}
+
 function calculate() {
+  if ($("pNhsMode").checked) applyNhsSettings();
   syncConditionalFields();
   const weeks = workingWeeks(value("pDpw"), value("pLeave"), value("pBh"));
   const currentAssumptions = assumptions();
   const result = calculatePrivateEmployment(value("pSalary"), currentAssumptions);
   $("pWeeksText").textContent = weeks.toFixed(1);
   $("monthlyNet").textContent = currency(result.monthlyNet);
-  $("pensionTitle").textContent = `${currentAssumptions.pension_method} pension`;
+  const nhsMode = $("pNhsMode").checked;
+  $("pensionTitle").textContent = nhsMode ? "NHS pension contributions" : `${currentAssumptions.pension_method} pension`;
   $("pensionValue").textContent = currency(result.totalPension);
+  $("pensionDetail").textContent = nhsMode ? "employee + employer per year" : "total funding per year";
+  $("estimateNotice").textContent = nhsMode
+    ? "This is a planning estimate. The NHS Pension Scheme is a defined-benefit scheme: contributions shown are not a pension pot or forecast benefit."
+    : "This is a planning tool, not financial advice. Tax treatment depends on your circumstances.";
 
   const carType = currentAssumptions.car_type;
   const carTitles = {
@@ -279,11 +363,33 @@ function setupTabs() {
 
 function init() {
   Object.entries(TAX_YEARS).forEach(([year, tax]) => $("taxYear").add(new Option(tax.label, year)));
+  Object.keys(NHS_PAY_BANDS_2026).forEach((band) => $("pNhsBand").add(new Option(`Band ${band}`, band)));
   $("taxYear").value = "2026/27";
+  $("pNhsBand").value = "5";
   restore();
   setupTabs();
-  document.addEventListener("input", (event) => { persist(event.target); calculate(); });
-  document.addEventListener("change", (event) => { persist(event.target); calculate(); });
+  document.addEventListener("click", (event) => {
+    const step = event.target.closest("[data-nhs-salary]");
+    if (!step) return;
+    $("pSalary").value = step.dataset.nhsSalary;
+    persist($("pSalary"));
+    calculate();
+  });
+  document.addEventListener("input", (event) => {
+    persist(event.target);
+    calculate();
+  });
+  document.addEventListener("change", (event) => {
+    persist(event.target);
+    if (event.target.id === "pNhsMode") {
+      if (event.target.checked) saveNonNhsSettings();
+      else restoreNonNhsSettings();
+      applyNhsSettings({ resetSalary: event.target.checked });
+    }
+    if (event.target.id === "pNhsBand") applyNhsSettings({ resetSalary: true });
+    calculate();
+  });
+  applyNhsSettings();
   calculate();
 
   if ("serviceWorker" in navigator) {
