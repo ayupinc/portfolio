@@ -54,8 +54,9 @@ The original resources remain available separately:
 ```text
 npm run dev
 npm test
+npm run deploy:static
 ```
 
-The production build is emitted to `dist/` and packaged for Cloudflare-compatible hosting.
+`npm run deploy:static` generates the static site and copies its routes into `public/`. The exported files are committed there because `public/` remains the deployment directory used by the existing Cloudflare site connected to `mapleintel.uk`.
 
 ---
