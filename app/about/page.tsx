@@ -5,16 +5,16 @@ import { ArrowIcon, ContactBand, PageIntro } from "../components";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Stephen Clinton and Maple Intel—operational leadership experience combined with hands-on analytics engineering and Power BI delivery.",
+    "About Stephen Clinton and Maple Leaf Intelligence—operational leadership experience combined with hands-on analytics engineering and Power BI delivery.",
 };
 
 export default function About() {
   return (
     <>
       <PageIntro
-        eyebrow="About Maple Intel"
+        eyebrow="About Maple Leaf Intelligence"
         title="Operational judgement and technical delivery, in the same conversation."
-        text="Maple Intel is an independent consultancy led by Stephen Clinton, specialising in operational analytics for ambulance services, the wider NHS and related service environments."
+        text="Maple Leaf Intelligence is an independent consultancy led by Stephen Clinton, specialising in operational analytics for ambulance services, the wider NHS and related service environments."
       />
 
       <section className="about-story shell">
@@ -43,7 +43,7 @@ export default function About() {
             correct and still mislead the people using it.
           </p>
           <p>
-            Maple Intel was created to work on that intersection: understand
+            Maple Leaf Intelligence was created to work on that intersection: understand
             the service, engineer a reliable analytical model and present the
             result clearly enough to support real decisions.
           </p>

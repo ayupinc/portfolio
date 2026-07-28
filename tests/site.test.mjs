@@ -13,6 +13,8 @@ test("renders the consultancy home page", async () => {
   assert.match(html, /Operational analytics for services where/);
   assert.match(html, /View selected work/);
   assert.match(html, /Evidence, not broad claims/);
+  assert.match(html, /Private preview/);
+  assert.match(html, /name="robots" content="noindex, nofollow"/);
   assert.doesNotMatch(html, /codex-preview/);
 });
 

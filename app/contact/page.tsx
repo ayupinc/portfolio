@@ -4,7 +4,7 @@ import { PageIntro } from "../components";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Discuss an NHS operational analytics, Power BI or analytics engineering requirement with Maple Intel.",
+    "Discuss an NHS operational analytics, Power BI or analytics engineering requirement with Maple Leaf Intelligence.",
 };
 
 export default function Contact() {

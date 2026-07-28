@@ -18,7 +18,7 @@ export default function Home() {
             <em>the detail matters.</em>
           </h1>
           <p className="hero__lede">
-            Maple Intel helps ambulance services, NHS teams and customer-service
+            Maple Leaf Intelligence helps ambulance services, NHS teams and customer-service
             operations turn complex logistical data into reliable analysis,
             Power BI reporting and better operational decisions.
           </p>
@@ -91,7 +91,7 @@ export default function Home() {
         <div className="shell">
           <div className="section-heading section-heading--wide">
             <div>
-              <p className="eyebrow">How Maple Intel helps</p>
+              <p className="eyebrow">How Maple Leaf Intelligence helps</p>
               <h2>Technical delivery grounded in operational reality.</h2>
             </div>
             <p>
@@ -130,7 +130,7 @@ export default function Home() {
         <div className="perspective__copy">
           <h2>Built from both sides of the decision.</h2>
           <p>
-            Maple Intel is led by Stephen Clinton, combining senior operational
+            Maple Leaf Intelligence is led by Stephen Clinton, combining senior operational
             leadership experience with hands-on SQL, modelling and Power BI
             delivery.
           </p>
@@ -140,7 +140,7 @@ export default function Home() {
             people rely on it during live operations.
           </p>
           <Link className="text-link" href="/about">
-            About Stephen and Maple Intel <ArrowIcon />
+            About Stephen and Maple Leaf Intelligence <ArrowIcon />
           </Link>
         </div>
       </section>

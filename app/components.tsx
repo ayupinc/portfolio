@@ -8,7 +8,7 @@ export function ArrowIcon() {
 
 export function Brand() {
   return (
-    <Link className="brand" href="/" aria-label="Maple Intel home">
+    <Link className="brand" href="/" aria-label="Maple Leaf Intelligence home">
       <Image
         className="brand__leaf"
         src="/assets/maple-leaf.png"
@@ -18,7 +18,7 @@ export function Brand() {
         priority
       />
       <span>
-        <strong>Maple Intel</strong>
+        <strong>Maple Leaf Intelligence</strong>
         <small>Operational analytics</small>
       </span>
     </Link>
@@ -98,7 +98,7 @@ export function Footer() {
         </div>
       </div>
       <div className="shell site-footer__base">
-        <span>© {new Date().getFullYear()} Maple Intel</span>
+        <span>© {new Date().getFullYear()} Maple Leaf Intelligence</span>
         <span>Built for clarity, evidence and operational use.</span>
       </div>
     </footer>

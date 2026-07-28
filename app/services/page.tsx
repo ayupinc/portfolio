@@ -65,7 +65,7 @@ export default function Services() {
       <PageIntro
         eyebrow="Services"
         title="A connected service from operational question to governed reporting."
-        text="Maple Intel can deliver a defined analytics project, advise on a difficult reporting problem or work as an embedded specialist within an operational or analytical team."
+        text="Maple Leaf Intelligence can deliver a defined analytics project, advise on a difficult reporting problem or work as an embedded specialist within an operational or analytical team."
       />
 
       <section className="service-list shell">
