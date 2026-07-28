@@ -103,8 +103,8 @@ export default async function CaseStudyPage({
                     <Image
                       src={item.src}
                       alt={item.alt}
-                      width={1600}
-                      height={800}
+                      width={item.width}
+                      height={item.height}
                     />
                     <figcaption>{item.caption}</figcaption>
                   </figure>

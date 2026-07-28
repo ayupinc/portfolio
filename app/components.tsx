@@ -77,18 +77,11 @@ export function Footer() {
           <p className="footer-label">Explore</p>
           <Link href="/services">Services</Link>
           <Link href="/portfolio">Portfolio</Link>
-          <Link href="/about">About Stephen</Link>
+          <Link href="/about">About</Link>
         </div>
         <div>
           <p className="footer-label">Start a conversation</p>
           <Link href="/contact">Discuss a project <ArrowIcon /></Link>
-          <a
-            href="https://www.linkedin.com/in/stephenclinton"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LinkedIn <ArrowIcon />
-          </a>
         </div>
       </div>
       <div className="shell site-footer__base">

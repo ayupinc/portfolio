@@ -27,14 +27,6 @@ export default function Contact() {
           <a className="contact-link" href="mailto:stephen@mapleintel.uk">
             stephen@mapleintel.uk <span aria-hidden="true">↗</span>
           </a>
-          <a
-            className="contact-link"
-            href="https://www.linkedin.com/in/stephenclinton"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Connect on LinkedIn <span aria-hidden="true">↗</span>
-          </a>
         </div>
         <aside className="contact-aside">
           <p className="eyebrow">Helpful context</p>

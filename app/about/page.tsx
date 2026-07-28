@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon, ContactBand, PageIntro } from "../components";
 
@@ -20,7 +21,14 @@ export default function About() {
       <section className="about-story shell">
         <div className="about-story__aside">
           <p className="eyebrow">Stephen Clinton</p>
-          <div className="monogram" aria-hidden="true">SC</div>
+          <Image
+            className="about-portrait"
+            src="/images/stephen-clinton-headshot.png"
+            alt="Stephen Clinton, founder of Maple Leaf Intelligence."
+            width={1024}
+            height={1024}
+            priority
+          />
           <p>
             Operational analytics consultant
             <br />

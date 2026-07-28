@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon, ContactBand, PageIntro } from "../components";
 
@@ -68,19 +69,51 @@ export default function Services() {
         text="Maple Leaf Intelligence can deliver a defined analytics project, advise on a difficult reporting problem or work as an embedded specialist within an operational or analytical team."
       />
 
-      <section className="service-list shell">
-        {services.map((service) => (
-          <article key={service.number} className="service-row">
-            <span className="service-row__number">{service.number}</span>
-            <div className="service-row__intro">
+      <section className="service-story shell">
+        <figure className="service-visual">
+          <Image
+            src="/images/emergency-operations-control-room.png"
+            alt="An illustrative, unbranded emergency-services control room with staff coordinating operational activity."
+            width={1536}
+            height={1024}
+            priority
+          />
+          <figcaption>Operational context, service coordination and performance.</figcaption>
+        </figure>
+        <div className="service-pair">
+          {services.slice(0, 2).map((service) => (
+            <article key={service.number} className="service-feature">
+              <span>{service.number}</span>
               <h2>{service.title}</h2>
               <p>{service.intro}</p>
-            </div>
-            <ul>
-              {service.items.map((item) => <li key={item}>{item}</li>)}
-            </ul>
-          </article>
-        ))}
+              <ul>
+                {service.items.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        <figure className="service-visual service-visual--reverse">
+          <Image
+            src="/images/analytics-engineering-workspace.png"
+            alt="An illustrative analyst workspace showing a data model, operational dashboard and validation checks."
+            width={1536}
+            height={1024}
+          />
+          <figcaption>Engineering, modelling, reporting and validation.</figcaption>
+        </figure>
+        <div className="service-pair">
+          {services.slice(2).map((service) => (
+            <article key={service.number} className="service-feature">
+              <span>{service.number}</span>
+              <h2>{service.title}</h2>
+              <p>{service.intro}</p>
+              <ul>
+                {service.items.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="engagement shell">

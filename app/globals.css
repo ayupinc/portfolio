@@ -690,6 +690,73 @@ h3 {
   padding-block: 20px 90px;
 }
 
+.service-story {
+  padding-block: 62px 96px;
+}
+
+.service-visual {
+  margin: 0;
+}
+
+.service-visual img {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  object-position: center;
+}
+
+.service-visual figcaption {
+  margin-top: 10px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.service-pair {
+  margin: 28px 0 74px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.service-feature {
+  padding: 38px 42px 42px;
+  border-right: 1px solid var(--rule);
+}
+
+.service-feature:last-child {
+  border-right: 0;
+}
+
+.service-feature > span {
+  color: var(--maple-dark);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.service-feature h2 {
+  margin: 32px 0 18px;
+  font-size: clamp(2rem, 3.5vw, 3.1rem);
+}
+
+.service-feature > p {
+  color: var(--ink-soft);
+}
+
+.service-feature ul {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-feature li {
+  padding-block: 10px;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
 .service-row {
   padding-block: 48px;
   display: grid;
@@ -790,6 +857,13 @@ h3 {
   color: #e3bc74;
   font-family: var(--serif);
   font-size: 5rem;
+}
+
+.about-portrait {
+  width: min(100%, 360px);
+  height: auto;
+  margin-bottom: 24px;
+  object-fit: cover;
 }
 
 .about-story__aside > p:last-child {
@@ -1021,15 +1095,18 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px;
+  align-items: start;
 }
 
 .evidence-grid figure {
   margin: 0;
+  align-self: start;
 }
 
 .evidence-grid img {
   width: 100%;
-  min-height: 280px;
+  height: auto;
+  min-height: 0;
   object-fit: contain;
   background: white;
 }
@@ -1100,6 +1177,10 @@ h3 {
 
   .service-row {
     grid-template-columns: 60px 1fr;
+  }
+
+  .service-feature {
+    padding-inline: 28px;
   }
 
   .service-row ul {
@@ -1211,6 +1292,25 @@ h3 {
 
   .service-grid {
     grid-template-columns: 1fr;
+  }
+
+  .service-visual img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .service-pair {
+    grid-template-columns: 1fr;
+    margin-bottom: 58px;
+  }
+
+  .service-feature {
+    padding: 32px 20px 36px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .service-feature:last-child {
+    border-bottom: 0;
   }
 
   .service-card,

@@ -9,7 +9,13 @@ export type CaseStudy = {
   challenge: string[];
   approach: { title: string; text: string }[];
   outcome: string[];
-  evidence: { src: string; alt: string; caption: string }[];
+  evidence: {
+    src: string;
+    alt: string;
+    caption: string;
+    width: number;
+    height: number;
+  }[];
   tags: string[];
 };
 
@@ -54,12 +60,16 @@ export const caseStudies: CaseStudy[] = [
     evidence: [
       {
         src: "/screenshots/queue-data-flow.png",
+        width: 1422,
+        height: 393,
         alt: "A data-flow diagram from case-management events through SQL transformations to Power BI.",
         caption:
           "The operational view is the final layer of a controlled path from raw audit events to validated queue states.",
       },
       {
         src: "/screenshots/queue-engineering.png",
+        width: 1960,
+        height: 846,
         alt: "A technical model showing queue placement and action tables.",
         caption:
           "Validated placement and action tables provide one consistent home for the temporal logic used across reports.",
@@ -107,12 +117,16 @@ export const caseStudies: CaseStudy[] = [
     evidence: [
       {
         src: "/screenshots/telephony-data-flow.png",
+        width: 1422,
+        height: 406,
         alt: "A data-flow diagram from native Cisco sources through analytical tables to Power BI.",
         caption:
           "Low-level events are reconstructed once into shared analytical tables before they reach reporting.",
       },
       {
         src: "/screenshots/cisco-engineering.png",
+        width: 1896,
+        height: 896,
         alt: "An analytical model for calls, agent calls, sessions and agent activity.",
         caption:
           "The model preserves the relationships between organisational demand and individual agent activity.",
@@ -200,12 +214,16 @@ export const caseStudies: CaseStudy[] = [
     evidence: [
       {
         src: "/screenshots/new-question-engineering.png",
+        width: 1974,
+        height: 732,
         alt: "A technical data model for questionnaire episodes and classified responses.",
         caption:
           "The transformation layer separates stable episodes from cleaned, classified response detail.",
       },
       {
         src: "/screenshots/questionnaire-review-times.png",
+        width: 1645,
+        height: 930,
         alt: "A Power BI report showing questionnaire review-time analysis.",
         caption:
           "The same governed model supports workflow duration and operational review.",
