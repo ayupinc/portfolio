@@ -1,6 +1,5 @@
 export type CaseStudy = {
   slug: string;
-  index: string;
   eyebrow: string;
   title: string;
   summary: string;
@@ -17,11 +16,10 @@ export type CaseStudy = {
 export const caseStudies: CaseStudy[] = [
   {
     slug: "clinical-queue-intelligence",
-    index: "01",
     eyebrow: "Clinical operations · Queue intelligence",
-    title: "Reconstructing a live clinical queue from fragmented audit events",
+    title: "Creating a live, trusted view of clinical queue activity",
     summary:
-      "A validated operational model and near-live Power BI wallboard that turned disconnected case-management events into a trustworthy view of waiting demand, active work and queue pressure.",
+      "A validated operational model and near-live Power BI wallboard that brings case-management events together into a trustworthy view of waiting demand, active work and queue pressure.",
     image: "/screenshots/queue-wallboard.png",
     imageAlt:
       "An anonymised Power BI wallboard showing clinical queue volumes, priorities and waiting times.",
@@ -32,8 +30,8 @@ export const caseStudies: CaseStudy[] = [
       { label: "Use", value: "Primary operational queue view" },
     ],
     challenge: [
-      "The case-management system recorded movements and actions as isolated audit events. It did not contain a persistent queue episode or a single field describing each case’s current operational state.",
-      "Cases could move between teams, change priority, leave and return to a queue, or progress through activity recorded in several systems. Manual checks and delayed extracts could not give team leaders a reliable current view.",
+      "The case-management system recorded movements and actions as a sequence of audit events. A reliable operational view required those events to be organised into persistent queue episodes and current states.",
+      "Cases could move between teams, change priority, leave and return to a queue, or progress through activity recorded in several systems. Team leaders needed one timely view that brought those movements together.",
     ],
     approach: [
       {
@@ -64,14 +62,13 @@ export const caseStudies: CaseStudy[] = [
         src: "/screenshots/queue-engineering.png",
         alt: "A technical model showing queue placement and action tables.",
         caption:
-          "Validated placement and action tables centralise temporal logic instead of repeating it in each report.",
+          "Validated placement and action tables provide one consistent home for the temporal logic used across reports.",
       },
     ],
     tags: ["T-SQL", "Power BI", "DirectQuery", "DAX", "Event modelling"],
   },
   {
     slug: "telephony-demand-workforce",
-    index: "02",
     eyebrow: "Contact-centre operations · Telephony",
     title: "One governed view of demand, service and workforce activity",
     summary:
@@ -86,8 +83,8 @@ export const caseStudies: CaseStudy[] = [
       { label: "Output", value: "Five reports, 40+ pages" },
     ],
     challenge: [
-      "A switchboard change made existing third-party reporting unreliable. The opaque reporting tables could not be repaired confidently, while native Cisco data represented each call and agent lifecycle as multiple low-level events.",
-      "Operational teams needed a consistent view from organisation-level demand through to individual calls, sessions and agent activity without relying on disconnected models or ambiguous platform metrics.",
+      "A switchboard change created the opportunity to build a transparent reporting model directly from native Cisco data, where each call and agent lifecycle is represented by multiple low-level events.",
+      "Operational teams needed a consistent view from organisation-level demand through to individual calls, sessions and agent activity, supported by shared models and clearly defined measures.",
     ],
     approach: [
       {
@@ -125,28 +122,27 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "operational-kpi-design",
-    index: "03",
     eyebrow: "Performance management · KPI governance",
     title: "Designing a waiting-time KPI that reflects operational reality",
     summary:
-      "A governed performance measure built where no authoritative timestamp existed—combining workflow interpretation, event logic, semantic modelling and distribution-based reporting.",
+      "A governed performance measure derived from operational workflow events—combining service interpretation, event logic, semantic modelling and distribution-based reporting.",
     image: "/screenshots/kpi.png",
     imageAlt:
       "An anonymised Power BI operational KPI report with trends and performance distributions.",
     facts: [
       { label: "Question", value: "How long did cases wait for assessment?" },
-      { label: "Constraint", value: "No single valid source timestamp" },
+      { label: "Method", value: "Workflow-derived start and end events" },
       { label: "Analysis", value: "Trend, percentile and distribution" },
       { label: "Control", value: "Definitions, caveats and validation" },
     ],
     challenge: [
       "Cases could change priority, move between assessment levels, leave and later return to the workflow. Several technically plausible start and end points produced materially different performance results.",
-      "The requirement was not simply to calculate a duration. It was to define a measure that operational teams recognised, apply it consistently and retain transparency about edge cases and process changes.",
+      "The requirement combined duration calculation with a clear operational definition that teams recognised, applied consistently and could interpret alongside edge cases and process changes.",
     ],
     approach: [
       {
         title: "Define the operational event",
-        text: "I worked from the workflow rather than convenient database fields, selecting the most relevant assignment immediately before assessment and the first valid assessment-initiation action.",
+        text: "I mapped the operational workflow to the underlying event data, selecting the most relevant assignment immediately before assessment and the first valid assessment-initiation action.",
       },
       {
         title: "Engineer explicit edge-case rules",
@@ -166,7 +162,6 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "questionnaire-workflow",
-    index: "04",
     eyebrow: "Clinical quality · Workflow analysis",
     title: "Turning branching questionnaire responses into stable analytical episodes",
     summary:
@@ -181,7 +176,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Use", value: "Pathway, quality and outcome reporting" },
     ],
     challenge: [
-      "The source held no completed assessment entity. A single questionnaire produced dozens of response rows, while branching, wording changes, spelling variants and re-opened sessions made direct aggregation unreliable.",
+      "The source represented each assessment as dozens of individual response rows. Stable completed episodes were created across branching, wording changes, spelling variants and re-opened sessions.",
       "Operational users needed to analyse complete workflow episodes and compare consistent clinical concepts across changing questionnaire versions.",
     ],
     approach: [
@@ -195,7 +190,7 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         title: "Govern change",
-        text: "Question and response variants were standardised through controlled mappings. Configuration reporting exposed new or changed content so the model could evolve without repeated report redevelopment.",
+        text: "Question and response variants were standardised through controlled mappings. Configuration reporting exposed new or changed content so the model could evolve through a simple governed maintenance process.",
       },
     ],
     outcome: [
@@ -220,7 +215,6 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "resource-utilisation",
-    index: "05",
     eyebrow: "Operational capacity · Resource analysis",
     title: "Making specialist resource availability and utilisation visible",
     summary:
@@ -236,7 +230,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     challenge: [
       "A specialist operational staff group needed a dedicated account of when resources were available, how they were used and where individual activity required investigation.",
-      "The data had to support comparisons across area, resource type and operational grouping without losing the episode-level evidence behind each measure.",
+      "The model supported comparisons across area, resource type and operational grouping while retaining the episode-level evidence behind each measure.",
     ],
     approach: [
       {
@@ -254,7 +248,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     outcome: [
       "The report gave operational leaders a consistent view of specialist resource supply and use while retaining the detail needed to investigate variation.",
-      "Its controlled definitions made utilisation a transparent operational measure rather than an unexplained percentage.",
+      "Its controlled definitions made utilisation a transparent operational measure with a clear relationship to underlying activity.",
     ],
     evidence: [],
     tags: ["Power BI", "DAX", "Time modelling", "Utilisation", "Operations"],

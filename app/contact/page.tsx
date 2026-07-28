@@ -13,7 +13,7 @@ export default function Contact() {
       <PageIntro
         eyebrow="Contact"
         title="Start with the operational problem."
-        text="If you are trying to understand demand, queues, workflow, capacity, service performance or the data beneath them, describe the requirement and where the current reporting falls short."
+        text="If you are working to understand demand, queues, workflow, capacity, service performance or the data beneath them, describe the requirement and the operational view you want to create."
       />
       <section className="contact-layout shell">
         <div className="contact-primary">
@@ -41,13 +41,13 @@ export default function Contact() {
           <h2>What to include</h2>
           <ol>
             <li><span>01</span>The service or operational environment</li>
-            <li><span>02</span>The question the current data cannot answer</li>
+            <li><span>02</span>The operational question you want to answer</li>
             <li><span>03</span>Known systems, sources or reporting constraints</li>
             <li><span>04</span>The timescale or type of support required</li>
           </ol>
           <p className="small-note">
-            Please do not send patient, employee or otherwise sensitive
-            operational data in an initial enquiry.
+            Keep initial enquiries free of patient, employee or otherwise
+            sensitive operational data.
           </p>
         </aside>
       </section>

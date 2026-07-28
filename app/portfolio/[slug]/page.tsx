@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowIcon, ContactBand, RelatedStudies } from "../../components";
+import { ContactBand, RelatedStudies } from "../../components";
 import { caseStudies, getCaseStudy } from "../../site-data";
 
 export function generateStaticParams() {
@@ -62,11 +62,10 @@ export default async function CaseStudyPage({
 
         <section className="case-section shell">
           <div className="case-section__label">
-            <span>01</span>
             <p>The challenge</p>
           </div>
           <div className="case-section__body prose">
-            <h2>The source data did not contain the operational answer.</h2>
+            <h2>Building the operational view from source activity.</h2>
             {study.challenge.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -75,7 +74,6 @@ export default async function CaseStudyPage({
 
         <section className="case-section shell">
           <div className="case-section__label">
-            <span>02</span>
             <p>The approach</p>
           </div>
           <div className="case-section__body">
@@ -97,7 +95,6 @@ export default async function CaseStudyPage({
           <section className="evidence-section">
             <div className="shell">
               <div className="case-section__label">
-                <span>03</span>
                 <p>Technical evidence</p>
               </div>
               <div className="evidence-grid">
@@ -119,7 +116,6 @@ export default async function CaseStudyPage({
 
         <section className="case-section shell">
           <div className="case-section__label">
-            <span>{study.evidence.length ? "04" : "03"}</span>
             <p>Outcome</p>
           </div>
           <div className="case-section__body prose">
@@ -130,12 +126,6 @@ export default async function CaseStudyPage({
             <ul className="tag-list" aria-label="Technologies and methods">
               {study.tags.map((tag) => <li key={tag}>{tag}</li>)}
             </ul>
-            <a
-              className="text-link"
-              href="/portfolio-original/index.html"
-            >
-              Inspect the original portfolio material <ArrowIcon />
-            </a>
           </div>
         </section>
       </article>

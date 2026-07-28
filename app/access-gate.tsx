@@ -25,7 +25,7 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.remove("gate-locked");
       return;
     }
-    setError("That code was not recognised.");
+    setError("Please check the three-digit code and try again.");
     setCode("");
   }
 

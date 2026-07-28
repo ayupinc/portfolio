@@ -25,7 +25,7 @@ const services = [
     number: "02",
     title: "Analytics engineering",
     intro:
-      "Create stable analytical structures when operational systems record events, transactions and technical states rather than usable business concepts.",
+      "Create stable analytical structures that translate operational events, transactions and technical states into usable business concepts.",
     items: [
       "T-SQL transformation and reusable reporting layers",
       "Event, state and episode reconstruction",
@@ -37,7 +37,7 @@ const services = [
     number: "03",
     title: "Power BI delivery",
     intro:
-      "Build semantic models and reports that make complex activity clear without hiding the evidence or the limits of the data.",
+      "Build semantic models and reports that make complex activity clear, with the evidence and data limitations presented openly.",
     items: [
       "Semantic modelling, Power Query and DAX",
       "Operational monitoring and wallboards",

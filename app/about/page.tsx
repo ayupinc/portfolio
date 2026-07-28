@@ -40,7 +40,8 @@ export default function About() {
             exist only as a sequence of audit events. A waiting-time KPI may
             have several technically valid timestamps but only one defensible
             operational meaning. A utilisation figure can be mathematically
-            correct and still mislead the people using it.
+            correct while a clear operational definition makes it useful to
+            the people using it.
           </p>
           <p>
             Maple Leaf Intelligence was created to work on that intersection: understand

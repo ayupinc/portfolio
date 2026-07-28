@@ -42,7 +42,6 @@ export default function Home() {
             />
           </div>
           <div className="hero__note">
-            <span>01</span>
             <p>
               Near-live queue intelligence
               <small>Built for continuous 24/7 operational use</small>
@@ -64,7 +63,7 @@ export default function Home() {
         <div className="section-heading section-heading--wide">
           <div>
             <p className="eyebrow">Selected work</p>
-            <h2>Evidence, not broad claims.</h2>
+            <h2>Operational work, clearly evidenced.</h2>
           </div>
           <p>
             Real projects showing how difficult operational data was
@@ -101,8 +100,8 @@ export default function Home() {
           </div>
           <div className="service-grid">
             {[
-              ["01", "Operational analysis", "Define the real question, workflow and performance measure before choosing the visual."],
-              ["02", "Analytics engineering", "Turn fragmented source data into stable, reusable analytical structures."],
+              ["01", "Operational analysis", "Define the operational question, workflow and performance measure that will guide the reporting."],
+              ["02", "Analytics engineering", "Turn complex source data into stable, reusable analytical structures."],
               ["03", "Power BI delivery", "Build semantic models and reports that work for monitoring and investigation."],
               ["04", "Validation & governance", "Make definitions, limitations and quality controls visible and maintainable."],
             ].map(([number, title, text]) => (
@@ -123,8 +122,8 @@ export default function Home() {
         <div className="perspective__statement">
           <p className="eyebrow">A different starting point</p>
           <blockquote>
-            “Good operational reporting begins with how the service actually
-            works—not with the fields that happen to be easiest to query.”
+            “Good operational reporting connects the way a service works with
+            the data needed to understand it.”
           </blockquote>
         </div>
         <div className="perspective__copy">
@@ -136,7 +135,7 @@ export default function Home() {
           </p>
           <p>
             That means understanding the pressures behind a metric, the
-            weaknesses hidden in source systems and what a report must do when
+            behaviour recorded by source systems and what a report must do when
             people rely on it during live operations.
           </p>
           <Link className="text-link" href="/about">

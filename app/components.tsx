@@ -80,12 +80,6 @@ export function Footer() {
           <Link href="/about">About Stephen</Link>
         </div>
         <div>
-          <p className="footer-label">Resources</p>
-          <a href="/portfolio-original/index.html">Original portfolio</a>
-          <a href="/rate-calculator.html">Contract rate calculator</a>
-          <a href="/non-nhs/">Non-NHS pay calculator</a>
-        </div>
-        <div>
           <p className="footer-label">Start a conversation</p>
           <Link href="/contact">Discuss a project <ArrowIcon /></Link>
           <a
@@ -142,10 +136,7 @@ export function CaseCard({
         />
       </Link>
       <div className="case-card__body">
-        <p className="case-card__meta">
-          <span>{study.index}</span>
-          {study.eyebrow}
-        </p>
+        <p className="case-card__meta">{study.eyebrow}</p>
         <h3>
           <Link href={`/portfolio/${study.slug}`}>{study.title}</Link>
         </h3>

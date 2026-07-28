@@ -12,7 +12,7 @@ test("renders the consultancy home page", async () => {
   const html = await rendered("/");
   assert.match(html, /Operational analytics for services where/);
   assert.match(html, /View selected work/);
-  assert.match(html, /Evidence, not broad claims/);
+  assert.match(html, /Operational work, clearly evidenced/);
   assert.match(html, /Private preview/);
   assert.match(html, /name="robots" content="noindex, nofollow"/);
   assert.doesNotMatch(html, /codex-preview/);
@@ -23,7 +23,7 @@ test("renders the portfolio and a complete case study", async () => {
   assert.match(portfolio, /From difficult operational data/);
 
   const html = await rendered("/portfolio/clinical-queue-intelligence");
-  assert.match(html, /Reconstructing a live clinical queue/);
+  assert.match(html, /Creating a live, trusted view of clinical queue activity/);
   assert.match(html, /The challenge/);
   assert.match(html, /Technical evidence/);
 });

@@ -232,8 +232,8 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(3.25rem, 7vw, 6.85rem);
-  line-height: 0.95;
+  font-size: clamp(2.85rem, 6vw, 5.25rem);
+  line-height: 1;
 }
 
 h2 {
@@ -254,12 +254,12 @@ h3 {
 }
 
 .hero {
-  min-height: calc(100vh - 78px);
-  padding-block: clamp(70px, 10vw, 140px) 76px;
+  min-height: auto;
+  padding-block: clamp(58px, 7vw, 96px) 62px;
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(440px, 0.85fr);
   align-items: center;
-  gap: clamp(48px, 7vw, 112px);
+  gap: clamp(42px, 6vw, 82px);
 }
 
 .hero h1 {
@@ -321,12 +321,6 @@ h3 {
   gap: 16px;
 }
 
-.hero__note > span {
-  color: var(--maple-dark);
-  font-family: var(--serif);
-  font-size: 1.2rem;
-}
-
 .hero__note p {
   margin: 0;
   font-weight: 750;
@@ -386,7 +380,7 @@ h3 {
 }
 
 .section {
-  padding-block: clamp(90px, 12vw, 160px);
+  padding-block: clamp(72px, 9vw, 112px);
 }
 
 .section-heading {
@@ -460,7 +454,7 @@ h3 {
 }
 
 .case-card__meta {
-  min-height: 28px;
+  min-height: 0;
   margin-bottom: 19px;
   display: flex;
   gap: 14px;
@@ -469,13 +463,6 @@ h3 {
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.case-card__meta span {
-  font-family: var(--serif);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0;
 }
 
 .case-card h3 {
@@ -509,7 +496,7 @@ h3 {
 }
 
 .services-preview {
-  padding-block: clamp(90px, 12vw, 160px);
+  padding-block: clamp(72px, 9vw, 112px);
   background: var(--paper-deep);
 }
 
@@ -549,7 +536,7 @@ h3 {
 }
 
 .perspective {
-  padding-block: clamp(90px, 12vw, 160px);
+  padding-block: clamp(72px, 9vw, 112px);
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: clamp(60px, 9vw, 140px);
@@ -578,7 +565,7 @@ h3 {
 }
 
 .contact-band {
-  padding-block: clamp(70px, 8vw, 110px);
+  padding-block: clamp(58px, 7vw, 82px);
   background: var(--forest-deep);
   color: var(--white);
 }
@@ -614,7 +601,7 @@ h3 {
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 1.7fr repeat(3, 1fr);
+  grid-template-columns: 1.7fr repeat(2, 1fr);
   gap: 54px;
 }
 
@@ -662,18 +649,18 @@ h3 {
 }
 
 .page-intro {
-  padding-block: clamp(90px, 12vw, 165px) clamp(70px, 9vw, 120px);
+  padding-block: clamp(68px, 8vw, 104px) clamp(50px, 6vw, 76px);
   border-bottom: 1px solid var(--rule);
 }
 
 .page-intro h1 {
   max-width: 1100px;
   margin-bottom: 38px;
-  font-size: clamp(3.5rem, 7.5vw, 7.2rem);
+  font-size: clamp(3rem, 6vw, 5.6rem);
 }
 
 .portfolio-index {
-  padding-block: 82px 145px;
+  padding-block: 62px 100px;
 }
 
 .archive-note {
@@ -700,11 +687,11 @@ h3 {
 }
 
 .service-list {
-  padding-block: 30px 120px;
+  padding-block: 20px 90px;
 }
 
 .service-row {
-  padding-block: 62px;
+  padding-block: 48px;
   display: grid;
   grid-template-columns: 80px 1fr 0.9fr;
   gap: 48px;
@@ -741,7 +728,7 @@ h3 {
 }
 
 .engagement {
-  padding: 90px 0 130px;
+  padding: 70px 0 100px;
 }
 
 .engagement__heading {
@@ -781,7 +768,7 @@ h3 {
 }
 
 .about-story {
-  padding-block: 100px 145px;
+  padding-block: 72px 105px;
   display: grid;
   grid-template-columns: 0.55fr 1.25fr;
   gap: clamp(70px, 12vw, 180px);
@@ -831,7 +818,7 @@ h3 {
 }
 
 .contact-layout {
-  padding-block: 80px 150px;
+  padding-block: 62px 105px;
   display: grid;
   grid-template-columns: 1fr 0.8fr;
   gap: clamp(60px, 11vw, 160px);
@@ -893,12 +880,12 @@ h3 {
 }
 
 .case-hero {
-  padding-block: 56px 70px;
+  padding-block: 42px 56px;
 }
 
 .back-link {
   display: inline-block;
-  margin-bottom: 90px;
+  margin-bottom: 48px;
   color: var(--ink-soft);
   font-size: 14px;
   font-weight: 700;
@@ -912,11 +899,11 @@ h3 {
 .case-hero h1 {
   max-width: 1120px;
   margin-bottom: 36px;
-  font-size: clamp(3.4rem, 7vw, 7rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
 }
 
 .case-hero__image {
-  margin-top: 70px;
+  margin-top: 48px;
   padding: 14px;
   background: var(--white);
   border: 1px solid var(--rule);
@@ -965,7 +952,7 @@ h3 {
 }
 
 .case-section {
-  padding-block: 105px;
+  padding-block: 72px;
   display: grid;
   grid-template-columns: 0.38fr 1fr;
   gap: 70px;
@@ -976,15 +963,7 @@ h3 {
 }
 
 .case-section__label {
-  display: flex;
-  gap: 18px;
-  align-items: baseline;
-}
-
-.case-section__label span {
-  color: var(--maple-dark);
-  font-family: var(--serif);
-  font-size: 1.2rem;
+  display: block;
 }
 
 .case-section__label p {
