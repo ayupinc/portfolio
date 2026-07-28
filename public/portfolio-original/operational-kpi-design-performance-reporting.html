@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operational KPI Design and Performance Reporting | Stephen Clinton</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #242424;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #FFFFFF;
+    --white: #FFFFFF;
+    --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .nav-link {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1125px;
+    margin: 0 auto;
+    padding: 34px 32px 86px;
+  }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 800px);
+    gap: 75px;
+    align-items: start;
+  }
+
+  .side-nav {
+    position: sticky;
+    top: 92px;
+    color: var(--navy);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .side-nav-title {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.45;
+    text-decoration: none;
+    display: block;
+  }
+
+  .side-nav-group { margin: 0 0 28px; }
+
+  .side-nav-list,
+  .side-nav-sublist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .side-nav-list { border-left: 4px solid var(--navy); }
+
+  .side-nav-list a,
+  .side-nav-current {
+    display: block;
+    padding: 9px 0 9px 14px;
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .side-nav-current { font-weight: 700; }
+
+  .side-nav-sublist {
+    margin: 0 0 6px 14px;
+    border-left: 2px solid var(--rule);
+  }
+
+  .side-nav-sublist a {
+    padding: 6px 0 6px 14px;
+    color: var(--body);
+    font-size: 14px;
+  }
+
+  .side-nav-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .content-column {
+    max-width: 800px;
+    min-width: 0;
+  }
+
+  .back-nav {
+    max-width: 800px;
+    margin: 0 0 28px;
+    text-align: left;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+  }
+
+  .case-header {
+    max-width: 800px;
+    margin: 0 0 34px;
+    text-align: left;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: 36pt;
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .hero-image {
+    width: 100%;
+    background: #F0F2F5;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    margin: 0 0 46px;
+    overflow: hidden;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+
+  .screenshot-note {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .hero-image .screenshot-note {
+    max-width: none;
+    margin: 8px 12px 10px;
+    padding: 0;
+  }
+
+  .case-layout {
+    max-width: 800px;
+    margin: 0;
+  }
+
+  .case-content { min-width: 0; }
+
+  .case-section + .case-section { margin-top: 46px; }
+
+  .what-i-did {
+    width: 100%;
+    margin-bottom: 46px;
+    padding: 24px 28px;
+    border-left: 5px solid #1B4D8E;
+    border-radius: 8px;
+    background: #EAF0F9;
+  }
+
+  .what-i-did h2 { margin-bottom: 14px; }
+  .what-i-did .output-list { margin-bottom: 0; }
+
+  h2 {
+    margin: 0 0 16px;
+    color: var(--navy);
+    font-size: clamp(22px, 2vw, 25px);
+    line-height: 1.18;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 19px;
+    line-height: 28px;
+  }
+
+  p + p { margin-block-start: 20pt; }
+  p + .output-list { margin-top: 12px; }
+
+  .output-list {
+    margin: 10px 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 3px 0 3px 18px;
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 19px;
+    line-height: 28px;
+  }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(8, 15, 29, 0.88);
+  }
+
+  .image-lightbox.is-open { display: flex; }
+
+  .image-lightbox img {
+    max-width: min(96vw, 1500px);
+    max-height: 90vh;
+    object-fit: contain;
+    background: #F0F2F5;
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.34);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.94);
+    color: var(--navy);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover { background: var(--white); }
+
+  .footer-nav {
+    margin-top: 30px;
+    text-align: left;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    main { padding: 32px 20px 64px; }
+    .page-grid { display: block; }
+    .side-nav { display: none; }
+    p,
+    .output-list li {
+      font-size: 19px;
+      line-height: 28px;
+    }
+  }
+</style>
+<script src="site-nav.js" defer></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="index.html">Power BI</a>
+      <a class="nav-link" href="analytics-engineering.html">Analytics Engineering</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="page-grid">
+    <aside class="side-nav" data-site-nav data-current-page="operational-kpi-design-performance-reporting"></aside>
+
+    <div class="content-column">
+      <div class="back-nav">
+        <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+      </div>
+
+      <header class="case-header">
+        <h1>Operational KPI Design and Performance Reporting</h1>
+      </header>
+
+      <section class="hero-image" aria-label="Operational KPI Power BI report screenshot">
+        <img src="screenshots/kpi.png" alt="Operational KPI Power BI report screenshot" data-lightbox>
+      </section>
+
+      <article class="case-layout">
+        <div class="case-content">
+          <section class="what-i-did" id="what-i-did">
+            <h2>What I Did</h2>
+            <ul class="output-list">
+              <li>Developed the reporting methodology required to calculate the KPI from operational business rules</li>
+              <li>Designed the Power BI semantic model supporting operational performance reporting</li>
+              <li>Developed Power Query transformations to support KPI calculation and analysis</li>
+              <li>Created DAX measures covering average, median, percentile and distribution-based performance measures</li>
+              <li>Designed reporting views supporting organisational, team and workflow-level analysis</li>
+              <li>Produced KPI definitions, caveats, governance documentation and user guidance</li>
+              <li>Validated KPI outputs against operational workflow behaviour and audit records</li>
+            </ul>
+          </section>
+
+          <section class="case-section" id="context">
+            <h2>Context</h2>
+            <p>I developed this reporting solution to provide a consistent and operationally meaningful measure of how long cases waited before assessment activity began.</p>
+            <p>At first glance, the KPI appeared straightforward. However, cases could move between operational queues, change priority, be reassigned between assessment levels and, in some circumstances, leave and later return to the workflow. As a result, there was no single timestamp within the source systems that accurately represented the waiting period being measured.</p>
+            <p>Although the underlying audit records contained the required events, the challenge was determining which events represented the true start and end of the waiting period and ensuring the resulting metric reflected operational reality rather than system behaviour.</p>
+            <p>My objective was to create a governed KPI definition, semantic model and reporting solution that would allow performance to be monitored consistently while remaining transparent about process limitations and operational edge cases.</p>
+          </section>
+
+          <section class="case-section" id="key-reporting-challenges">
+            <h2>Key Reporting Challenges</h2>
+            <ul class="output-list">
+              <li>Defining a KPI where no single source-system timestamp existed</li>
+              <li>Identifying the correct start and end events from multiple workflow actions</li>
+              <li>Accounting for cases leaving and re-entering operational queues</li>
+              <li>Managing process changes that affected historical comparability</li>
+              <li>Supporting performance reporting without oversimplifying workflow behaviour</li>
+              <li>Ensuring KPI calculations remained consistent across all reporting outputs</li>
+            </ul>
+          </section>
+
+          <section class="case-section" id="data-model">
+            <h2>Data Model</h2>
+            <p>The reporting model was designed around workflow audit events rather than summary records.</p>
+            <p>A key challenge was that cases could experience multiple workflow transitions before assessment activity began. Simply using the first queue entry or first workflow assignment often produced misleading results because cases could move between queues, be reassigned or return to the workflow after a period elsewhere in the process.</p>
+            <p>To address this, I developed a reporting model that identified the most relevant workflow assignment immediately preceding the assessment activity and used this as the KPI start point.</p>
+            <p>The KPI end point was derived from the first valid assessment initiation event, using a hierarchy of operational actions to ensure cases were consistently captured even where different assessment methods were used.</p>
+            <p>This approach created a reporting framework that reflected how the workflow actually operated rather than relying on assumptions about the source data.</p>
+            <p>The semantic model supported analysis by workflow level, priority, date, operational group and other dimensions while maintaining a single governed KPI definition throughout the reporting solution.</p>
+          </section>
+
+          <section class="case-section" id="kpi-design-and-operational-interpretation">
+            <h2>KPI Design and Operational Interpretation</h2>
+            <p>The most significant aspect of this project was not the dashboard itself but the design of the KPI.</p>
+            <p>Several potential interpretations of the waiting period existed within the operational workflow. Different choices for the start or end point could significantly alter reported performance and create inconsistencies between teams.</p>
+            <p>I therefore developed a formal KPI definition supported by documented business rules, operational caveats and technical calculation logic.</p>
+            <p>Particular consideration was given to:</p>
+            <ul class="output-list">
+              <li>Cases moving between workflow levels</li>
+              <li>Cases leaving and re-entering the workflow</li>
+              <li>Differing assessment initiation methods</li>
+              <li>Missing workflow events</li>
+              <li>Historical process changes affecting comparability</li>
+              <li>Prevention of artificially inflated waiting times</li>
+            </ul>
+            <p>The final KPI definition used the most recent workflow assignment immediately prior to assessment activity as the duration start point and the first valid assessment initiation event as the duration end point. This ensured the reported duration maintained a direct relationship with the assessment activity being measured.</p>
+            <p>By documenting both the methodology and the known limitations, I ensured that performance discussions focused on operational behaviour rather than disagreements about the calculation itself.</p>
+          </section>
+
+          <section class="case-section" id="report-design">
+            <h2>Report Design</h2>
+            <p>I designed the report to support both operational monitoring and performance analysis. Pages focused on:</p>
+            <ul class="output-list">
+              <li>KPI trends</li>
+              <li>Waiting time distributions</li>
+              <li>Workflow-level performance</li>
+              <li>Priority-based analysis</li>
+              <li>Volume and demand context</li>
+              <li>Performance segmentation</li>
+              <li>Investigation of operational variation</li>
+            </ul>
+            <p>Interactive filtering and drill-through functionality enabled users to move between organisation-level performance indicators and the underlying operational activity driving KPI movement.</p>
+            <p>My design objective was to avoid relying solely on headline averages. The report therefore included measures and visualisations that allowed users to understand the distribution of waiting times and identify operational behaviours that would otherwise be hidden within aggregated figures.</p>
+            <p>This provided a more accurate representation of performance and supported more informed operational decision making.</p>
+          </section>
+
+          <section class="case-section" id="outcome">
+            <h2>Outcome</h2>
+            <p>The completed solution established a governed and transparent operational KPI capable of supporting performance reporting across multiple teams and workflows.</p>
+            <p>Operational leaders were able to monitor waiting times, identify emerging performance pressures and understand how workflow changes affected service delivery.</p>
+            <p>By combining KPI governance, semantic modelling and operational reporting, I created a reporting framework that remained aligned to operational reality while providing a consistent basis for performance measurement.</p>
+            <p>The KPI definition, reporting approach and supporting governance documentation were subsequently used as a reference point for other operational performance measures where workflow events required similar interpretation and control.</p>
+          </section>
+        </div>
+      </article>
+
+      <div class="footer-nav">
+        <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
+</body>
+</html>

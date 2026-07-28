@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specific Resource Availability and Utilisation Reporting | Stephen Clinton</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #242424;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #FFFFFF;
+    --white: #FFFFFF;
+    --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .nav-link {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1125px;
+    margin: 0 auto;
+    padding: 34px 32px 86px;
+  }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 800px);
+    gap: 75px;
+    align-items: start;
+  }
+
+  .side-nav {
+    position: sticky;
+    top: 92px;
+    color: var(--navy);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .side-nav-title {
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.45;
+    text-decoration: none;
+    display: block;
+  }
+
+  .side-nav-group { margin: 0 0 28px; }
+
+  .side-nav-list,
+  .side-nav-sublist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .side-nav-list { border-left: 4px solid var(--navy); }
+
+  .side-nav-list a,
+  .side-nav-current {
+    display: block;
+    padding: 9px 0 9px 14px;
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .side-nav-current { font-weight: 700; }
+
+  .side-nav-sublist {
+    margin: 0 0 6px 14px;
+    border-left: 2px solid var(--rule);
+  }
+
+  .side-nav-sublist a {
+    padding: 6px 0 6px 14px;
+    color: var(--body);
+    font-size: 14px;
+  }
+
+  .side-nav-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .content-column {
+    max-width: 800px;
+    min-width: 0;
+  }
+
+  .back-nav {
+    max-width: 800px;
+    margin: 0 0 28px;
+    text-align: left;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-decoration: none;
+  }
+
+  .case-header {
+    max-width: 800px;
+    margin: 0 0 34px;
+    text-align: left;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: 36pt;
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .hero-image {
+    width: 100%;
+    background: #F0F2F5;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    margin: 0 0 46px;
+    overflow: hidden;
+  }
+
+  .hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+
+  .screenshot-note {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .hero-image .screenshot-note {
+    max-width: none;
+    margin: 8px 12px 10px;
+    padding: 0;
+  }
+
+  .case-layout {
+    max-width: 800px;
+    margin: 0;
+  }
+
+  .case-content { min-width: 0; }
+
+  .case-section + .case-section { margin-top: 46px; }
+
+  .what-i-did {
+    width: 100%;
+    margin-bottom: 46px;
+    padding: 24px 28px;
+    border-left: 5px solid #1B4D8E;
+    border-radius: 8px;
+    background: #EAF0F9;
+  }
+
+  .what-i-did h2 { margin-bottom: 14px; }
+  .what-i-did .output-list { margin-bottom: 0; }
+
+  h2 {
+    margin: 0 0 16px;
+    color: var(--navy);
+    font-size: clamp(22px, 2vw, 25px);
+    line-height: 1.18;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 19px;
+    line-height: 28px;
+  }
+
+  p + p { margin-block-start: 20pt; }
+  p + .output-list { margin-top: 12px; }
+
+  .output-list {
+    margin: 10px 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 3px 0 3px 18px;
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 19px;
+    line-height: 28px;
+  }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(8, 15, 29, 0.88);
+  }
+
+  .image-lightbox.is-open { display: flex; }
+
+  .image-lightbox img {
+    max-width: min(96vw, 1500px);
+    max-height: 90vh;
+    object-fit: contain;
+    background: #F0F2F5;
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.34);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.94);
+    color: var(--navy);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover { background: var(--white); }
+
+  .footer-nav {
+    margin-top: 30px;
+    text-align: left;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    main { padding: 32px 20px 64px; }
+    .page-grid { display: block; }
+    .side-nav { display: none; }
+    p,
+    .output-list li {
+      font-size: 19px;
+      line-height: 28px;
+    }
+  }
+</style>
+<script src="site-nav.js" defer></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="index.html">Power BI</a>
+      <a class="nav-link" href="analytics-engineering.html">Analytics Engineering</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="page-grid">
+    <aside class="side-nav" data-site-nav data-current-page="resource-availability-utilisation-reporting"></aside>
+
+    <div class="content-column">
+      <div class="back-nav">
+        <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+      </div>
+
+      <header class="case-header">
+        <h1>Specific Resource Availability and Utilisation Reporting</h1>
+      </header>
+
+      <section class="hero-image" aria-label="Specific resource utilisation Power BI report screenshot">
+        <img src="screenshots/utilisation-1.png" alt="Specific resource utilisation Power BI report screenshot" data-lightbox>
+      </section>
+
+      <article class="case-layout">
+        <div class="case-content">
+          <section class="what-i-did" id="what-i-did">
+            <h2>What I Did</h2>
+            <ul class="output-list">
+              <li>Designed the Power BI semantic model for availability, utilisation and activity reporting</li>
+              <li>Built time and event-based measures for resource activity, episode length and utilisation percentage</li>
+              <li>Created highly filterable report pages for area, resource type and operational grouping</li>
+              <li>Built detail pages for reviewing individual resource activity and exception cases</li>
+              <li>Produced help, information and version pages so users could understand metric definitions and report changes</li>
+            </ul>
+          </section>
+
+          <section class="case-section" id="context">
+            <h2>Context</h2>
+            <p>A specialist operational staff group needed a dedicated report showing availability, activity and utilisation across different regions and responder types. Existing reporting did not capture the group in a way that reflected how they operated, making it difficult for managers to understand service coverage, compare activity and identify under-used or over-stretched resource patterns.</p>
+            <p>The report was designed for group management, operational leadership and performance teams. It needed to support both a quick headline view and deeper analysis of individual activity periods, with enough filtering to separate areas, resource types and episode characteristics without requiring separate reports.</p>
+          </section>
+
+          <section class="case-section" id="key-reporting-challenges">
+            <h2>Key Reporting Challenges</h2>
+            <ul class="output-list">
+              <li>Capturing availability data for a group whose activity was not represented well in standard reporting feeds</li>
+              <li>Combining resource availability, operational events and episode timing into a single reporting structure</li>
+              <li>Calculating utilisation consistently across different resource types and working patterns</li>
+              <li>Providing detailed drill-through while keeping the main report usable for operational managers</li>
+              <li>Making filter state visible so users could understand exactly which activity was included in each view</li>
+            </ul>
+          </section>
+
+          <section class="case-section" id="data-model">
+            <h2>Data Model</h2>
+            <p>The data model brought together raw availability records, resource attributes, region and type lookups, and activity event timings. New data capture was required because the group reported in a non-standard way, so the model had to align availability periods with operational events before utilisation could be calculated reliably.</p>
+            <p>Temporal modelling was used to capture event times and calculate availability durations, activity durations and utilisation rates. The semantic model supported headline measures, trend analysis and drill-through to individual activity periods without duplicating metric logic across pages.</p>
+          </section>
+
+          <section class="case-section" id="report-design">
+            <h2>Report Design</h2>
+            <p>The report presented headline availability, activity and utilisation metrics alongside time-based charts, event-based views and detailed tables. Field parameters allowed users to change analytical perspective without moving between separate pages, and an applied-filter display made the current reporting context visible.</p>
+            <p>Additional pages supported detailed review of individual records, user guidance, report definitions and version information. This gave operational users a practical daily report while preserving the audit trail needed for performance conversations and data quality investigation.</p>
+          </section>
+
+          <section class="case-section" id="outcome">
+            <h2>Outcome</h2>
+            <p>The report gave managers a clearer view of how specialist resources were available and used across operational areas. It supported performance review, workforce planning and service coverage discussions using a consistent set of metrics rather than ad hoc extracts.</p>
+            <p>By combining availability capture, event timing and Power BI modelling, the solution created a reusable reporting structure for a resource group that had previously been difficult to monitor through standard operational reports.</p>
+          </section>
+        </div>
+      </article>
+
+      <div class="footer-nav">
+        <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
+</body>
+</html>

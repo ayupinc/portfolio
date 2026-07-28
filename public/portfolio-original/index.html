@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power BI | Stephen Clinton</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --navy-mid: #1E3A5F;
+    --ink: #1A1A2E;
+    --body: #3D4A5C;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+    --paper: #FAFBFC;
+    --shadow: 0 18px 55px rgba(15,31,61,0.16);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .portfolio-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .portfolio-nav a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .portfolio-nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  header {
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  .hero {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 46px 32px 12px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(30px, 4vw, 50px);
+    line-height: 1.06;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 10px 32px 92px;
+  }
+
+  .intro {
+    margin: 0 auto 24px;
+    color: #242424;
+    max-width: 820px;
+    text-align: center;
+  }
+
+  .intro + .intro {
+    margin-top: -12px;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+
+  .project-card {
+    border: 1px solid var(--rule);
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(15,31,61,0.11);
+    border-color: rgba(15,31,61,0.35);
+  }
+
+  .thumb-link {
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    background: #F0F2F5;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+    text-decoration: none;
+  }
+
+  .project-card > .thumb-link {
+    height: auto;
+  }
+
+  .thumb-link img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .thumb-carousel {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #F0F2F5;
+  }
+
+  .project-card > .thumb-carousel {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thumb-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  .thumb-carousel img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .thumb-carousel img.is-active {
+    opacity: 1;
+  }
+
+  .thumb-carousel-button {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 40px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .thumb-carousel-button:hover {
+    background: var(--white);
+  }
+
+  .thumb-carousel-button.prev { left: 8px; }
+  .thumb-carousel-button.next { right: 8px; }
+
+  .card-body {
+    padding: 18px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .project-title {
+    margin: 0;
+    color: var(--navy);
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.16;
+  }
+
+  .summary {
+    margin: 0;
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .details-link {
+    align-self: flex-start;
+    margin-top: auto;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    border-radius: 0;
+    padding: 0;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .details-link:hover { color: #1B4D8E; }
+
+  .details-link::after {
+    content: " \2197";
+    display: inline-block;
+    margin-left: 5px;
+    text-decoration: none;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      padding: 12px 20px;
+    }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    .portfolio-nav {
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+    .hero { padding: 38px 24px 34px; }
+    main { padding: 28px 20px 64px; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .thumb-link,
+    .project-card > .thumb-carousel {
+      border-bottom: 1px solid var(--rule);
+    }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <nav class="portfolio-nav" aria-label="Portfolio sections">
+      <a href="index.html" aria-current="page">Power BI</a>
+      <a href="analytics-engineering.html">Analytics Engineering</a>
+    </nav>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <section class="hero">
+    <h1>Power BI</h1>
+  </section>
+</header>
+
+<main>
+  <p class="intro">A selection of Power BI reports built from real operational problems: demand, workflow, performance, queue monitoring, utilisation and outcomes. The examples focus on how I structure reports for decision-making: clear navigation, usable visuals, governed measures, and enough context for managers and analysts to understand what is happening and what needs attention.</p>
+  <p class="intro">Each case study explains the audience and purpose, the shape of the data model, the transformation work behind the report, and the DAX or business rules needed to make the numbers trustworthy. The work is based on real client projects, with identifying details removed and figures changed; screenshots and values are illustrative and do not identify organisations, disclose operational details or reflect actual performance.</p>
+  <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
+</main>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+
+<script>
+const projects = [
+  {
+    title: "Questionnaire Workflow Reporting",
+    image: "screenshots/question-powerbi.png",
+    images: [
+      "screenshots/question-powerbi.png",
+      "screenshots/questionnaire-review-times.png"
+    ],
+    url: "questionnaire-workflow-reporting-governance.html",
+    summary: "Power BI reporting and governance for complex branching questionnaire workflows."
+  },
+  {
+    title: "Work Flow and Outcome Analysis",
+    image: "screenshots/case-flow.png",
+    url: "call-flow-analysis.html",
+    summary: "Power BI pathway analysis showing how work moved through operational stages and influenced outcomes."
+  },
+  {
+    title: "Real-Time Clinical Queue Monitoring",
+    image: "screenshots/queue-wallboard.png",
+    url: "real-time-queue-monitoring.html",
+    summary: "DirectQuery wallboard reconstructing live clinical queue state from audit events for 24/7 operational monitoring."
+  },
+  {
+    title: "Specific Resource Availability and Utilisation",
+    image: "screenshots/utilisation-1.png",
+    url: "resource-availability-utilisation-reporting.html",
+    summary: "Availability, activity and utilisation reporting for a specialist operational staff group."
+  },
+  {
+    title: "Telephony Demand & Agent Activity",
+    image: "screenshots/calls-to-service.png",
+    images: [
+      "screenshots/calls-to-service.png",
+      "screenshots/agent-summary.png",
+      "screenshots/agent-session-summary.png",
+      "screenshots/agent-calls.png",
+      "screenshots/agent-session-journal.png"
+    ],
+    url: "telephony-demand-agent-activity.html",
+    summary: "Power BI reporting for demand, service performance, workforce utilisation and agent activity investigation."
+  },
+  {
+    title: "Operational KPI Design and Performance Reporting",
+    image: "screenshots/kpi.png",
+    url: "operational-kpi-design-performance-reporting.html",
+    summary: "Governed waiting-time KPI reporting built from workflow audit events and operational business rules."
+  }
+];
+
+const grid = document.querySelector("#portfolioGrid");
+
+const featuredProjectIndex = projects.findIndex((project) => project.url === "telephony-demand-agent-activity.html");
+if (featuredProjectIndex > 0) {
+  projects.unshift(projects.splice(featuredProjectIndex, 1)[0]);
+}
+
+projects.forEach((project) => {
+  const article = document.createElement("article");
+  article.className = "project-card";
+  const thumbMedia = project.images
+    ? `<div class="thumb-carousel" data-thumb-carousel>
+        <a class="thumb-image-link" href="${project.url}" aria-label="Open case study for ${project.title}">
+          ${project.images.map((image, imageIndex) => `<img class="${imageIndex === 0 ? "is-active" : ""}" src="${image}" alt="">`).join("")}
+        </a>
+        <button class="thumb-carousel-button prev" type="button" aria-label="Previous screenshot" data-thumb-prev>&lsaquo;</button>
+        <button class="thumb-carousel-button next" type="button" aria-label="Next screenshot" data-thumb-next>&rsaquo;</button>
+      </div>`
+    : `<img src="${project.image}" alt="${project.title}">`;
+  article.innerHTML = `
+    ${project.images ? thumbMedia : `
+    <a class="thumb-link" href="${project.url}" aria-label="Open case study for ${project.title}">
+      ${thumbMedia}
+    </a>`}
+    <div class="card-body">
+      <h2 class="project-title">${project.title}</h2>
+      <p class="summary">${project.summary}</p>
+      <a class="details-link" href="${project.url}">View case study</a>
+    </div>
+  `;
+  article.querySelectorAll("[data-thumb-carousel]").forEach((carousel) => {
+    const images = [...carousel.querySelectorAll("img")];
+    let activeImage = 0;
+    const showImage = (nextIndex) => {
+      activeImage = (nextIndex + images.length) % images.length;
+      images.forEach((image, imageIndex) => {
+        image.classList.toggle("is-active", imageIndex === activeImage);
+      });
+    };
+
+    carousel.querySelector("[data-thumb-prev]").addEventListener("click", () => showImage(activeImage - 1));
+    carousel.querySelector("[data-thumb-next]").addEventListener("click", () => showImage(activeImage + 1));
+  });
+  grid.appendChild(article);
+});
+</script>
+</body>
+</html>

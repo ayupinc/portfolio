@@ -1,63 +1,61 @@
-# Stephen Clinton - Power BI Portfolio
+# Maple Intel Website
 
-A static portfolio site deployed from the `public/` directory.
+Strategy, content and—after the design is agreed—the production website for Maple Intel, Stephen Clinton’s operational analytics, analytics engineering and Power BI consultancy.
 
----
+The first production version is implemented with Next-compatible React pages built through Vinext for Cloudflare Workers/Sites. The original static portfolio remains preserved under `public/portfolio-original/`, while its strongest material has been reorganised into the new client-focused case studies.
 
-## Adding Screenshots
+## Current strategic principle
 
-1. Export your Power BI screenshot as a JPEG or PNG.
-2. Drop the file into the `public/screenshots/` folder in this project.
-3. Update the relevant `image`, `images` or `<img src="">` reference in the matching HTML file.
+The website should guide potential clients through five beliefs:
 
-```
-image: "screenshots/example-report.png"
-```
+1. Maple Intel understands the operational problem I have.
+2. This is a credible specialist consultancy.
+3. The case studies demonstrate genuine technical and delivery depth.
+4. Maple Intel could deliver this project or assignment.
+5. I’d like to discuss it.
 
-Suggested filenames:
-- example-report.png
+Recruiters and other intermediaries are a secondary audience. The same evidence should allow them to recognise that Maple Intel can undertake suitable contract, interim or embedded assignments without making the site resemble a job-seeking portfolio.
 
----
+The primary market focus is ambulance services and other operational NHS environments. Wider health and customer-service operations are adjacent markets connected by the same underlying need: making complex logistical and operational data useful for analysis, visualisation and performance reporting.
 
-## Running Locally
-
-In a terminal, navigate to this folder and run:
-
-```
-npm install
-npm run dev
-```
-
-Then open http://localhost:5173 in your browser.
-
----
-
-## Deploying via GitHub + Netlify
-
-### One-time setup
-
-1. Create a free account at github.com
-2. Create a new repository — click + top right, New repository, name it bi-portfolio, leave it Public
-3. Upload all files from this folder via Add file > Upload files in GitHub
-4. Go to netlify.com, sign in
-5. Click Add new site > Import an existing project > GitHub
-6. Select your repository
-7. Confirm: Build command = npm run build, Publish directory = dist
-8. Click Deploy site
-
-Netlify gives you a live public URL immediately.
-
-### Updating after changes
-
-Any file you update in GitHub automatically triggers a new Netlify deployment.
-
----
+The technical work—Power BI reports, data models, SQL/data-flow diagrams and workflow illustrations—will be the visual focus.
 
 ## Project structure
 
-  portfolio/
-  public/
-    index.html
-    analytics-engineering.html
-    screenshots/   <-- Portfolio screenshot files
-    assets/        <-- Shared brand assets
+```text
+docs/
+  brand.md
+  content-plan.md
+  case-study-template.md
+  style-guide.md
+  roadmap.md
+src/
+public/
+  images/
+  icons/
+  downloads/
+assets/
+  original-screenshots/
+  diagrams/
+```
+
+See `docs/roadmap.md` for the decision gates that must be completed before implementation.
+
+## Preserved resources
+
+The original resources remain available separately:
+
+- `/portfolio-original/index.html` — original Power BI and analytics engineering portfolio
+- `/rate-calculator.html` — contract rate calculator
+- `/non-nhs/` — non-NHS pay calculator
+
+## Local validation
+
+```text
+npm run dev
+npm test
+```
+
+The production build is emitted to `dist/` and packaged for Cloudflare-compatible hosting.
+
+---

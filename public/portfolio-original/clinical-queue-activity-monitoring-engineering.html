@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queue Activity | Stephen Clinton</title>
+<style>
+  :root { --navy:#0F1F3D; --accent:var(--navy); --body:#242424; --muted:#6B7A8F; --rule:#D1D8E3; --bg:#FFFFFF; --sans:Aptos,"Segoe UI",system-ui,sans-serif; --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif; }
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--body);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);border-bottom:1px solid var(--rule);backdrop-filter:blur(14px)}
+  .topbar-inner{max-width:1180px;margin:0 auto;min-height:66px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .brand{display:inline-flex;align-items:center;gap:11px;color:var(--accent);text-decoration:none}
+  .brand-mark{width:31px;height:31px;object-fit:contain;display:block}
+  .brand-fallback{width:31px;height:31px;border:2px solid var(--accent);display:none;place-items:center;color:var(--accent);font-size:18px;font-weight:700;line-height:1}
+  .brand-name{font-size:15px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+  .top-actions{display:flex;align-items:center;justify-content:flex-end;gap:18px;color:var(--accent)}
+  .nav-link,.back-link{color:var(--navy);font-size:12px;font-weight:600;letter-spacing:0;text-decoration:none}
+  .social-link{text-decoration:none;font-size:14px;font-weight:600;color:var(--accent)}
+  main{max-width:1040px;margin:0 auto;padding:44px 32px 86px}
+  .back-nav{max-width:900px;margin:0 auto 28px;text-align:center}
+  .case-header{max-width:900px;margin:0 auto 46px;text-align:center}
+  h1{margin:0 0 14px;color:var(--navy);font-size:clamp(34px,4.2vw,50px);line-height:1.06;font-weight:600;letter-spacing:0}
+  .case-subtitle{max-width:700px;margin:0 auto;color:var(--muted);font-family:var(--serif);font-size:20px;line-height:1.58}
+  .hero-image{width:100%;background:#F0F2F5;border:1px solid var(--rule);border-radius:8px;margin:0 0 46px;overflow:hidden}
+  .hero-image img{display:block;width:100%;height:auto;cursor:zoom-in}
+  .image-lightbox{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:28px;background:rgba(8,15,29,.88)}
+  .image-lightbox.is-open{display:flex}
+  .image-lightbox img{max-width:min(96vw,1500px);max-height:90vh;object-fit:contain;background:#F0F2F5;border:1px solid rgba(255,255,255,.22);box-shadow:0 18px 60px rgba(0,0,0,.34)}
+  .lightbox-close{position:absolute;top:18px;right:18px;width:42px;height:42px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.94);color:var(--navy);font-size:28px;line-height:1;cursor:pointer}
+  .lightbox-close:hover{background:#fff}
+  .case-layout{max-width:680px;margin:0 auto}
+  .case-section+.case-section{margin-top:46px}
+  .intro-section{margin-bottom:30px}
+  .what-i-did{width:100%;margin:30px 0 46px;padding:24px 28px;border-left:5px solid #1B4D8E;border-radius:8px;background:#EAF0F9}
+  .what-i-did h2{margin-bottom:14px}
+  .what-i-did .output-list{margin-bottom:0}
+  .what-i-did .output-list li{font-family:var(--sans);font-size:19px;line-height:1.55}
+  h2{margin:0 0 16px;color:var(--navy);font-size:clamp(22px,2vw,25px);line-height:1.18;font-weight:650;letter-spacing:0}
+  p{margin:0;color:var(--body);font-family:var(--serif);font-size:20px;line-height:1.6}
+  p+p{margin-top:30px}
+  .output-list{margin:10px 0 18px;padding:0;list-style:none}
+  .output-list li{position:relative;padding:3px 0 3px 18px;color:var(--body);font-family:var(--serif);font-size:20px;line-height:1.58}
+  .output-list li::before{content:"-";position:absolute;left:0;color:var(--muted)}
+  .case-action{margin-top:28px;padding-top:22px;border-top:1px solid var(--rule)}
+  .case-action-note{display:inline-block;border:1px solid var(--rule);border-radius:4px;padding:9px 13px;color:var(--muted);font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+  .text-link{color:var(--navy);font-family:var(--sans);font-weight:650;text-decoration:underline;text-underline-offset:3px}
+  footer{background:var(--navy);color:rgba(255,255,255,.72);padding:34px 32px;text-align:center;font-size:11px;letter-spacing:.03em}
+  @media (max-width:780px){.topbar-inner{padding:0 20px}.brand-name{font-size:13px}.top-actions{gap:12px}main{padding:32px 20px 64px}.case-subtitle{font-size:18px}p,.output-list li{font-size:18px}}
+  /* Shared case-study layout */
+  :root { --sans: Arial, "Helvetica Neue", Helvetica, sans-serif; }
+  main { max-width: 1125px; margin: 0 auto; padding: 34px 32px 86px; }
+  .page-grid { display: grid; grid-template-columns: 250px minmax(0, 800px); gap: 75px; align-items: start; }
+  .side-nav { position: sticky; top: 92px; color: var(--navy); font-size: 15px; line-height: 1.45; }
+  .side-nav-title { margin: 0 0 10px; color: var(--navy); font-size: 15px; font-weight: 700; line-height: 1.45; text-decoration: none; display: block; }
+  .side-nav-group { margin: 0 0 28px; }
+  .side-nav-list,
+  .side-nav-sublist { margin: 0; padding: 0; list-style: none; }
+  .side-nav-list { border-left: 4px solid var(--navy); }
+  .side-nav-list a,
+  .side-nav-current { display: block; padding: 9px 0 9px 14px; color: var(--navy); text-decoration: none; }
+  .side-nav-current { font-weight: 700; }
+  .side-nav-sublist { margin: 0 0 6px 14px; border-left: 2px solid var(--rule); }
+  .side-nav-sublist a { padding: 6px 0 6px 14px; color: var(--body); font-size: 14px; }
+  .side-nav-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .content-column { max-width: 800px; min-width: 0; }
+  .back-nav,
+  .case-header,
+  .hero-image,
+  .case-layout { max-width: 800px; margin-left: 0; margin-right: 0; text-align: left; }
+  .case-header { margin-bottom: 24px; }
+  h1 { font-size: 36pt; }
+  .case-subtitle,
+  p,
+  .output-list li { font-family: var(--sans); font-size: 19px; line-height: 25px; }
+  p + p { margin-block-start: 20pt; }
+  @media (max-width: 780px) {
+    .page-grid { display: block; }
+    .side-nav { display: none; }
+    .case-subtitle,
+    p,
+    .output-list li { font-size: 19px; line-height: 25px; }
+  }
+</style>
+<script src="site-nav.js" defer></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="index.html">Power BI</a>
+      <a class="nav-link" href="analytics-engineering.html">Analytics Engineering</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="page-grid">
+    <aside class="side-nav" data-site-nav data-current-page="clinical-queue-activity-monitoring-engineering"></aside>
+
+    <div class="content-column">
+  <div class="back-nav">
+    <a class="back-link" href="analytics-engineering.html" data-return-link data-default-href="analytics-engineering.html" data-default-text="Return to Analytics Engineering" data-source-page="call-flow-analysis" data-referrer-href="call-flow-analysis.html" data-referrer-text="Return to Work Flow and Outcome Analysis">&larr; Return to Analytics Engineering</a>
+  </div>
+
+  <header class="case-header">
+    <h1>Queue Activity</h1>
+  </header>
+
+  <article class="case-layout">
+    <section class="case-section intro-section" id="context">
+      <p>An analytical structure was required to better understand activity in the queues in the case management system. Cases could be presented to multiple queues, dealt with by multiple teams, and progress with or without interaction and outcomes. These activities were urgently required for performance management and case progress reports, as well as being important to subsequent investigations.</p>
+    </section>
+  </article>
+
+  <section class="hero-image" aria-label="Queue activity engineering screenshot">
+    <img src="screenshots/queue-engineering.png" alt="Queue activity engineering screenshot" data-lightbox>
+  </section>
+
+  <article class="case-layout">
+    <section class="what-i-did" id="what-i-did">
+      <h2>What I Did</h2>
+      <ul class="output-list">
+        <li>Created a stable analytical entity to track each queue or team placement per case</li>
+        <li>Introduced validation logic to classify each placement and preserve the inclusion or exclusion rationale</li>
+        <li>Sequenced activity from cases, assessment software, questionnaires and staff-generated events against the active placement</li>
+        <li>Reconstructed placement start and end times from audit events where the source system held no continuous episode</li>
+        <li>Engineered endpoint logic for time-to-assessment KPIs, handling missing workflow markers and operational edge cases</li>
+      </ul>
+    </section>
+
+    <section class="case-section" id="data-engineering-process">
+      <h2>Data Engineering Process</h2>
+      <p>The case management system recorded queue events as they happened: team assignments, assessment activity, team actions and outcomes, but not continuous episodes. A single case could generate dozens of audit records across multiple systems without any persistent identifier representing the placement or actions within a team. The operational questions required that structure.</p>
+      <p>Firstly, I created a stable analytical entity that the source system did not provide, generating an ID for each placement into a queue or team and capturing the case ID, team name, placement sequence, timestamp, priority, and category at the point of placement. This transformed isolated audit records into something that could be queried as a continuous queue episode.</p>
+      <p>Not all team placements in the audit stream represented genuine activity. System housekeeping processes generated transient placements, duplicate transitions, timeout removals and technical routing artefacts which needed excluding to avoid misrepresenting durations and case progress. I introduced validation logic to classify each placement and retained the inclusion or exclusion rationale within the output table, rather than applying opaque filters inside individual reports. This meant operational users could trust duration calculations, review excluded events and investigate unusual behaviour without relying on logic hidden downstream.</p>
+      <p>Once validated team placements existed, activity from across the source systems, including cases, assessment software, questionnaire activity and staff-generated events, could be attributed to the correct placement episode. The key challenge was temporal: actions frequently occurred after multiple placement changes, with simultaneous priority transitions, and across several systems simultaneously. The attribution logic sequenced all events chronologically and assigned each action to the active validated level at that point in time, producing a record of what happened within a placement rather than simply what happened to an incident overall.</p>
+      <p>The most complex stage was reconstructing start and end times for each queue level. The source systems did not store episode durations, so end times had to be inferred from subsequent placements, removals, outcomes and lookback logic. Several edge cases required explicit handling: cases that left and returned to the queue, multiple assessments on the same incident, and missing assessment or staff actions where queue gateway activity had to be treated as the triage start point.</p>
+      <p>This temporal reconstruction logic became particularly important for the time-to-start-assessment KPIs. The KPIs required identifying the relevant queue placement, then finding the first meaningful clinical activity after it. I engineered an endpoint hierarchy in association with operational teams, consisting of a staff action event, an assessment start or a recorded outcome, to prevent triage records being lost in cases where markers could be missing.</p>
+      <p>I validated the data extensively using comparisons against the original audit event table, with the inclusion and exclusion rationale providing evidence of accuracy, real-time analysis of clinician activity and comparisons against other limited in-built reports.</p>
+    </section>
+
+    <section class="case-section" id="output-model">
+      <h2>Output Model</h2>
+      <p>The engineering process produced two analytical tables:</p>
+      <ul class="output-list">
+        <li>An episode-based row per validated queue placement, with placement start and end timestamps, priority at placement, validation status and rationale for inclusion or exclusion</li>
+        <li>A row per operational action occurring within a validated placement, linked back to the relevant placement ID and recording the action source, type and timestamp</li>
+      </ul>
+      <p>Downstream Power BI reporting was built against these tables rather than against the raw audit sources directly. This centralised the validation rules, temporal calculations and KPI definitions in the SQL transformation layer, avoiding duplication across reports and ensuring that any change to operational logic could be made in one place.</p>
+      <p>An anonymised example of the SQL scripts is available <a class="text-link" href="clinical-queue-activity-sql.html">here</a>.</p>
+    </section>
+
+    <section class="case-section" id="outcome">
+      <h2>Outcome</h2>
+      <p>The output was a validated, queryable queue episode model with time-to-assessment KPIs made calculable for the first time, supported by a defined endpoint hierarchy to handle incomplete workflow marker usage. Validation rationale persisted within the model rather than being applied dynamically, improving auditability and reproducibility. The model was applied to several outputs and reports including case flow, queue monitoring and KPI reports.</p>
+    </section>
+  </article>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
+</body>
+</html>

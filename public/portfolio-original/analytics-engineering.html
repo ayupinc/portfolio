@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics Engineering | Stephen Clinton</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --navy-mid: #1E3A5F;
+    --ink: #1A1A2E;
+    --body: #3D4A5C;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #F7F8FA;
+    --white: #FFFFFF;
+    --paper: #FAFBFC;
+    --shadow: 0 18px 55px rgba(15,31,61,0.16);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Aptos, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body.modal-open { overflow: hidden; }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .portfolio-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .portfolio-nav a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .portfolio-nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  header {
+    background: var(--bg);
+    color: var(--navy);
+  }
+
+  .hero {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 46px 32px 12px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 10px;
+    font-size: clamp(30px, 4vw, 50px);
+    line-height: 1.06;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 10px 32px 92px;
+  }
+
+  .intro {
+    margin: 0 auto 24px;
+    color: #242424;
+    max-width: 820px;
+    text-align: center;
+  }
+
+  .intro + .intro {
+    margin-top: -12px;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    align-items: start;
+  }
+
+  .project-card {
+    border: 1px solid var(--rule);
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .project-card-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(15,31,61,0.11);
+    border-color: rgba(15,31,61,0.35);
+  }
+
+  .thumb-button,
+  .thumb-link {
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    background: #F0F2F5;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: inherit;
+    text-decoration: none;
+  }
+
+  .project-card > .thumb-link {
+    height: auto;
+  }
+
+  .thumb-button img,
+  .thumb-link img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .thumb-carousel {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #F0F2F5;
+  }
+
+  .project-card > .thumb-carousel {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thumb-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  .thumb-carousel img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .thumb-carousel img.is-active {
+    opacity: 1;
+  }
+
+  .thumb-carousel-button {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 40px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .thumb-carousel-button:hover {
+    background: var(--white);
+  }
+
+  .thumb-carousel-button.prev { left: 8px; }
+  .thumb-carousel-button.next { right: 8px; }
+
+  .card-body {
+    padding: 22px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .project-title {
+    margin: 0;
+    color: var(--navy);
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.16;
+  }
+
+  .summary {
+    margin: 0;
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .details-button,
+  .details-link {
+    align-self: flex-start;
+    margin-top: auto;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    border-radius: 0;
+    padding: 0;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .details-button:hover,
+  .details-link:hover { color: #1B4D8E; }
+
+  .details-link::after {
+    content: " \2197";
+    display: inline-block;
+    margin-left: 5px;
+    text-decoration: none;
+  }
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+  }
+
+  .modal[aria-hidden="false"] { display: flex; }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,18,33,0.72);
+  }
+
+  .modal-panel {
+    position: relative;
+    z-index: 1;
+    width: min(1040px, 100%);
+    max-height: min(88vh, 920px);
+    overflow: auto;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+  }
+
+  .modal-close {
+    position: sticky;
+    top: 0;
+    float: right;
+    z-index: 2;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-left: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: white;
+    color: var(--navy);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .modal-image {
+    width: 100%;
+    display: block;
+    background: #F0F2F5;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .modal-content {
+    padding: 28px 34px 34px;
+  }
+
+  .modal-title {
+    margin: 0 48px 22px 0;
+    color: var(--navy);
+    font-size: 30px;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .detail-block {
+    padding-top: 18px;
+    margin-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .detail-block:first-of-type {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  .detail-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--navy);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .detail-text {
+    margin: 0;
+    color: var(--body);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      padding: 12px 20px;
+    }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    .portfolio-nav {
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+    .hero { padding: 38px 24px 34px; }
+    main { padding: 28px 20px 64px; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .thumb-button,
+    .thumb-link,
+    .project-card > .thumb-carousel {
+      border-bottom: 1px solid var(--rule);
+    }
+    .modal { padding: 14px; }
+    .modal-content { padding: 22px; }
+    .modal-title { font-size: 24px; }
+  }
+</style>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <nav class="portfolio-nav" aria-label="Portfolio sections">
+      <a href="index.html">Power BI</a>
+      <a href="analytics-engineering.html" aria-current="page">Analytics Engineering</a>
+    </nav>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<header>
+  <section class="hero">
+    <h1>Analytics Engineering</h1>
+  </section>
+</header>
+
+<main>
+  <p class="intro">These examples show the data engineering layer behind reporting: SQL models, stored procedures and reusable datasets built from messy operational systems. They show how event logs, audit trails, questionnaire responses and telephony records can become stable reporting tables that Power BI, SSRS and analysts can trust.</p>
+  <p class="intro">The emphasis is on interpretation as much as transformation: reconstructing timelines, defining episodes, applying business rules, and documenting logic so that complex operational activity becomes explainable and repeatable. The work is based on real client projects, with identifying details removed and values changed; examples do not identify organisations, expose operational details or represent actual activity volumes.</p>
+  <section class="portfolio-grid" id="portfolioGrid" aria-label="Portfolio examples"></section>
+</main>
+
+<div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="document">
+    <button class="modal-close" type="button" data-close aria-label="Close details">&times;</button>
+    <img class="modal-image" id="modalImage" src="" alt="">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div id="modalDetails"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+
+<script>
+const projects = [
+  {
+    title: "Cisco Telephony",
+    url: "cisco-telephony-analytics-engineering.html",
+    summary: "Reconstructed calls, agent calls, sessions and activities from native Cisco event data so Power BI and SSRS could report from a trusted operational layer."
+  },
+  {
+    title: "Questionnaire Responses",
+    url: "questionnaire-analytics-engineering.html",
+    summary: "Structured raw CAD questionnaire responses into episode and response tables for clinical quality, outcome and pathway reporting."
+  },
+  {
+    title: "Queue Activity",
+    url: "clinical-queue-activity-monitoring-engineering.html",
+    summary: "Built a validated queue episode model from CAD audit tables, including queue placements, waiting times and actions taken while cases were waiting."
+  }
+];
+
+const grid = document.querySelector("#portfolioGrid");
+const modal = document.querySelector("#projectModal");
+const modalTitle = document.querySelector("#modalTitle");
+const modalImage = document.querySelector("#modalImage");
+const modalDetails = document.querySelector("#modalDetails");
+let lastTrigger = null;
+
+
+function detailBlock(label, text) {
+  return `<section class="detail-block"><span class="detail-label">${label}</span><p class="detail-text">${text}</p></section>`;
+}
+
+function openProject(project, trigger) {
+  lastTrigger = trigger;
+  modalTitle.textContent = project.title;
+  modalImage.src = project.image;
+  modalImage.alt = project.title;
+  modalDetails.innerHTML = [
+    ...(project.sections
+      ? project.sections.map((section) => detailBlock(section.label, section.text))
+      : [
+        detailBlock("Requirement", project.requirement),
+        detailBlock("Power BI Solution", project.solution),
+        detailBlock("Data Modelling / Engineering", project.engineering),
+        project.extra ? detailBlock(project.extraLabel || "More Detail", project.extra) : ""
+      ])
+  ].join("");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  modal.querySelector(".modal-close").focus();
+}
+
+function closeProject() {
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  if (lastTrigger) lastTrigger.focus();
+}
+
+projects.forEach((project, index) => {
+  const article = document.createElement(project.url ? "a" : "article");
+  article.className = project.url ? "project-card project-card-link" : "project-card";
+  if (project.url) {
+    article.href = project.url;
+    article.setAttribute("aria-label", `View case study for ${project.title}`);
+  }
+  article.innerHTML = `
+    <div class="card-body">
+      <h2 class="project-title">${project.title}</h2>
+      <p class="summary">${project.summary}</p>
+      ${project.url
+        ? `<span class="details-link">View case study</span>`
+        : `<button class="details-button" type="button">View detail</button>`}
+    </div>
+  `;
+  if (!project.url) {
+    article.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => openProject(project, button));
+    });
+  }
+  grid.appendChild(article);
+});
+
+modal.addEventListener("click", (event) => {
+  if (event.target.hasAttribute("data-close")) closeProject();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && modal.getAttribute("aria-hidden") === "false") closeProject();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time Clinical Queue Monitoring and Operational Wallboard | Stephen Clinton</title>
+<style>
+  :root {
+    --navy: #0F1F3D;
+    --accent: var(--navy);
+    --body: #242424;
+    --muted: #6B7A8F;
+    --rule: #D1D8E3;
+    --bg: #FFFFFF;
+    --white: #FFFFFF;
+    --sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    --serif: var(--sans);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.94);
+    border-bottom: 1px solid var(--rule);
+    backdrop-filter: blur(14px);
+  }
+
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    min-height: 66px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .brand-fallback {
+    width: 31px;
+    height: 31px;
+    border: 2px solid var(--accent);
+    display: none;
+    place-items: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    color: var(--accent);
+  }
+
+  .nav-link,
+  .reserved-link {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    color: var(--accent);
+  }
+
+  .reserved-link {
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  .social-link {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  main {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 44px 32px 86px;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+  }
+
+  .back-nav {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  .case-header {
+    max-width: 900px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 14px;
+    color: var(--navy);
+    font-size: clamp(34px, 4.2vw, 50px);
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+
+  .case-subtitle {
+    max-width: 680px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.58;
+  }
+
+  .media-carousel {
+    max-width: 900px;
+    margin: 34px auto 52px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #F0F2F5;
+  }
+
+  .data-flow-figure {
+    margin: 18px 0 0;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  .data-flow-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .carousel-frame {
+    position: relative;
+    background: #E8EBF0;
+  }
+
+  .carousel-slide {
+    display: none;
+    margin: 0;
+  }
+
+  .carousel-slide.is-active {
+    display: block;
+  }
+
+  .carousel-slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .carousel-slide img,
+  .data-flow-figure img {
+    cursor: zoom-in;
+  }
+
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 42px;
+    border: 1px solid rgba(15,31,61,0.24);
+    background: rgba(255,255,255,0.88);
+    color: var(--navy);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .carousel-button:hover { background: var(--white); }
+  .carousel-button.prev { left: 10px; }
+  .carousel-button.next { right: 10px; }
+
+  .image-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(8, 15, 29, 0.88);
+  }
+
+  .image-lightbox.is-open {
+    display: flex;
+  }
+
+  .image-lightbox img {
+    max-width: min(96vw, 1500px);
+    max-height: 90vh;
+    object-fit: contain;
+    background: #F0F2F5;
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.34);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.94);
+    color: var(--navy);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover {
+    background: var(--white);
+  }
+
+  .case-layout {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .case-content {
+    min-width: 0;
+  }
+
+  .case-section + .case-section {
+    margin-top: 46px;
+  }
+
+  .what-i-did {
+    width: 100%;
+    margin-bottom: 46px;
+    padding: 24px 28px;
+    border-left: 5px solid #1B4D8E;
+    border-radius: 8px;
+    background: #EAF0F9;
+  }
+
+  .what-i-did h2 {
+    margin-bottom: 14px;
+  }
+
+  .what-i-did .output-list {
+    margin-bottom: 0;
+  }
+
+  h2 {
+    margin: 0 0 16px;
+    color: var(--navy);
+    font-size: clamp(22px, 2vw, 25px);
+    line-height: 1.18;
+    font-weight: 650;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  p {
+    margin: 0;
+    color: var(--body);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.6;
+  }
+
+  p + p { margin-top: 30px; }
+
+  .technical-detail {
+    margin-top: 20px;
+  }
+
+  .technical-detail summary {
+    display: inline;
+    color: var(--body);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    list-style: none;
+  }
+
+  .technical-detail summary::-webkit-details-marker { display: none; }
+
+  .technical-body {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  .technical-body p { color: var(--muted); }
+
+  .output-list {
+    margin: 10px 0 18px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .output-list li {
+    position: relative;
+    padding: 3px 0 3px 18px;
+    color: var(--body);
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.58;
+  }
+
+  .output-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  p + .output-list { margin-top: 12px; }
+
+  .footer-nav {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.72);
+    padding: 34px 32px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 780px) {
+    .topbar-inner { padding: 0 20px; }
+    .brand-name { font-size: 13px; }
+    .top-actions { min-width: 40px; }
+    main { padding: 32px 20px 64px; }
+    .case-subtitle { font-size: 18px; }
+    .media-carousel { margin-bottom: 42px; }
+    p,
+    .output-list li { font-size: 18px; }
+  }
+  /* Shared case-study layout */
+  :root { --sans: Arial, "Helvetica Neue", Helvetica, sans-serif; }
+  main { max-width: 1125px; margin: 0 auto; padding: 34px 32px 86px; }
+  .page-grid { display: grid; grid-template-columns: 250px minmax(0, 800px); gap: 75px; align-items: start; }
+  .side-nav { position: sticky; top: 92px; color: var(--navy); font-size: 15px; line-height: 1.45; }
+  .side-nav-title { margin: 0 0 10px; color: var(--navy); font-size: 15px; font-weight: 700; line-height: 1.45; text-decoration: none; display: block; }
+  .side-nav-group { margin: 0 0 28px; }
+  .side-nav-list,
+  .side-nav-sublist { margin: 0; padding: 0; list-style: none; }
+  .side-nav-list { border-left: 4px solid var(--navy); }
+  .side-nav-list a,
+  .side-nav-current { display: block; padding: 9px 0 9px 14px; color: var(--navy); text-decoration: none; }
+  .side-nav-current { font-weight: 700; }
+  .side-nav-sublist { margin: 0 0 6px 14px; border-left: 2px solid var(--rule); }
+  .side-nav-sublist a { padding: 6px 0 6px 14px; color: var(--body); font-size: 14px; }
+  .side-nav-list a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .content-column { max-width: 800px; min-width: 0; }
+  .back-nav,
+  .case-header,
+  .case-layout,
+  .media-carousel { max-width: 800px; margin-left: 0; margin-right: 0; text-align: left; }
+  h1 { font-size: 36pt; }
+  .case-subtitle,
+  p,
+  .output-list li { font-family: var(--sans); font-size: 19px; line-height: 28px; }
+  p + p { margin-block-start: 20pt; }
+  @media (max-width: 780px) {
+    .page-grid { display: block; }
+    .side-nav { display: none; }
+    .case-subtitle,
+    p,
+    .output-list li { font-size: 19px; line-height: 28px; }
+  }
+</style>
+<script src="site-nav.js" defer></script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="d8794a5a-2720-43f4-b7bd-b7790f43102c"></script>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Stephen Clinton home">
+      <img class="brand-mark" src="assets/maple-leaf.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+      <span class="brand-fallback" aria-hidden="true">M</span>
+      <span class="brand-name">Stephen Clinton</span>
+    </a>
+    <div class="top-actions" aria-label="Portfolio links">
+      <a class="nav-link" href="index.html">Power BI</a>
+      <a class="nav-link" href="analytics-engineering.html">Analytics Engineering</a>
+      <a class="social-link" href="https://www.linkedin.com/in/stephenclinton" aria-label="LinkedIn, external site">LinkedIn ↗</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="page-grid">
+    <aside class="side-nav" data-site-nav data-current-page="real-time-queue-monitoring"></aside>
+
+    <div class="content-column">
+  <div class="back-nav">
+    <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+  </div>
+
+  <header class="case-header">
+    <h1>Real-Time Clinical Queue Monitoring and Operational Wallboard</h1>
+    <p class="case-subtitle">Near-live queue visibility for outbound call-back work, designed for continuous operational use by team leaders.</p>
+  </header>
+
+  <section class="media-carousel" aria-label="Real-time clinical queue monitoring wallboard screenshot">
+    <div class="carousel-frame">
+      <figure class="carousel-slide is-active">
+        <img src="screenshots/queue-wallboard.png" alt="Real-time clinical queue monitoring wallboard screenshot" data-lightbox>
+      </figure>
+    </div>
+  </section>
+
+  <article class="case-layout">
+    <div class="case-content">
+      <section class="what-i-did" id="what-i-did">
+        <h2>What I Did</h2>
+        <ul class="output-list">
+          <li>Built status reconstruction logic from multiple audit events to show each case's current operational state</li>
+          <li>Created near-live queries into the case management system to gather queue and workload data</li>
+          <li>Designed a lightweight DirectQuery semantic model for continuous operational reporting</li>
+          <li>Developed DAX measures for queue volume, active workload, elapsed time and longest-waiting case reporting</li>
+          <li>Designed and built a wallboard layout optimised for continuous display by operational teams</li>
+          <li>Implemented bookmark navigation between queue views and drill-through to case-level detail</li>
+          <li>Produced metric definitions and support information for operational governance</li>
+        </ul>
+      </section>
+
+      <section class="case-section" id="context">
+        <h2>Context</h2>
+        <p>I developed this wallboard for a high-volume section of a contact centre performing outbound calls to follow up on earlier inbound conversations. Cases waited in a backlog and were called when an agent was available, with different call types reflecting priority and several teams holding different operational skills.</p>
+        <p>The operational challenge was live visibility. Team leaders needed to understand how many cases were waiting, which priorities were building, which work was already active and where the longest waits were occurring without relying on delayed extracts or manual checks.</p>
+        <p>Technologies were T-SQL for the warehouse and native source tables, with Power BI DirectQuery for the semantic model, DAX measures and reporting canvas.</p>
+      </section>
+
+      <section class="case-section" id="key-reporting-challenges">
+        <h2>Key Reporting Challenges</h2>
+        <ul class="output-list">
+          <li>Reconstructing a live queue state from audit events rather than a single current-status field</li>
+          <li>Showing waiting demand and active workload clearly enough for continuous operational monitoring</li>
+          <li>Keeping the semantic model lightweight enough for DirectQuery performance</li>
+          <li>Calculating elapsed waiting and active durations in a way that updated with current time</li>
+          <li>Supporting both wallboard visibility and drill-through investigation from the same report</li>
+          <li>Separating priority, queue and team views without creating multiple disconnected reports</li>
+        </ul>
+      </section>
+
+      <section class="case-section" id="queue-state-reconstruction">
+        <h2>Queue State Reconstruction</h2>
+        <p>Case details were held in the case management system tables, but the queue state had to be inferred from a series of audit events showing movement between queues, entering or exiting the queue and starting or ending a call-back. It could not be read from a single status field.</p>
+        <p>I wrote reconstruction logic that interpreted those events into a single observable state for each case so the wallboard could report live waiting demand, active work and priority position consistently. This followed the same principle as the wider queue activity model: isolated audit records were transformed into operational states that users could understand and act on.</p>
+        <p>The logic also needed to handle cases moving between queues, cases returning after earlier activity and records where the operational meaning depended on the sequence of surrounding events. Preserving that interpretation in the data layer kept the Power BI report focused on presentation and operational decision support rather than repeating complex event logic inside visuals.</p>
+      </section>
+
+      <section class="case-section" id="semantic-model-and-measures">
+        <h2>Semantic Model and Measures</h2>
+        <p>The semantic model was intentionally kept lightweight. A single operational fact table, populated by a near-live SQL extraction process, carried queue, status, elapsed-time and clinician fields. Small lookup dimensions handled priority labels and queue classifications.</p>
+        <p>DirectQuery was used throughout so the wallboard reflected current operational state rather than a cached snapshot. Despite the complexity of the operational logic, the extraction query consistently executed in under one second.</p>
+        <p>DAX measures were focused on operational state rather than historical analysis. They covered live queue volumes, active workload, active clinician counts, longest waiting case by priority and elapsed duration measures for both waiting and active work. These measures allowed the same model to support headline wallboard tiles, priority breakdowns and drill-through investigation without separate calculations for each page.</p>
+      </section>
+
+      <section class="case-section" id="wallboard-design">
+        <h2>Wallboard Design</h2>
+        <p>The Power BI solution was designed as a wallboard rather than a traditional analytical report. The first design priority was at-a-glance readability for team leaders monitoring demand continuously during operational shifts.</p>
+        <p>The dashboard provided live waiting volumes, active workload, longest waiting case by priority, longest active assessment duration and active agent counts by role. Visual hierarchy was kept deliberately simple so queue pressure, waiting time and active work could be understood quickly from a distance.</p>
+        <p>Additional functionality included drill-through into detailed case-level records, bookmark navigation between queue types and metric definitions with support/version information for governance. This allowed the same report to work both as a shared operational display and as an investigation route when a team leader needed to understand the cases behind a metric.</p>
+      </section>
+
+      <section class="case-section" id="outcome">
+        <h2>Outcome</h2>
+        <p>The wallboard was deployed for continuous 24/7 operational use across all teams and became the primary operational view of live queue demand across the organisation.</p>
+        <p>It gave operational leaders a shared view of current workload, active activity and waiting pressure, replacing manual checks with a continuously available source of queue information. By combining event reconstruction, DirectQuery modelling and wallboard-focused design, the report supported immediate operational decision making while retaining drill-through detail for case-level review.</p>
+      </section>
+    </div>
+  </article>
+
+  <div class="footer-nav">
+    <a class="back-link" href="index.html">&larr; Back to Power BI</a>
+  </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Stephen Clinton · Power BI and analytics engineering portfolio
+</footer>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot">
+  <button class="lightbox-close" type="button" aria-label="Close expanded screenshot">&times;</button>
+  <img src="" alt="">
+</div>
+<script>
+const lightbox = document.querySelector("#imageLightbox");
+const lightboxImage = lightbox.querySelector("img");
+const lightboxClose = lightbox.querySelector(".lightbox-close");
+
+function openLightbox(image) {
+  lightboxImage.src = image.currentSrc || image.src;
+  lightboxImage.alt = image.alt;
+  lightbox.classList.add("is-open");
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightboxImage.src = "";
+  lightboxImage.alt = "";
+}
+
+document.querySelectorAll("[data-lightbox]").forEach((image) => {
+  image.addEventListener("click", () => openLightbox(image));
+});
+
+lightboxClose.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+});
+</script>
+</body>
+</html>
