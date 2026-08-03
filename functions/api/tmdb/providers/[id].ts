@@ -17,9 +17,7 @@ interface TmdbProvider {
 }
 
 interface TmdbRegion {
-  ads?: TmdbProvider[];
   flatrate?: TmdbProvider[];
-  free?: TmdbProvider[];
   link?: string;
 }
 
@@ -86,11 +84,9 @@ export const onRequestGet = async (context: PagesContext) => {
 
   const payload = (await upstream.json()) as TmdbResponse;
   const uk = payload.results?.GB;
-  const candidates = [
-    ...(uk?.flatrate ?? []),
-    ...(uk?.free ?? []),
-    ...(uk?.ads ?? []),
-  ].sort(
+  // TMDB's flatrate group represents subscription streaming. Rental and
+  // purchase offers are deliberately excluded from the app.
+  const candidates = [...(uk?.flatrate ?? [])].sort(
     (left, right) =>
       (left.display_priority ?? Number.MAX_SAFE_INTEGER) -
       (right.display_priority ?? Number.MAX_SAFE_INTEGER),
