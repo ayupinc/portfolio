@@ -34,6 +34,7 @@ declare const caches: {
 
 const CACHE_CONTROL =
   "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400";
+const RESELLER_CHANNEL = /\b(?:amazon|apple tv|roku premium)\s+channel\b/i;
 
 function json(body: unknown, status = 200, cacheControl = "no-store") {
   return new Response(JSON.stringify(body), {
@@ -60,7 +61,7 @@ export const onRequestGet = async (context: PagesContext) => {
 
   const requestUrl = new URL(context.request.url);
   const cacheKey = new Request(
-    new URL(`/api/tmdb/providers/${id}?filter=subscription-v2`, requestUrl.origin),
+    new URL(`/api/tmdb/providers/${id}?filter=subscription-v3`, requestUrl.origin),
   );
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
@@ -99,7 +100,8 @@ export const onRequestGet = async (context: PagesContext) => {
       typeof providerId !== "number" ||
       seen.has(providerId) ||
       !provider.provider_name ||
-      !provider.logo_path
+      !provider.logo_path ||
+      RESELLER_CHANNEL.test(provider.provider_name)
     ) {
       return [];
     }
