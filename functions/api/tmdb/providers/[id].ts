@@ -17,7 +17,9 @@ interface TmdbProvider {
 }
 
 interface TmdbRegion {
+  ads?: TmdbProvider[];
   flatrate?: TmdbProvider[];
+  free?: TmdbProvider[];
   link?: string;
 }
 
@@ -66,6 +68,7 @@ function serviceKey(name: string) {
   if (value.includes("britbox")) return "britbox";
   if (value.includes("hbo max")) return "hbo-max";
   if (value.includes("mubi")) return "mubi";
+  if (value.includes("uktv") || value.includes("u&")) return "uktv";
   return value
     .replace(/\b(?:standard\s+)?with ads\b/g, "")
     .replace(/[^a-z0-9]+/g, "-")
@@ -109,7 +112,7 @@ export const onRequestGet = async (context: PagesContext) => {
     id !== "0" ? `tmdb-${id}` : tvdb ? `tvdb-${tvdb}` : `imdb-${imdb ?? "none"}`;
   const cacheKey = new Request(
     new URL(
-      `/api/tmdb/providers/${id}?filter=lookup-v5&lookup=${lookupIdentity}&season=${season ?? "series"}`,
+      `/api/tmdb/providers/${id}?filter=services-v6&lookup=${lookupIdentity}&season=${season ?? "series"}`,
       requestUrl.origin,
     ),
   );
@@ -169,9 +172,13 @@ export const onRequestGet = async (context: PagesContext) => {
     ? ((await detailsResult.json()) as TmdbDetails)
     : null;
   const uk = payload.results?.GB;
-  // TMDB's flatrate group represents subscription streaming. Rental and
+  // Include subscription, free and ad-supported streaming. Rental and
   // purchase offers are deliberately excluded from the app.
-  const candidates = [...(uk?.flatrate ?? [])].sort(
+  const candidates = [
+    ...(uk?.flatrate ?? []),
+    ...(uk?.free ?? []),
+    ...(uk?.ads ?? []),
+  ].sort(
     (left, right) =>
       (left.display_priority ?? Number.MAX_SAFE_INTEGER) -
       (right.display_priority ?? Number.MAX_SAFE_INTEGER),
