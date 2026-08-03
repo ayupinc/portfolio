@@ -60,7 +60,7 @@ export const onRequestGet = async (context: PagesContext) => {
 
   const requestUrl = new URL(context.request.url);
   const cacheKey = new Request(
-    new URL(`/api/tmdb/providers/${id}`, requestUrl.origin),
+    new URL(`/api/tmdb/providers/${id}?filter=subscription-v2`, requestUrl.origin),
   );
   const cached = await caches.default.match(cacheKey);
   if (cached) return cached;
