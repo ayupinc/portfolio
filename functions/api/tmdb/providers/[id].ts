@@ -35,6 +35,10 @@ interface TmdbDetails {
   networks?: TmdbNetwork[];
 }
 
+interface TmdbFindResponse {
+  tv_results?: Array<{ id?: number }>;
+}
+
 declare const caches: {
   default: {
     match(request: Request): Promise<Response | undefined>;
@@ -97,9 +101,15 @@ export const onRequestGet = async (context: PagesContext) => {
     return json({ error: "Invalid season number." }, 400);
   }
   const season = seasonValue === null ? null : Number(seasonValue);
+  const tvdbValue = requestUrl.searchParams.get("tvdb");
+  const imdbValue = requestUrl.searchParams.get("imdb");
+  const tvdb = tvdbValue && /^\d+$/.test(tvdbValue) ? tvdbValue : null;
+  const imdb = imdbValue && /^tt\d+$/i.test(imdbValue) ? imdbValue : null;
+  const lookupIdentity =
+    id !== "0" ? `tmdb-${id}` : tvdb ? `tvdb-${tvdb}` : `imdb-${imdb ?? "none"}`;
   const cacheKey = new Request(
     new URL(
-      `/api/tmdb/providers/${id}?filter=season-v4&season=${season ?? "series"}`,
+      `/api/tmdb/providers/${id}?filter=lookup-v5&lookup=${lookupIdentity}&season=${season ?? "series"}`,
       requestUrl.origin,
     ),
   );
@@ -110,13 +120,37 @@ export const onRequestGet = async (context: PagesContext) => {
     Accept: "application/json",
     Authorization: `Bearer ${context.env.TMDB_READ_TOKEN}`,
   };
+  let tmdbId = Number(id);
+  if (tmdbId === 0 && (tvdb || imdb)) {
+    const externalId = tvdb ?? imdb;
+    const externalSource = tvdb ? "tvdb_id" : "imdb_id";
+    const findResult = await fetch(
+      `https://api.themoviedb.org/3/find/${externalId}?external_source=${externalSource}&language=en-GB`,
+      { headers },
+    );
+    if (findResult.ok) {
+      const findPayload = (await findResult.json()) as TmdbFindResponse;
+      tmdbId = findPayload.tv_results?.[0]?.id ?? 0;
+    }
+  }
+
+  if (!tmdbId) {
+    const response = json(
+      { link: null, providers: [], originalNetwork: null, season },
+      200,
+      CACHE_CONTROL,
+    );
+    context.waitUntil(caches.default.put(cacheKey, response.clone()));
+    return response;
+  }
+
   const providerPath =
     season === null
-      ? `https://api.themoviedb.org/3/tv/${id}/watch/providers`
-      : `https://api.themoviedb.org/3/tv/${id}/season/${season}/watch/providers`;
+      ? `https://api.themoviedb.org/3/tv/${tmdbId}/watch/providers`
+      : `https://api.themoviedb.org/3/tv/${tmdbId}/season/${season}/watch/providers`;
   const [upstream, detailsResult] = await Promise.all([
     fetch(providerPath, { headers }),
-    fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-GB`, {
+    fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?language=en-GB`, {
       headers: {
         ...headers,
       },
