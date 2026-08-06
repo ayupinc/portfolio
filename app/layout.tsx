@@ -1,32 +1,33 @@
 import type { Metadata } from "next";
-import { AccessGate } from "./access-gate";
 import { Footer, Header } from "./components";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mapleintel.uk"),
-  title: {
-    default: "Maple Leaf Intelligence | Operational analytics for health services",
-    template: "%s | Maple Leaf Intelligence",
-  },
+  title: "Maple Leaf Intelligence | Operational intelligence for health services",
   description:
-    "Independent Power BI and analytics engineering consultancy for ambulance services, the wider NHS and complex operational environments.",
+    "Maple Leaf Intelligence helps NHS and health-service teams understand demand, flow, capacity and performance, and turn complex operational information into practical decision support.",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/assets/maple-leaf.png",
+    shortcut: "/assets/maple-leaf.png",
+    apple: "/assets/maple-leaf.png",
   },
   openGraph: {
     title: "Maple Leaf Intelligence",
     description:
-      "Operational analytics and Power BI for ambulance services and the wider NHS.",
+      "See the operational picture. Make the next decision with confidence.",
     type: "website",
     url: "https://mapleintel.uk",
+    siteName: "Maple Leaf Intelligence",
     images: [
       {
         url: "/og.png",
-        width: 1734,
-        height: 907,
-        alt: "Maple Leaf Intelligence — Operational analytics for services where the detail matters.",
+        width: 1731,
+        height: 909,
+        alt: "Maple Leaf Intelligence - operational intelligence for health services.",
       },
     ],
   },
@@ -34,16 +35,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Maple Leaf Intelligence",
     description:
-      "Operational analytics and Power BI for ambulance services and the wider NHS.",
+      "See the operational picture. Make the next decision with confidence.",
     images: ["/og.png"],
   },
   robots: {
-    index: false,
-    follow: false,
-    googleBot: {
-      index: false,
-      follow: false,
-    },
+    index: true,
+    follow: true,
   },
 };
 
@@ -56,11 +53,9 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <AccessGate>
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
-        </AccessGate>
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );

@@ -182,3 +182,40 @@ The next strategic decisions, in order, are:
 2. Which operational problems should receive the greatest prominence within the agreed market focus?
 3. What outcomes and operational context can be stated publicly?
 4. What existing Maple Intel brand assets or constraints must be retained?
+
+## Planned platform separation
+
+Status: noted for future work. Do not reorganise the Energy or Car code until
+the public Maple Leaf website work is complete.
+
+The products should remain separate applications with a shared backend and
+small shared packages:
+
+    maple-leaf-platform/
+      apps/
+        maple-leaf/          # public company landing page and case studies
+        energy/              # private responsive desktop/mobile dashboard
+        car/                 # private mobile-first application
+        rate-calculator/     # public client-side utility
+        tv/                  # publicly reachable Simkl-powered TV application
+      workers/
+        api/
+          energy/
+          car/
+          simkl/
+      packages/
+        shared-ui/
+        shared-types/
+
+Deployment and access principles:
+
+- Maple Leaf and the Rate Calculator remain public.
+- Energy and Car use separate Cloudflare Pages projects and separate
+  Cloudflare Access applications and policies.
+- Sensitive Energy and Car API routes are protected independently.
+- TV can remain publicly reachable, while Simkl OAuth and tokens stay behind
+  the Worker.
+- Each Cloudflare Pages project uses its own application subdirectory and
+  build settings.
+- Complete the website first, then perform one controlled repository
+  reorganisation and update the Cloudflare deployments together.

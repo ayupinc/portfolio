@@ -8,6 +8,8 @@ const generatedAssets = resolve(project, "public/_next");
 const temporaryDirectory = await mkdtemp(join(tmpdir(), "mapleintel-export-"));
 const assetBackup = join(temporaryDirectory, "_next");
 let hadGeneratedAssets = false;
+const retiredRoutes = ["about", "contact", "portfolio", "services", "_not-found"];
+const routeBackups = [];
 
 try {
   try {
@@ -15,6 +17,17 @@ try {
     hadGeneratedAssets = true;
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
+  }
+
+  for (const route of retiredRoutes) {
+    const source = resolve(project, "public", route);
+    const backup = join(temporaryDirectory, route);
+    try {
+      await rename(source, backup);
+      routeBackups.push({ source, backup });
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
   }
 
   const build = spawnSync(
@@ -35,6 +48,10 @@ try {
   if (hadGeneratedAssets) {
     await rm(generatedAssets, { recursive: true, force: true });
     await rename(assetBackup, generatedAssets);
+  }
+  for (const { source, backup } of routeBackups) {
+    await rm(source, { recursive: true, force: true });
+    await rename(backup, source);
   }
   throw error;
 } finally {

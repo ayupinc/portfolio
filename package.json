@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/export-static.mjs",
+    "build:case-studies": "PYTHONPATH=.pdf-tools python3 scripts/build-case-studies.py",
     "deploy:static": "node scripts/export-static.mjs",
     "start": "next dev",
     "test": "npm run deploy:static && node --test tests/site.test.mjs",

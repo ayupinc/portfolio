@@ -4,35 +4,55 @@ import test from "node:test";
 
 async function rendered(pathname) {
   const file =
-    pathname === "/" ? "../out/index.html" : `../out${pathname}/index.html`;
+    pathname === "/" ? "../out/index.html" : "../out" + pathname + "/index.html";
   return readFile(new URL(file, import.meta.url), "utf8");
 }
 
-test("renders the consultancy home page", async () => {
+test("renders one public, company-focused landing page", async () => {
   const html = await rendered("/");
-  assert.match(html, /Operational analytics for services where/);
-  assert.match(html, /View selected work/);
-  assert.match(html, /Operational work, clearly evidenced/);
-  assert.match(html, /Private preview/);
-  assert.match(html, /name="robots" content="noindex, nofollow"/);
-  assert.doesNotMatch(html, /codex-preview/);
+
+  assert.match(html, /See the operational picture/);
+  assert.match(html, /What Maple Leaf does/);
+  assert.match(html, /organisation&#x27;s challenge/);
+  assert.match(html, /Operational problems, resolved in practice/);
+  assert.match(html, /name="robots" content="index, follow"/);
+  assert.doesNotMatch(html, /Private preview/);
+  assert.doesNotMatch(html, /About Stephen/);
+  assert.doesNotMatch(html, /href="\/about/);
+  assert.doesNotMatch(html, /href="\/portfolio/);
 });
 
-test("renders the portfolio and a complete case study", async () => {
-  const portfolio = await rendered("/portfolio");
-  assert.match(portfolio, /From difficult operational data/);
+test("links to three one-page case-study PDFs", async () => {
+  const html = await rendered("/");
+  const files = [
+    "clinical-queue-intelligence-case-study.pdf",
+    "telephony-demand-workforce-case-study.pdf",
+    "waiting-time-kpi-case-study.pdf",
+  ];
 
-  const html = await rendered("/portfolio/clinical-queue-intelligence");
-  assert.match(html, /Creating a live, trusted view of clinical queue activity/);
-  assert.match(html, /The challenge/);
-  assert.match(html, /Technical evidence/);
+  for (const filename of files) {
+    assert.match(html, new RegExp("/downloads/" + filename));
+    const pdf = await readFile(
+      new URL("../out/downloads/" + filename, import.meta.url),
+    );
+    assert.equal(pdf.subarray(0, 4).toString(), "%PDF");
+  }
 });
 
-test("retains original portfolio and calculators as static resources", async () => {
+test("does not export the retired website routes", async () => {
+  await Promise.all(
+    ["/about", "/contact", "/portfolio", "/services"].map((pathname) =>
+      assert.rejects(() => rendered(pathname)),
+    ),
+  );
+});
+
+test("retains the archive and standalone public tools", async () => {
   await Promise.all([
     access(new URL("../out/portfolio-original/index.html", import.meta.url)),
     access(new URL("../out/rate-calculator.html", import.meta.url)),
     access(new URL("../out/non-nhs/index.html", import.meta.url)),
+    access(new URL("../out/simkltv/index.html", import.meta.url)),
   ]);
 
   const archived = await readFile(

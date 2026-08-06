@@ -5,5 +5,7 @@ node_modules
 dist
 out
 .wrangler
+.pdf-tools
+tmp
 .env*
 *.tgz
