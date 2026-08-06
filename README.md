@@ -15,7 +15,8 @@ not part of the public site journey.
 - `/case-studies/clinical-queue-intelligence/`
 - `/case-studies/telephony-demand-workforce/`
 - `/case-studies/waiting-time-kpi/`
-- `/rate-calculator.html` - preserved standalone public utility
+- `/rate/` - preserved standalone public utility (contract day-rate calculator)
+- `/salary/` - preserved standalone public utility (NHS/non-NHS take-home pay calculator)
 - `/simkltv/` - preserved standalone TV application
 
 ## Current strategic principle
@@ -64,8 +65,8 @@ Rate Calculator and TV into independent applications.
 The original resources remain available separately:
 
 - `/portfolio-original/index.html` — original Power BI and analytics engineering portfolio
-- `/rate-calculator.html` — contract rate calculator
-- `/non-nhs/` — non-NHS pay calculator
+- `/rate/` — contract rate calculator
+- `/salary/` — NHS/non-NHS take-home pay calculator
 
 ## Local validation
 
