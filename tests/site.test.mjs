@@ -16,6 +16,9 @@ test("renders the public, company-focused landing page", async () => {
   assert.match(html, /Reporting shaped around operational requirements/);
   assert.match(html, /Examples of reporting in operational use/);
   assert.match(html, /Reporting organised around operational questions/);
+  assert.match(html, /We combine operational understanding/);
+  assert.match(html, /how demand moves through the service/);
+  assert.match(html, /How is demand moving through pathways and teams/);
   assert.match(html, /enquiry@mapleintel\.uk/);
   assert.match(html, /emergency-department-ambulance-pressure\.png/);
   assert.match(html, /emergency-operations-control-room\.png/);
@@ -32,6 +35,7 @@ test("renders the public, company-focused landing page", async () => {
   assert.doesNotMatch(html, /\.pdf/);
   assert.doesNotMatch(html, /stephen@mapleintel\.uk/);
   assert.doesNotMatch(html, /health-service/i);
+  assert.doesNotMatch(html, /Please do not include/);
   assert.doesNotMatch(html, /class="reporting-feature"/);
   assert.doesNotMatch(html, /clinical-information-review\.jpg/);
   assert.doesNotMatch(html, /screenshots\/kpi\.png/);

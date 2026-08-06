@@ -14,7 +14,7 @@ const capabilities = [
   {
     icon: Search,
     title: "Understand the service",
-    text: "Clarify the operational question, review how work moves through the service and agree definitions with the people who use them.",
+    text: "Clarify the operational question, review how demand moves through the service and agree definitions with the people who use them.",
   },
   {
     icon: BarChart3,
@@ -33,7 +33,7 @@ const questions = [
   "Where are queues, delays or hand-off problems forming?",
   "Does available capacity match the pressure on the service?",
   "Which performance measures can leaders rely on?",
-  "How is work moving through pathways and teams?",
+  "How is demand moving through pathways and teams?",
   "What evidence is needed before changing the service?",
 ];
 
@@ -140,9 +140,10 @@ export default function Home() {
             <h2>Reporting shaped around operational requirements.</h2>
           </div>
           <p>
-            The work combines operational understanding, analysis and
-            reporting. Technical methods support the work, but are not the
-            focus of the service.
+            We combine operational understanding, analysis and reporting with
+            strong technical capability, so that the underlying data is
+            dependable and the resulting reports are clear and useful in
+            operational practice.
           </p>
         </div>
         <div className="capability-grid">
@@ -282,8 +283,7 @@ export default function Home() {
             <p>
               An initial email can simply outline the service area, the
               reporting question, the information currently available and any
-              relevant timescale. Please do not include patient, employee or
-              other sensitive data.
+              relevant timescale.
             </p>
             <a
               className="button"
