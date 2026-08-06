@@ -15,7 +15,14 @@ test("renders the public, company-focused landing page", async () => {
   assert.match(html, /What Maple Leaf does/);
   assert.match(html, /Reporting shaped around operational requirements/);
   assert.match(html, /Examples of reporting in operational use/);
+  assert.match(html, /Reporting organised around operational questions/);
   assert.match(html, /enquiry@mapleintel\.uk/);
+  assert.match(html, /emergency-department-ambulance-pressure\.png/);
+  assert.match(html, /emergency-operations-control-room\.png/);
+  assert.match(html, /class="hero-stage"/);
+  assert.match(html, /class="hero__panel"/);
+  assert.match(html, /class="reporting-summary"/);
+  assert.match(html, /class="questions-section__background"/);
   assert.match(html, /class="process-flow"/);
   assert.match(html, /name="robots" content="index, follow"/);
   assert.doesNotMatch(html, /Private preview/);
@@ -25,6 +32,11 @@ test("renders the public, company-focused landing page", async () => {
   assert.doesNotMatch(html, /\.pdf/);
   assert.doesNotMatch(html, /stephen@mapleintel\.uk/);
   assert.doesNotMatch(html, /health-service/i);
+  assert.doesNotMatch(html, /class="reporting-feature"/);
+  assert.doesNotMatch(html, /clinical-information-review\.jpg/);
+  assert.doesNotMatch(html, /screenshots\/kpi\.png/);
+  assert.doesNotMatch(html, /screenshots\/queue-wallboard\.png/);
+  assert.doesNotMatch(html, /screenshots\/agent-summary\.png/);
 });
 
 test("links to three concise web case studies", async () => {

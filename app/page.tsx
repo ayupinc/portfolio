@@ -1,19 +1,28 @@
+import Image from "next/image";
+import {
+  BarChart3,
+  FileCheck2,
+  GitBranch,
+  MonitorCheck,
+  Search,
+  Target,
+} from "lucide-react";
 import { caseStudies } from "./case-study-data";
 import { ArrowIcon } from "./components";
 
 const capabilities = [
   {
-    number: "01",
+    icon: Search,
     title: "Understand the service",
     text: "Clarify the operational question, review how work moves through the service and agree definitions with the people who use them.",
   },
   {
-    number: "02",
+    icon: BarChart3,
     title: "Develop consistent reporting",
     text: "Bring operational information together into a consistent account of demand, queues, activity, capacity and performance.",
   },
   {
-    number: "03",
+    icon: MonitorCheck,
     title: "Support operational use",
     text: "Deliver reporting that can support routine oversight, performance review and service improvement, with definitions and limitations kept visible.",
   },
@@ -29,10 +38,26 @@ const questions = [
 ];
 
 const process = [
-  ["01", "Scope", "Agree the operational question and the intended use of the reporting."],
-  ["02", "Understand", "Review how the service works, where the information comes from and how terms are used."],
-  ["03", "Develop", "Create the reporting and test it with the people who understand the operation."],
-  ["04", "Hand over", "Document definitions and support routine use and maintenance."],
+  {
+    icon: Target,
+    title: "Scope",
+    text: "Agree the operational question and the intended use of the reporting.",
+  },
+  {
+    icon: GitBranch,
+    title: "Understand",
+    text: "Review how the service works, where the information comes from and how terms are used.",
+  },
+  {
+    icon: BarChart3,
+    title: "Develop",
+    text: "Create the reporting and test it with the people who understand the operation.",
+  },
+  {
+    icon: FileCheck2,
+    title: "Hand over",
+    text: "Document definitions and support routine use and maintenance.",
+  },
 ];
 
 export default function Home() {
@@ -60,58 +85,42 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
 
-      <section className="hero shell" id="top">
-        <div className="hero__copy">
-          <p className="eyebrow">Maple Leaf Intelligence</p>
-          <h1>Intelligent reporting for NHS operations.</h1>
-          <p className="hero__lede">
-            Maple Leaf Intelligence develops operational reporting focused on
-            demand, flow, capacity and performance. The work begins with how
-            the service operates and how the information will be used.
-          </p>
-          <div className="button-row">
-            <a
-              className="button"
-              href="#case-studies"
-            >
-              Case studies <span aria-hidden="true">↓</span>
-            </a>
-            <a
-              className="text-link"
-              href="mailto:enquiry@mapleintel.uk?subject=NHS%20reporting%20enquiry"
-            >
-              Reporting enquiries <ArrowIcon />
-            </a>
+      <section className="hero-stage" id="top">
+        <Image
+          className="hero-stage__background"
+          src="/images/emergency-department-ambulance-pressure.png"
+          alt="Several emergency ambulances outside a busy hospital emergency department."
+          fill
+          priority
+          sizes="100vw"
+        />
+        <div className="hero shell">
+          <div className="hero__panel">
+            <div className="hero__copy">
+              <p className="eyebrow">Maple Leaf Intelligence</p>
+              <h1>Intelligent reporting for NHS operations.</h1>
+              <p className="hero__lede">
+                Maple Leaf Intelligence develops operational reporting focused on
+                demand, flow, capacity and performance. The work begins with how
+                the service operates and how the information will be used.
+              </p>
+              <div className="button-row">
+                <a
+                  className="button"
+                  href="#case-studies"
+                >
+                  Case studies <span aria-hidden="true">↓</span>
+                </a>
+                <a
+                  className="text-link"
+                  href="mailto:enquiry@mapleintel.uk?subject=NHS%20reporting%20enquiry"
+                >
+                  Reporting enquiries <ArrowIcon />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-
-        <aside className="operational-card" aria-label="The operational picture">
-          <div className="operational-card__head">
-            <span>Reporting context</span>
-            <strong><i aria-hidden="true" /> In operational use</strong>
-          </div>
-          <div className="signal-list">
-            <div>
-              <span className="signal-icon">D</span>
-              <p><strong>Demand</strong><small>When, where and how it arrives</small></p>
-              <span aria-hidden="true">→</span>
-            </div>
-            <div>
-              <span className="signal-icon">F</span>
-              <p><strong>Flow</strong><small>Where work waits or moves</small></p>
-              <span aria-hidden="true">→</span>
-            </div>
-            <div>
-              <span className="signal-icon">C</span>
-              <p><strong>Capacity</strong><small>How resource meets pressure</small></p>
-              <span aria-hidden="true">→</span>
-            </div>
-          </div>
-          <div className="operational-card__foot">
-            <span>Defined consistently</span>
-            <div aria-hidden="true"><i /><i /><i /><i /><i /></div>
-          </div>
-        </aside>
       </section>
 
       <section className="scope-strip" aria-label="Areas of focus">
@@ -137,21 +146,41 @@ export default function Home() {
           </p>
         </div>
         <div className="capability-grid">
-          {capabilities.map((capability) => (
-            <article key={capability.number} className="capability-card">
-              <span>{capability.number}</span>
-              <h3>{capability.title}</h3>
-              <p>{capability.text}</p>
+          {capabilities.map(({ icon: Icon, title, text }) => (
+            <article key={title} className="capability-card">
+              <span className="capability-card__icon" aria-hidden="true">
+                <Icon strokeWidth={1.7} />
+              </span>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </article>
           ))}
+        </div>
+
+        <div className="reporting-summary">
+          <div>
+            <p className="eyebrow">Operational reporting</p>
+            <h3>A clear view of performance and variation.</h3>
+          </div>
+          <p>
+            Reporting brings measures, trends and supporting detail together
+            so that the operational position can be reviewed consistently.
+          </p>
         </div>
       </section>
 
       <section className="questions-section">
+        <Image
+          className="questions-section__background"
+          src="/images/emergency-operations-control-room.png"
+          alt=""
+          fill
+          sizes="100vw"
+        />
         <div className="shell questions-layout">
           <div className="questions-intro">
             <p className="eyebrow">The questions behind the work</p>
-            <h2>The reporting is organised around operational questions.</h2>
+            <h2>Reporting organised around operational questions.</h2>
             <p>
               This is particularly relevant where the information is spread
               across systems, reports or operational definitions.
@@ -214,10 +243,10 @@ export default function Home() {
             <h2>A typical reporting engagement.</h2>
           </div>
           <div className="process-flow" aria-label="Four connected stages">
-            {process.map(([number, title, text]) => (
-              <article key={number}>
+            {process.map(({ icon: Icon, title, text }) => (
+              <article key={title}>
                 <div className="process-flow__node">
-                  <span>{number}</span>
+                  <Icon aria-hidden="true" strokeWidth={1.7} />
                 </div>
                 <div className="process-flow__card">
                   <h3>{title}</h3>
