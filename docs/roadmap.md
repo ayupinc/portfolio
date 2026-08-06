@@ -185,8 +185,20 @@ The next strategic decisions, in order, are:
 
 ## Planned platform separation
 
-Status: noted for future work. Do not reorganise the Energy or Car code until
-the public Maple Leaf website work is complete.
+Status: Energy and Car are split (2026-08-06) — ahead of the sequencing
+originally planned here, at explicit request. `energy-dashboard` and
+`car-dashboard` are now independent repositories
+(`ayupinc/energy-dashboard`, `ayupinc/car-dashboard`), each with its own
+Cloudflare Worker, D1 database and Pages project. The `vehicles` and
+`vehicle_status_snapshots` data was migrated across and verified before the
+source tables were dropped. See `car-dashboard/docs/decisions.md` #001 and
+`energy-dashboard/docs/decisions.md` #005 for the detail.
+
+Not yet done: folding Maple Leaf, Rate Calculator and TV into the single
+`maple-leaf-platform/` monorepo layout below, and giving Energy/Car their
+own Cloudflare Access applications (car-dashboard's API is not yet behind
+Access at all; energy-dashboard's existing Access setup currently redirects
+even the Pages-to-Worker service call and needs checking in the dashboard).
 
 The products should remain separate applications with a shared backend and
 small shared packages:
