@@ -1,16 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function ArrowIcon() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function DownloadIcon() {
-  return <span aria-hidden="true">↓</span>;
-}
-
 export function Brand() {
   return (
-    <a className="brand" href="#top" aria-label="Maple Leaf Intelligence home">
+    <Link className="brand" href="/" aria-label="Maple Leaf Intelligence home">
       <span className="brand__mark" aria-hidden="true">
         <Image
           src="/assets/maple-leaf.png"
@@ -22,9 +19,9 @@ export function Brand() {
       </span>
       <span className="brand__copy">
         <strong>Maple Leaf Intelligence</strong>
-        <small>Operational intelligence for health services</small>
+        <small>Intelligent reporting for NHS operations</small>
       </span>
-    </a>
+    </Link>
   );
 }
 
@@ -34,15 +31,15 @@ export function Header() {
       <div className="shell site-header__inner">
         <Brand />
         <nav className="site-nav" aria-label="Primary navigation">
-          <a href="#what-we-do">What we do</a>
-          <a href="#case-studies">Case studies</a>
-          <a href="#how-we-work">How we work</a>
+          <Link href="/#what-we-do">What we do</Link>
+          <Link href="/#case-studies">Case studies</Link>
+          <Link href="/#how-we-work">How we work</Link>
         </nav>
         <a
           className="button button--small header-action"
-          href="mailto:stephen@mapleintel.uk?subject=Operational%20analytics%20enquiry"
+          href="mailto:enquiry@mapleintel.uk?subject=NHS%20reporting%20enquiry"
         >
-          Discuss a challenge <ArrowIcon />
+          Contact <ArrowIcon />
         </a>
       </div>
     </header>
@@ -55,16 +52,16 @@ export function Footer() {
       <div className="shell site-footer__main">
         <Brand />
         <p>
-          Helping NHS and health-service teams understand demand, flow,
-          capacity and performance.
+          Reporting for NHS teams working with demand, flow, capacity and
+          performance.
         </p>
-        <a href="mailto:stephen@mapleintel.uk">
-          stephen@mapleintel.uk <ArrowIcon />
+        <a href="mailto:enquiry@mapleintel.uk">
+          enquiry@mapleintel.uk <ArrowIcon />
         </a>
       </div>
       <div className="shell site-footer__base">
         <span>© {new Date().getFullYear()} Maple Leaf Intelligence</span>
-        <span>Operational clarity. Evidence that holds up.</span>
+        <span>Intelligent reporting for NHS operations.</span>
       </div>
     </footer>
   );

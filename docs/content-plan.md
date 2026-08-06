@@ -2,19 +2,22 @@
 
 ## Governing user journey
 
-Every page and component should help a potential client progress through five beliefs:
+Every page and component should give an NHS operational reader a concise account
+of:
 
-1. **Recognition:** “Maple Intel understands the operational problem I have.”
-2. **Credibility:** “This is a credible specialist consultancy.”
-3. **Evidence:** “The case studies demonstrate genuine technical and delivery depth.”
-4. **Fit:** “Maple Intel could deliver this project or assignment.”
-5. **Intent:** “I’d like to discuss it.”
+1. **Focus:** intelligent reporting for NHS operations.
+2. **Scope:** demand, flow, capacity, workforce and performance.
+3. **Examples:** reporting requirements, work undertaken and operational use.
+4. **Approach:** a measured account of how reporting is developed.
+5. **Contact:** a straightforward route for reporting enquiries.
 
 The site should not force every visitor through a rigid sequence. It should provide clear routes for fast-scanning decision-makers and deeper routes for technical readers.
 
 Recruiters and other engagement intermediaries are a secondary audience. They should be able to infer suitability for contract, interim or embedded assignments from the same evidence, without the site adopting the language or structure of a job-seeking portfolio.
 
-The primary client context is ambulance services and other operational NHS environments. Wider health and customer-service operations are adjacent audiences because they share similar analytical problems involving demand, queues, workflow, resources, service levels, performance and outcomes.
+The primary and stated client context is NHS operations, including ambulance
+services and other settings concerned with demand, queues, workflow, capacity,
+workforce and performance.
 
 ## Content model
 

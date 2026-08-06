@@ -1,39 +1,38 @@
 # Maple Intel Website
 
-The production website for Maple Leaf Intelligence, an operational analytics
-and decision-support consultancy for NHS and health-service teams.
+The production website for Maple Leaf Intelligence, focused on intelligent
+reporting for NHS operations.
 
 The current production version is a public, single-page Next.js site. It
 explains the company through the operational questions it helps services answer
-and links to concise A4 case-study PDFs. The original technical portfolio
+and links to concise, responsive case-study pages. The original technical portfolio
 remains preserved under `public/portfolio-original/` as source material, but is
 not part of the public site journey.
 
 ## Current public structure
 
 - `/` - company landing page
-- `/downloads/clinical-queue-intelligence-case-study.pdf`
-- `/downloads/telephony-demand-workforce-case-study.pdf`
-- `/downloads/waiting-time-kpi-case-study.pdf`
+- `/case-studies/clinical-queue-intelligence/`
+- `/case-studies/telephony-demand-workforce/`
+- `/case-studies/waiting-time-kpi/`
 - `/rate-calculator.html` - preserved standalone public utility
 - `/simkltv/` - preserved standalone TV application
 
 ## Current strategic principle
 
-The website should guide potential clients through five beliefs:
+The website should give NHS operational readers a concise account of:
 
-1. Maple Intel understands the operational problem I have.
-2. This is a credible specialist consultancy.
-3. The case studies show a recognisable organisational problem and a credible
-   operational response.
-4. Maple Intel could deliver this project or assignment.
-5. I’d like to discuss it.
+1. the reporting work Maple Leaf undertakes;
+2. the operational contexts in which it works;
+3. examples of reporting requirements and work completed;
+4. how to make an enquiry.
 
 Technical recruiters are not a target audience for the public website.
 Technical detail remains available in the preserved source material where it
 is useful for future content work.
 
-The primary market focus is ambulance services and other operational NHS environments. Wider health and customer-service operations are adjacent markets connected by the same underlying need: making complex logistical and operational data useful for analysis, visualisation and performance reporting.
+The primary focus is NHS operations, including ambulance services and other
+settings concerned with demand, flow, capacity, workforce and performance.
 
 The company proposition and the operational usefulness of the work are the
 focus. Tools and technical methods are supporting detail.

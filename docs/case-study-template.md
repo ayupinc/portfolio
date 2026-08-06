@@ -1,19 +1,20 @@
-# Maple Leaf Intelligence one-page case study template
+# Maple Leaf Intelligence web case study template
 
 ## Audience and purpose
 
-The primary reader is an NHS or health-service operational leader. A study
-should help that reader recognise a service problem, understand Maple Leaf's
-response and judge whether the approach could transfer to their organisation.
+The primary reader works in NHS operations. A study should give that reader a
+concise account of the reporting need, the work undertaken and how the result
+was used.
 
-Each study must fit on one A4 page and remain readable both as a PDF and on
-screen. It is an operational story, not a technical portfolio page.
+Each study should be a concise, responsive web page that can be understood in
+one short reading session. It is an operational story, not a technical
+portfolio page.
 
 ## Required structure
 
 ### Problem-led title
 
-Name the organisational challenge or the operational improvement. Avoid tool
+Name the reporting requirement or operational subject. Avoid tool
 names and dashboard labels.
 
 ### One-sentence summary
@@ -28,7 +29,7 @@ Use no more than three facts:
 - the organisation's need;
 - the delivered result or verified use.
 
-### The organisation's challenge
+### The reporting need
 
 Explain:
 
@@ -39,7 +40,7 @@ Explain:
 Keep this section free of implementation detail unless it is essential to
 understanding the problem.
 
-### What Maple Leaf did
+### Work undertaken
 
 Use three short steps:
 
@@ -47,10 +48,10 @@ Use three short steps:
 2. how Maple Leaf created a dependable account of the operation;
 3. what practical view, process or decision support Maple Leaf delivered.
 
-Refer to technologies only when the audience needs them to understand the
-response. Technical details can remain in the archived evidence.
+Refer to technologies only when the audience needs them to understand the work.
+Technical details can remain in the archived evidence.
 
-### What changed
+### Operational use
 
 Use verified and proportionate outcomes:
 
@@ -77,11 +78,11 @@ the company web address and contact email.
 
 ## Editorial checks
 
-- The organisation's problem is clear before the method appears.
-- Maple Leaf is the subject of the response; the case study is not a personal
-  biography.
+- The reporting need is clear before the method appears.
+- The case study describes the organisation and the work rather than presenting
+  a personal biography.
 - An operational reader can understand every sentence.
 - Tool names and implementation language have been removed unless necessary.
 - Outcomes are accurate, attributable and safe to publish.
-- The complete study fits on one A4 page without small or crowded text.
+- The complete study remains concise and reads well on desktop and mobile.
 - Screenshots contain no patient, employee or sensitive operational data.

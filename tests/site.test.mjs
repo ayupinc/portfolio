@@ -8,34 +8,41 @@ async function rendered(pathname) {
   return readFile(new URL(file, import.meta.url), "utf8");
 }
 
-test("renders one public, company-focused landing page", async () => {
+test("renders the public, company-focused landing page", async () => {
   const html = await rendered("/");
 
-  assert.match(html, /See the operational picture/);
+  assert.match(html, /Intelligent reporting for NHS operations/);
   assert.match(html, /What Maple Leaf does/);
-  assert.match(html, /organisation&#x27;s challenge/);
-  assert.match(html, /Operational problems, resolved in practice/);
+  assert.match(html, /Reporting shaped around operational requirements/);
+  assert.match(html, /Examples of reporting in operational use/);
+  assert.match(html, /enquiry@mapleintel\.uk/);
+  assert.match(html, /class="process-flow"/);
   assert.match(html, /name="robots" content="index, follow"/);
   assert.doesNotMatch(html, /Private preview/);
   assert.doesNotMatch(html, /About Stephen/);
   assert.doesNotMatch(html, /href="\/about/);
   assert.doesNotMatch(html, /href="\/portfolio/);
+  assert.doesNotMatch(html, /\.pdf/);
+  assert.doesNotMatch(html, /stephen@mapleintel\.uk/);
+  assert.doesNotMatch(html, /health-service/i);
 });
 
-test("links to three one-page case-study PDFs", async () => {
-  const html = await rendered("/");
-  const files = [
-    "clinical-queue-intelligence-case-study.pdf",
-    "telephony-demand-workforce-case-study.pdf",
-    "waiting-time-kpi-case-study.pdf",
+test("links to three concise web case studies", async () => {
+  const cases = [
+    ["clinical-queue-intelligence", "Continuous operational use"],
+    ["telephony-demand-workforce", "2.5m calls represented annually"],
+    ["waiting-time-kpi", "One documented definition"],
   ];
+  const home = await rendered("/");
 
-  for (const filename of files) {
-    assert.match(html, new RegExp("/downloads/" + filename));
-    const pdf = await readFile(
-      new URL("../out/downloads/" + filename, import.meta.url),
-    );
-    assert.equal(pdf.subarray(0, 4).toString(), "%PDF");
+  for (const [slug, outcome] of cases) {
+    assert.match(home, new RegExp("/case-studies/" + slug + "/"));
+    const html = await rendered("/case-studies/" + slug);
+    assert.match(html, /The reporting need/);
+    assert.match(html, /Work undertaken/);
+    assert.match(html, /Operational use/);
+    assert.match(html, /enquiry@mapleintel\.uk/);
+    assert.match(html, new RegExp(outcome));
   }
 });
 

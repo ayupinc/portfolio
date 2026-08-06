@@ -4,9 +4,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mapleintel.uk"),
-  title: "Maple Leaf Intelligence | Operational intelligence for health services",
+  title: "Maple Leaf Intelligence | Intelligent reporting for NHS operations",
   description:
-    "Maple Leaf Intelligence helps NHS and health-service teams understand demand, flow, capacity and performance, and turn complex operational information into practical decision support.",
+    "Maple Leaf Intelligence develops operational reporting for NHS services, with a focus on demand, flow, capacity and performance.",
   alternates: {
     canonical: "/",
   },
@@ -18,24 +18,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Maple Leaf Intelligence",
     description:
-      "See the operational picture. Make the next decision with confidence.",
+      "Intelligent reporting for NHS operations.",
     type: "website",
     url: "https://mapleintel.uk",
     siteName: "Maple Leaf Intelligence",
     images: [
       {
         url: "/og.png",
-        width: 1731,
-        height: 909,
-        alt: "Maple Leaf Intelligence - operational intelligence for health services.",
+        width: 1732,
+        height: 908,
+        alt: "Maple Leaf Intelligence - intelligent reporting for NHS operations.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Maple Leaf Intelligence",
-    description:
-      "See the operational picture. Make the next decision with confidence.",
+    description: "Intelligent reporting for NHS operations.",
     images: ["/og.png"],
   },
   robots: {

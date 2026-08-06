@@ -6,19 +6,24 @@ Working strategic direction. This document should be agreed before visual design
 
 ## Brand proposition
 
-Maple Intel is a specialist operational analytics, analytics engineering and Power BI consultancy. Its primary focus is ambulance services and other operational NHS environments, with wider health and customer-service operations as closely related markets.
+Maple Intel develops intelligent reporting for NHS operations. Its work covers
+operational analytics, reporting and the supporting information structures.
 
 It combines technical delivery with first-hand operational understanding: the work is designed not only to report activity, but to help people understand demand, flow, performance, capacity and outcomes.
 
 ## Primary positioning statement
 
-> Operational analytics and Power BI for ambulance services and the wider NHS.
+> Intelligent reporting for NHS operations.
 
 Supporting explanation:
 
-> Maple Intel helps health and customer-service operations make sense of complex logistical and operational data—from data engineering and modelling to analysis, visualisation and performance reporting.
+> Maple Intel develops reporting focused on demand, flow, capacity and
+> performance, beginning with how the service operates and how the information
+> will be used.
 
-The leading proposition is deliberately specific, while the supporting line explains the transferable problem and leaves room for relevant work outside the NHS. Both may be refined after content testing, but neither should be replaced by generic language about “unlocking data” or “transforming insights”.
+The proposition is deliberately specific and should not be diluted with a list
+of adjacent sectors or replaced by generic language about “unlocking data” or
+“transforming insights”.
 
 ## Market focus
 
@@ -28,13 +33,9 @@ The leading proposition is deliberately specific, while the supporting line expl
 - urgent and emergency healthcare operations;
 - other NHS services with complex demand, flow, workforce, resource or performance data.
 
-### Adjacent markets
-
-- wider health-service operations;
-- contact centres and customer-service environments;
-- other operational settings with similar questions about demand, queues, workflow, capacity, productivity, service levels and outcomes.
-
-The website should lead with the NHS and ambulance specialism because this is where Maple Intel’s operational credibility is strongest. Adjacent markets should be described through the problems they share, not presented as unrelated sectors.
+The public website should maintain this NHS focus. Examples from contact-centre
+environments are included only where they demonstrate reporting relevant to NHS
+operations.
 
 ## Audience
 

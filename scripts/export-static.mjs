@@ -8,7 +8,14 @@ const generatedAssets = resolve(project, "public/_next");
 const temporaryDirectory = await mkdtemp(join(tmpdir(), "mapleintel-export-"));
 const assetBackup = join(temporaryDirectory, "_next");
 let hadGeneratedAssets = false;
-const retiredRoutes = ["about", "contact", "portfolio", "services", "_not-found"];
+const managedRoutes = [
+  "about",
+  "case-studies",
+  "contact",
+  "portfolio",
+  "services",
+  "_not-found",
+];
 const routeBackups = [];
 
 try {
@@ -19,7 +26,7 @@ try {
     if (error.code !== "ENOENT") throw error;
   }
 
-  for (const route of retiredRoutes) {
+  for (const route of managedRoutes) {
     const source = resolve(project, "public", route);
     const backup = join(temporaryDirectory, route);
     try {

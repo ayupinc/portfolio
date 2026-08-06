@@ -1,0 +1,2 @@
+:HL["/_next/static/chunks/0tsaqcs9lzij6.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"case-studies","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"waiting-time-kpi","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"NzNG5U6hSi-0P-wN0l_2I"}
