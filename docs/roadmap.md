@@ -194,40 +194,43 @@ Cloudflare Worker, D1 database and Pages project. The `vehicles` and
 source tables were dropped. See `car-dashboard/docs/decisions.md` #001 and
 `energy-dashboard/docs/decisions.md` #005 for the detail.
 
-Not yet done: folding Maple Leaf, Rate Calculator and TV into the single
-`maple-leaf-platform/` monorepo layout below, and giving Energy/Car their
-own Cloudflare Access applications (car-dashboard's API is not yet behind
-Access at all; energy-dashboard's existing Access setup currently redirects
-even the Pages-to-Worker service call and needs checking in the dashboard).
+Status: Rate Calculator, Salary Calculator and the original portfolio are
+split (2026-08-10). `rate-calculator` and `salary-calculator` are now
+independent repositories (previously `public/rate/` and `public/salary/`
+inside this repo, served as subpaths of mapleintel.uk); the original
+technical portfolio is now `portfolio-archive` (previously
+`public/portfolio-original/`, plus a stray duplicate copy at the `public/`
+root that existed from before the tidy-up and has been deleted rather than
+carried forward). None of the three were linked from this site's
+navigation, so the split didn't touch anything reachable from the public
+journey — but each now needs its own Cloudflare Pages project and
+domain/subdomain to be reachable again.
 
-The products should remain separate applications with a shared backend and
-small shared packages:
+Following the same precedent as the Energy/Car split, these were made fully
+independent sibling repositories rather than folded into the
+`maple-leaf-platform/` monorepo layout originally sketched below — that
+layout is superseded by the pattern actually used (separate repo per
+product, matching `energy-dashboard`/`car-dashboard`).
 
-    maple-leaf-platform/
-      apps/
-        maple-leaf/          # public company landing page and case studies
-        energy/              # private responsive desktop/mobile dashboard
-        car/                 # private mobile-first application
-        rate-calculator/     # public client-side utility
-        tv/                  # publicly reachable Simkl-powered TV application
-      workers/
-        api/
-          energy/
-          car/
-          simkl/
-      packages/
-        shared-ui/
-        shared-types/
+Not yet done: splitting the TV application out of `SimklApp/web/` (it's
+still deployed as `public/simkltv/` — actually just a stale copy of that
+app's build output — inside this repo's public folder; the redundant copy
+has been deleted, but `SimklApp/web` itself still hardcodes `basePath:
+"/simkltv"` in `next.config.ts`, plus `/simkltv` URLs in `app/layout.tsx`
+and `app/simkl-app.tsx`, which need updating before it can be deployed at
+its own domain root), and giving Energy/Car their own Cloudflare Access
+applications (car-dashboard's API is not yet behind Access at all;
+energy-dashboard's existing Access setup currently redirects even the
+Pages-to-Worker service call and needs checking in the dashboard).
 
 Deployment and access principles:
 
-- Maple Leaf and the Rate Calculator remain public.
+- Maple Leaf, the Rate Calculator, the Salary Calculator, the portfolio
+  archive and TV all remain public.
 - Energy and Car use separate Cloudflare Pages projects and separate
   Cloudflare Access applications and policies.
 - Sensitive Energy and Car API routes are protected independently.
 - TV can remain publicly reachable, while Simkl OAuth and tokens stay behind
   the Worker.
-- Each Cloudflare Pages project uses its own application subdirectory and
+- Each product is its own Cloudflare Pages project with its own repo and
   build settings.
-- Complete the website first, then perform one controlled repository
-  reorganisation and update the Cloudflare deployments together.

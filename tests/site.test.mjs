@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function rendered(pathname) {
@@ -68,19 +68,4 @@ test("does not export the retired website routes", async () => {
       assert.rejects(() => rendered(pathname)),
     ),
   );
-});
-
-test("retains the archive and standalone public tools", async () => {
-  await Promise.all([
-    access(new URL("../out/portfolio-original/index.html", import.meta.url)),
-    access(new URL("../out/rate-calculator.html", import.meta.url)),
-    access(new URL("../out/non-nhs/index.html", import.meta.url)),
-    access(new URL("../out/simkltv/index.html", import.meta.url)),
-  ]);
-
-  const archived = await readFile(
-    new URL("../out/portfolio-original/index.html", import.meta.url),
-    "utf8",
-  );
-  assert.match(archived, /Power BI/);
 });
